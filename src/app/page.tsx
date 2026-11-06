@@ -3,48 +3,38 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
 import { SmoothScroll, useScrollProgress } from '@/components/ui/SmoothScroll';
-import { CustomCursor } from '@/components/ui/CustomCursor';
 import { Navbar } from '@/components/sections/Navbar';
 import { HeroSection } from '@/components/sections/HeroSection';
-import { AboutSection } from '@/components/sections/AboutSection';
-import { SkillsSection } from '@/components/sections/SkillsSection';
 import { ProjectsSection } from '@/components/sections/ProjectsSection';
+import { SkillsSection } from '@/components/sections/SkillsSection';
 import { WinsSection } from '@/components/sections/WinsSection';
+import { AboutSection } from '@/components/sections/AboutSection';
 import { ExperienceSection } from '@/components/sections/ExperienceSection';
 import { ContactSection } from '@/components/sections/ContactSection';
 import { Footer } from '@/components/sections/Footer';
+import { BackToTop } from '@/components/ui/BackToTop';
 
-// Dynamic import with ssr: false for Three.js Canvas per performance budget
+// Dynamic import with ssr: false for Three.js Canvas (No preloader spinner)
 const Scene3D = dynamic(
   () => import('@/components/3d/Scene3D').then((m) => m.Scene3D),
   {
     ssr: false,
-    loading: () => (
-      <div
-        className="fixed inset-0 z-0 pointer-events-none w-full h-full bg-[#030712] flex items-center justify-center"
-        aria-hidden="true"
-      >
-        <div className="w-6 h-6 border-2 border-violet-500/20 border-t-violet-400 rounded-full animate-spin" />
-      </div>
-    ),
+    loading: () => null,
   }
 );
 
 function PortfolioContent() {
-  const { progress, isMobile } = useScrollProgress();
+  const { isMobile } = useScrollProgress();
 
   return (
     <div className="relative min-h-screen cosmic-backdrop text-slate-100 overflow-x-hidden">
-      {/* ONE fixed full-screen Canvas behind all content */}
-      <Scene3D scrollProgress={progress} isMobile={isMobile} />
+      {/* (3D) Single low-opacity ambient layer */}
+      <Scene3D isMobile={isMobile} />
 
-      {/* Desktop Custom Glowing Cursor (automatically hidden on mobile) */}
-      <CustomCursor />
-
-      {/* Sticky Blurred Navbar */}
+      {/* Sticky Blurred Navbar with active-section highlight */}
       <Navbar />
 
-      {/* Main Scroll Content */}
+      {/* Main Recruiter-First Scroll Content */}
       <main id="main-content" className="relative z-10 pb-20">
         <HeroSection />
         <ProjectsSection />
@@ -57,6 +47,9 @@ function PortfolioContent() {
 
       {/* Footer */}
       <Footer />
+
+      {/* (7) Floating Back-To-Top button appearing after 600px scroll */}
+      <BackToTop />
     </div>
   );
 }

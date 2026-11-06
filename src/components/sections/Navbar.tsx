@@ -1,33 +1,60 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 import { PERSONAL_INFO, NAV_SECTIONS } from '@/data/portfolioData';
 import { FileTextIcon, ArrowUpRightIcon } from '@/components/ui/Icons';
+import { SHARED_EASE } from '@/lib/animations';
 
 export const Navbar: React.FC = () => {
   const [activeSection, setActiveSection] = useState('hero');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const shouldReduceMotion = useReducedMotion();
 
+  // (2) Active-section highlight via IntersectionObserver & blur/border on scroll
   useEffect(() => {
+    // 1. Scroll listener for blur & border
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
-
-      // Determine active section
-      const sections = NAV_SECTIONS.map((s) => document.getElementById(s.id));
-      const scrollPos = window.scrollY + 180;
-
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const sec = sections[i];
-        if (sec && sec.offsetTop <= scrollPos) {
-          setActiveSection(NAV_SECTIONS[i].id);
-          break;
-        }
-      }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    handleScroll();
+
+    // 2. IntersectionObserver for active section highlight
+    const sectionElements = NAV_SECTIONS.map((section) =>
+      document.getElementById(section.id)
+    ).filter(Boolean) as HTMLElement[];
+
+    if (sectionElements.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // Find visible entries
+        const visibleEntries = entries.filter((entry) => entry.isIntersecting);
+        if (visibleEntries.length > 0) {
+          // Sort by intersection ratio or pick the first intersecting entry
+          visibleEntries.sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+          const topEntry = visibleEntries[0];
+          if (topEntry.target.id) {
+            setActiveSection(topEntry.target.id);
+          }
+        }
+      },
+      {
+        root: null,
+        rootMargin: '-20% 0px -55% 0px',
+        threshold: [0, 0.2, 0.5],
+      }
+    );
+
+    sectionElements.forEach((el) => observer.observe(el));
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      observer.disconnect();
+    };
   }, []);
 
   // Prevent background scroll when mobile menu is open
@@ -47,7 +74,7 @@ export const Navbar: React.FC = () => {
     setActiveSection(id);
     const target = document.getElementById(id);
     if (target) {
-      target.scrollIntoView({ behavior: 'smooth' });
+      target.scrollIntoView({ behavior: shouldReduceMotion ? 'auto' : 'smooth' });
     }
   };
 
@@ -55,7 +82,7 @@ export const Navbar: React.FC = () => {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? 'bg-[#030712]/85 backdrop-blur-xl border-b border-white/[0.08] py-2.5 sm:py-3'
+          ? 'bg-[#030712]/90 backdrop-blur-xl border-b border-white/10 py-2.5 sm:py-3 shadow-lg shadow-black/40'
           : 'bg-transparent py-3.5 sm:py-4'
       }`}
     >
@@ -92,12 +119,21 @@ export const Navbar: React.FC = () => {
                   e.preventDefault();
                   handleNavClick(item.id);
                 }}
-                className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                  isActive
-                    ? 'bg-violet-600/25 text-white border border-violet-500/30 shadow-sm'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.04]'
+                className={`relative px-3.5 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                  isActive ? 'text-white' : 'text-slate-400 hover:text-slate-200'
                 }`}
               >
+                {/* Active Highlight Pill */}
+                {isActive && (
+                  <motion.span
+                    layoutId={shouldReduceMotion ? undefined : 'nav-active-pill'}
+                    className="absolute inset-0 rounded-lg bg-violet-600/30 border border-violet-500/40 -z-10 shadow-sm"
+                    transition={{
+                      duration: 0.25,
+                      ease: SHARED_EASE,
+                    }}
+                  />
+                )}
                 {item.label}
               </a>
             );
@@ -133,7 +169,7 @@ export const Navbar: React.FC = () => {
         {/* Mobile Hamburger (44x44px tap target for touch) */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden flex items-center justify-center w-11 h-11 rounded-xl bg-slate-900/90 border border-white/[0.1] text-slate-200 active:scale-95 transition"
+          className="md:hidden flex items-center justify-center w-11 h-11 rounded-xl bg-slate-900/90 border border-white/10 text-slate-200 active:scale-95 transition"
           aria-label={mobileMenuOpen ? 'Close Menu' : 'Open Menu'}
           aria-expanded={mobileMenuOpen}
         >
@@ -149,7 +185,7 @@ export const Navbar: React.FC = () => {
 
       {/* Mobile Fullscreen Drawer Overlay */}
       {mobileMenuOpen && (
-        <div className="md:hidden fixed inset-x-0 top-[57px] bottom-0 bg-[#030712]/98 backdrop-blur-3xl px-6 py-6 flex flex-col justify-between border-t border-white/[0.08] z-50 animate-in fade-in slide-in-from-top-4 duration-200">
+        <div className="md:hidden fixed inset-x-0 top-[57px] bottom-0 bg-[#030712]/98 backdrop-blur-3xl px-6 py-6 flex flex-col justify-between border-t border-white/10 z-50">
           <div className="space-y-2">
             {NAV_SECTIONS.map((item) => (
               <a
@@ -171,7 +207,7 @@ export const Navbar: React.FC = () => {
             ))}
           </div>
 
-          <div className="space-y-3 pt-6 border-t border-white/[0.08] pb-8">
+          <div className="space-y-3 pt-6 border-t border-white/10 pb-8">
             <a
               href={PERSONAL_INFO.resumeUrl}
               target="_blank"
