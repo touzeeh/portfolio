@@ -33,10 +33,10 @@ export const ProjectsStage: React.FC<ProjectsStageProps> = ({ reducedMotion = fa
   });
 
   return (
-    <group ref={groupRef} position={[0, -9.8, 0]}>
-      {/* Dimensional Depth Portal 1 (Closest) */}
-      <mesh ref={frame1} position={[0, 0, 1.8]}>
-        <torusGeometry args={[3.4, 0.016, 16, 80]} />
+    <group ref={groupRef} position={[0, -9.8, -2.5]}>
+      {/* Dimensional Depth Portal 1 */}
+      <mesh ref={frame1} position={[0, 0, 0]}>
+        <torusGeometry args={[3.6, 0.016, 16, 80]} />
         <meshStandardMaterial
           color="#06b6d4"
           emissive="#06b6d4"
@@ -45,9 +45,9 @@ export const ProjectsStage: React.FC<ProjectsStageProps> = ({ reducedMotion = fa
         />
       </mesh>
 
-      {/* Dimensional Depth Portal 2 (Mid) */}
-      <mesh ref={frame2} position={[0, 0, -0.8]}>
-        <torusGeometry args={[2.9, 0.018, 16, 80]} />
+      {/* Dimensional Depth Portal 2 */}
+      <mesh ref={frame2} position={[0, 0, -2.2]}>
+        <torusGeometry args={[3.0, 0.018, 16, 80]} />
         <meshStandardMaterial
           color="#8b5cf6"
           emissive="#8b5cf6"
@@ -56,9 +56,9 @@ export const ProjectsStage: React.FC<ProjectsStageProps> = ({ reducedMotion = fa
         />
       </mesh>
 
-      {/* Dimensional Depth Portal 3 (Far) */}
-      <mesh ref={frame3} position={[0, 0, -3.2]}>
-        <torusGeometry args={[2.4, 0.014, 16, 80]} />
+      {/* Dimensional Depth Portal 3 */}
+      <mesh ref={frame3} position={[0, 0, -4.5]}>
+        <torusGeometry args={[2.5, 0.014, 16, 80]} />
         <meshStandardMaterial
           color="#38bdf8"
           emissive="#38bdf8"
@@ -67,8 +67,8 @@ export const ProjectsStage: React.FC<ProjectsStageProps> = ({ reducedMotion = fa
         />
       </mesh>
 
-      {/* Left Gutter: Floating Holographic Prism */}
-      <group position={[-3.8, 0.4, 0]}>
+      {/* Left Outer Margin: Floating Holographic Prism */}
+      <group position={[-5.4, 0.4, 0]}>
         <mesh ref={prismLeft}>
           <boxGeometry args={[0.9, 0.9, 0.9]} />
           <meshStandardMaterial
@@ -88,8 +88,8 @@ export const ProjectsStage: React.FC<ProjectsStageProps> = ({ reducedMotion = fa
         </mesh>
       </group>
 
-      {/* Right Gutter: Floating Quantum Prism */}
-      <group position={[3.8, -0.4, -0.5]}>
+      {/* Right Outer Margin: Floating Quantum Prism */}
+      <group position={[5.4, -0.4, -0.5]}>
         <mesh ref={prismRight}>
           <dodecahedronGeometry args={[0.8, 0]} />
           <meshStandardMaterial
@@ -110,8 +110,8 @@ export const ProjectsStage: React.FC<ProjectsStageProps> = ({ reducedMotion = fa
       </group>
 
       {/* Ambient portal glow illumination */}
-      <pointLight color="#8b5cf6" intensity={3} distance={10} position={[0, 0, 0]} />
-      <pointLight color="#06b6d4" intensity={2} distance={8} position={[0, 0, -2]} />
+      <pointLight color="#8b5cf6" intensity={3} distance={12} position={[0, 0, 0]} />
+      <pointLight color="#06b6d4" intensity={2.5} distance={10} position={[0, 0, -2]} />
     </group>
   );
 };

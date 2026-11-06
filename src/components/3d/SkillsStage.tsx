@@ -51,7 +51,7 @@ export const SkillsStage: React.FC<SkillsStageProps> = ({
   const constellationScale = isMobile ? 0.8 : 1.15;
 
   return (
-    <group position={[0, -6.0, 0]} scale={constellationScale}>
+    <group position={[0, -6.0, isMobile ? -5.0 : -2.6]} scale={constellationScale}>
       {/* Central Constellation Anchor Core */}
       <mesh>
         <sphereGeometry args={[0.55, 24, 24]} />

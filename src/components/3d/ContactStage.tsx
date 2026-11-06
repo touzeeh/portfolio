@@ -70,7 +70,7 @@ export const ContactStage: React.FC<ContactStageProps> = ({
   });
 
   return (
-    <group position={[0, -17.0, 0]}>
+    <group position={[0, -17.0, -2.5]}>
       {/* Central Gravitational Singularity Core */}
       <mesh>
         <sphereGeometry args={[1.0, 32, 32]} />

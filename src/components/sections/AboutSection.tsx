@@ -10,13 +10,13 @@ export const AboutSection: React.FC = () => {
     <section id="about" className="py-24 px-4 sm:px-6 max-w-6xl mx-auto">
       {/* Section Header */}
       <div className="mb-12 space-y-2">
-        <span className="text-xs font-mono uppercase tracking-widest text-violet-400 font-semibold">
+        <span className="text-xs font-mono uppercase tracking-widest text-violet-400 font-semibold drop-shadow-sm">
           Background
         </span>
-        <h2 className="font-display text-section-fluid text-white tracking-tight">
+        <h2 className="font-display text-section-fluid text-white tracking-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)]">
           About Me
         </h2>
-        <p className="text-slate-400 text-base max-w-xl">
+        <p className="text-slate-300 text-base max-w-xl drop-shadow-[0_1px_6px_rgba(0,0,0,0.7)]">
           A glimpse into my engineering journey, education, and technical philosophy.
         </p>
       </div>

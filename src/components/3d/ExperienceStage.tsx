@@ -53,7 +53,7 @@ export const ExperienceStage: React.FC<ExperienceStageProps> = ({ reducedMotion 
   });
 
   return (
-    <group ref={groupRef} position={[0, -13.5, 0]}>
+    <group ref={groupRef} position={[0, -13.5, -2.5]}>
       {/* Central Glowing Vertical Data Spine */}
       <mesh position={[0, 0, -0.5]}>
         <cylinderGeometry args={[0.02, 0.02, 5.2, 16]} />

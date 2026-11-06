@@ -81,7 +81,7 @@ export const Navbar: React.FC = () => {
         </a>
 
         {/* Desktop Nav Items */}
-        <nav className="hidden md:flex items-center gap-1 p-1 rounded-xl bg-slate-900/60 border border-white/[0.06] backdrop-blur-md">
+        <nav className="hidden md:flex items-center gap-1 p-1 rounded-xl bg-slate-950/80 border border-white/10 backdrop-blur-xl shadow-lg shadow-black/40">
           {NAV_SECTIONS.map((item) => {
             const isActive = activeSection === item.id;
             return (

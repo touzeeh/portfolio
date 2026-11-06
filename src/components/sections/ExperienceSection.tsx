@@ -9,13 +9,13 @@ export const ExperienceSection: React.FC = () => {
     <section id="experience" className="py-24 px-4 sm:px-6 max-w-6xl mx-auto">
       {/* Section Header */}
       <div className="mb-14 space-y-2">
-        <span className="text-xs font-mono uppercase tracking-widest text-violet-400 font-semibold">
+        <span className="text-xs font-mono uppercase tracking-widest text-violet-400 font-semibold drop-shadow-sm">
           Trajectory
         </span>
-        <h2 className="font-display text-section-fluid text-white tracking-tight">
+        <h2 className="font-display text-section-fluid text-white tracking-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)]">
           Timeline & Milestones
         </h2>
-        <p className="text-slate-400 text-base max-w-xl">
+        <p className="text-slate-300 text-base max-w-xl drop-shadow-[0_1px_6px_rgba(0,0,0,0.7)]">
           Academic progression, hackathons, open-source building, and continuous technical growth.
         </p>
       </div>

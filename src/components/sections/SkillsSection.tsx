@@ -9,13 +9,13 @@ export const SkillsSection: React.FC = () => {
     <section id="skills" className="py-24 px-4 sm:px-6 max-w-6xl mx-auto">
       {/* Section Header */}
       <div className="mb-12 space-y-2">
-        <span className="text-xs font-mono uppercase tracking-widest text-cyan-400 font-semibold">
+        <span className="text-xs font-mono uppercase tracking-widest text-cyan-400 font-semibold drop-shadow-sm">
           Expertise
         </span>
-        <h2 className="font-display text-section-fluid text-white tracking-tight">
+        <h2 className="font-display text-section-fluid text-white tracking-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)]">
           Skills & Technical Stack
         </h2>
-        <p className="text-slate-400 text-base max-w-xl">
+        <p className="text-slate-300 text-base max-w-xl drop-shadow-[0_1px_6px_rgba(0,0,0,0.7)]">
           Grouped by engineering domain. No artificial percentages or vanity bars—just the actual tools and technologies I use to build software.
         </p>
       </div>

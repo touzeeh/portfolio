@@ -82,10 +82,10 @@ export const HeroStage: React.FC<HeroStageProps> = ({
   });
 
   return (
-    <group ref={groupRef} position={[0, 0, 0]}>
+    <group ref={groupRef} position={[0, 0, -1.8]}>
       {/* Central Kinetic Distorted Core Sphere */}
       <mesh ref={meshRef}>
-        <sphereGeometry args={[1.35, isMobile ? 32 : 48, isMobile ? 32 : 48]} />
+        <sphereGeometry args={[isMobile ? 1.05 : 1.25, isMobile ? 32 : 48, isMobile ? 32 : 48]} />
         <MeshDistortMaterial
           color="#8b5cf6"
           distort={reducedMotion ? 0 : isMobile ? 0.28 : 0.38}
@@ -110,27 +110,27 @@ export const HeroStage: React.FC<HeroStageProps> = ({
         />
       </mesh>
 
-      {/* Gyroscopic Hairline Ring 1 (Teal) */}
+      {/* Gyroscopic Halo Ring 1 (Teal) */}
       <mesh ref={ringRef1}>
-        <torusGeometry args={[2.3, 0.015, 16, isMobile ? 64 : 100]} />
+        <torusGeometry args={[isMobile ? 2.4 : 2.9, 0.016, 16, isMobile ? 64 : 100]} />
         <meshStandardMaterial
           color="#06b6d4"
           roughness={0.1}
           metalness={0.9}
           emissive="#06b6d4"
-          emissiveIntensity={0.8}
+          emissiveIntensity={0.9}
         />
       </mesh>
 
-      {/* Gyroscopic Hairline Ring 2 (Violet) */}
+      {/* Gyroscopic Halo Ring 2 (Violet) */}
       <mesh ref={ringRef2} rotation={[Math.PI / 3, 0, 0]}>
-        <torusGeometry args={[2.7, 0.012, 16, isMobile ? 64 : 100]} />
+        <torusGeometry args={[isMobile ? 2.8 : 3.4, 0.014, 16, isMobile ? 64 : 100]} />
         <meshStandardMaterial
           color="#a78bfa"
           roughness={0.1}
           metalness={0.9}
           emissive="#8b5cf6"
-          emissiveIntensity={0.7}
+          emissiveIntensity={0.8}
         />
       </mesh>
 
@@ -140,18 +140,18 @@ export const HeroStage: React.FC<HeroStageProps> = ({
           <bufferAttribute attach="attributes-position" args={[positions, 3]} />
         </bufferGeometry>
         <pointsMaterial
-          size={isMobile ? 0.045 : 0.035}
+          size={isMobile ? 0.038 : 0.028}
           color="#c4b5fd"
           transparent
-          opacity={0.7}
+          opacity={0.6}
           sizeAttenuation
           blending={THREE.AdditiveBlending}
         />
       </points>
 
       {/* Stage lights */}
-      <pointLight color="#8b5cf6" intensity={isMobile ? 2.2 : 3} distance={10} position={[2, 2, 2]} />
-      <pointLight color="#06b6d4" intensity={isMobile ? 1.8 : 2.5} distance={8} position={[-2, -2, -1]} />
+      <pointLight color="#8b5cf6" intensity={isMobile ? 2.5 : 3.5} distance={12} position={[2, 2, 2]} />
+      <pointLight color="#06b6d4" intensity={isMobile ? 2.0 : 3.0} distance={10} position={[-2, -2, -1]} />
     </group>
   );
 };

@@ -18,15 +18,15 @@ export const HeroSection: React.FC = () => {
       id="hero"
       className="relative min-h-screen flex flex-col justify-center items-center px-4 sm:px-6 pt-28 pb-16"
     >
-      {/* Soft Vignette Overlay for Readability while letting 3D universe shine */}
+      {/* Targeted radial backdrop for 100% text contrast while letting 3D universe orbit cleanly around */}
       <div
-        className="absolute inset-0 bg-gradient-to-b from-[#030712]/40 via-transparent to-[#030712]/60 pointer-events-none"
+        className="absolute inset-0 bg-[radial-gradient(ellipse_65%_55%_at_center,rgba(3,7,18,0.78)_0%,rgba(3,7,18,0.4)_60%,transparent_90%)] pointer-events-none"
         aria-hidden="true"
       />
 
       <div className="relative z-10 max-w-4xl mx-auto text-center flex flex-col items-center gap-6">
         {/* Status Pill Badge */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/80 border border-white/10 text-xs text-slate-300 backdrop-blur-md shadow-lg shadow-black/40 max-w-full">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-950/85 border border-white/10 text-xs text-slate-300 backdrop-blur-md shadow-lg shadow-black/60 max-w-full">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
           <span className="font-mono text-[11px] tracking-wide text-slate-300 text-center">
             {PERSONAL_INFO.status}
@@ -35,19 +35,19 @@ export const HeroSection: React.FC = () => {
 
         {/* Headline */}
         <div className="space-y-4">
-          <h1 className="font-display text-hero-fluid font-bold tracking-tight text-white max-w-3xl mx-auto">
+          <h1 className="font-display text-hero-fluid font-bold tracking-tight text-white max-w-3xl mx-auto drop-shadow-[0_4px_16px_rgba(0,0,0,0.9)]">
             Hi, I'm{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-300 via-white to-cyan-300">
               {PERSONAL_INFO.fullName}
             </span>
           </h1>
-          <p className="text-lg sm:text-xl md:text-2xl font-medium text-slate-200 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-lg sm:text-xl md:text-2xl font-medium text-slate-200 max-w-2xl mx-auto leading-relaxed drop-shadow-[0_2px_10px_rgba(0,0,0,0.85)]">
             {PERSONAL_INFO.headline}
           </p>
         </div>
 
         {/* Subtext */}
-        <p className="max-w-xl text-slate-400 text-sm sm:text-base leading-relaxed">
+        <p className="max-w-xl text-slate-300 text-sm sm:text-base leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
           {PERSONAL_INFO.subheadline}
         </p>
 

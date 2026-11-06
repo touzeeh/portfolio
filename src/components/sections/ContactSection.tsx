@@ -52,13 +52,13 @@ export const ContactSection: React.FC = () => {
     <section id="contact" className="py-24 px-4 sm:px-6 max-w-6xl mx-auto">
       {/* Section Header */}
       <div className="mb-14 space-y-2">
-        <span className="text-xs font-mono uppercase tracking-widest text-cyan-400 font-semibold">
+        <span className="text-xs font-mono uppercase tracking-widest text-cyan-400 font-semibold drop-shadow-sm">
           Get in Touch
         </span>
-        <h2 className="font-display text-section-fluid text-white tracking-tight">
+        <h2 className="font-display text-section-fluid text-white tracking-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)]">
           Let's build something together
         </h2>
-        <p className="text-slate-400 text-base max-w-xl">
+        <p className="text-slate-300 text-base max-w-xl drop-shadow-[0_1px_6px_rgba(0,0,0,0.7)]">
           Whether you have an internship role, an engineering project, or want to discuss 3D web systems, send a message below.
         </p>
       </div>
