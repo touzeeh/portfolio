@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#120924"/>
+      <stop offset="50%" stop-color="#080614"/>
+      <stop offset="100%" stop-color="#02030a"/>
+    </linearGradient>
+    <linearGradient id="violetGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#a855f7"/>
+      <stop offset="100%" stop-color="#ec4899"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="50%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="800" height="500" fill="url(#bg)"/>
+
+  <!-- Cyber Grid Pattern -->
+  <g opacity="0.12" stroke="#c084fc" stroke-width="1">
+    <line x1="0" y1="50" x2="800" y2="50"/>
+    <line x1="0" y1="100" x2="800" y2="100"/>
+    <line x1="0" y1="150" x2="800" y2="150"/>
+    <line x1="0" y1="200" x2="800" y2="200"/>
+    <line x1="0" y1="250" x2="800" y2="250"/>
+    <line x1="0" y1="300" x2="800" y2="300"/>
+    <line x1="0" y1="350" x2="800" y2="350"/>
+    <line x1="0" y1="400" x2="800" y2="400"/>
+    <line x1="0" y1="450" x2="800" y2="450"/>
+    <line x1="100" y1="0" x2="100" y2="500"/>
+    <line x1="200" y1="0" x2="200" y2="500"/>
+    <line x1="300" y1="0" x2="300" y2="500"/>
+    <line x1="400" y1="0" x2="400" y2="500"/>
+    <line x1="500" y1="0" x2="500" y2="500"/>
+    <line x1="600" y1="0" x2="600" y2="500"/>
+    <line x1="700" y1="0" x2="700" y2="500"/>
+  </g>
+
+  <!-- Outer Boundary Frame -->
+  <rect x="20" y="20" width="760" height="460" rx="16" fill="none" stroke="#a855f7" stroke-width="2" stroke-opacity="0.45"/>
+  <rect x="28" y="28" width="744" height="444" rx="12" fill="none" stroke="#ffffff" stroke-width="1" stroke-opacity="0.08"/>
+
+  <!-- Viewfinder Corner Accents -->
+  <path d="M 20 50 L 20 20 L 50 20" stroke="#a855f7" stroke-width="4" fill="none"/>
+  <path d="M 750 20 L 780 20 L 780 50" stroke="#a855f7" stroke-width="4" fill="none"/>
+  <path d="M 780 450 L 780 480 L 750 480" stroke="#a855f7" stroke-width="4" fill="none"/>
+  <path d="M 50 480 L 20 480 L 20 450" stroke="#a855f7" stroke-width="4" fill="none"/>
+
+  <!-- Radial Glow Behind Trophy -->
+  <circle cx="400" cy="190" r="130" fill="#8b5cf6" opacity="0.16" filter="url(#glow)"/>
+  <circle cx="400" cy="190" r="80" fill="#ec4899" opacity="0.12" filter="url(#glow)"/>
+
+  <!-- Medal / Star Emblem -->
+  <g transform="translate(350, 95) scale(1.1)">
+    <!-- Ribbon Top -->
+    <polygon points="30,10 45,70 15,70" fill="#8b5cf6" opacity="0.9"/>
+    <polygon points="60,10 45,70 75,70" fill="#ec4899" opacity="0.9"/>
+    <!-- Gold Medal Ring -->
+    <circle cx="45" cy="85" r="42" fill="url(#goldGrad)" stroke="#fef08a" stroke-width="3"/>
+    <circle cx="45" cy="85" r="34" fill="#030712" stroke="#f59e0b" stroke-width="1.5"/>
+    <!-- Medal Center Star -->
+    <polygon points="45,62 48,74 60,74 50,81 54,92 45,86 36,92 40,81 30,74 42,74" fill="url(#goldGrad)"/>
+    <!-- Laurel Wreath Leaves -->
+    <path d="M 25 90 C 25 105 45 112 45 112" fill="none" stroke="#fef08a" stroke-width="2"/>
+    <path d="M 65 90 C 65 105 45 112 45 112" fill="none" stroke="#fef08a" stroke-width="2"/>
+  </g>
+
+  <!-- Winner Badge Pill -->
+  <g transform="translate(270, 275)">
+    <rect width="260" height="32" rx="16" fill="#a855f7" fill-opacity="0.18" stroke="#a855f7" stroke-width="1.5"/>
+    <text x="130" y="21" fill="#e9d5ff" font-family="system-ui, sans-serif" font-size="13" font-weight="700" text-anchor="middle" letter-spacing="2">★ BEST FULL-STACK PROJECT ★</text>
+  </g>
+
+  <!-- Title & Event Details -->
+  <text x="400" y="348" fill="#ffffff" font-family="system-ui, sans-serif" font-size="24" font-weight="800" text-anchor="middle" letter-spacing="-0.5">KarigarKart • Artisan Commerce Platform</text>
+  <text x="400" y="380" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="15" font-weight="500" text-anchor="middle">Central India Developer Summit 2025</text>
+
+  <!-- Verification Tech Footer -->
+  <g transform="translate(180, 420)">
+    <rect width="440" height="28" rx="8" fill="#0f172a" stroke="#ffffff" stroke-opacity="0.1"/>
+    <text x="220" y="18" fill="#c084fc" font-family="monospace" font-size="11" text-anchor="middle" letter-spacing="1">AWARD VERIFIED • E-COMMERCE &amp; DIGITAL SYSTEMS</text>
+  </g>
+</svg>

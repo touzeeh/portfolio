@@ -36,7 +36,7 @@ export const AboutSection: React.FC = () => {
                 {/* Photo / Avatar Placeholder */}
                 <div className="w-16 h-16 rounded-[12px] bg-gradient-to-tr from-violet-600 to-cyan-500 p-[2px] shrink-0">
                   <div className="w-full h-full rounded-[10px] bg-[#030712] flex items-center justify-center font-display font-bold text-lg text-white">
-                    MTA
+                    TA
                   </div>
                 </div>
                 <div>

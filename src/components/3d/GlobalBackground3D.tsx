@@ -45,8 +45,8 @@ export const GlobalBackground3D: React.FC<GlobalBackground3DProps> = ({
 
       // X: spread across screen width
       pos[i * 3] = (p1 - 0.5) * (isMobile ? 20 : 32);
-      // Y: covers whole height from top (+8) to bottom of site (-24)
-      pos[i * 3 + 1] = 8 - p2 * 32;
+      // Y: covers whole height from top (+8) to bottom of site (-26)
+      pos[i * 3 + 1] = 8 - p2 * 34;
       // Z: strictly deep background layer from -24 to -6 (never clips in front of content!)
       pos[i * 3 + 2] = -24 + p3 * 17;
 
@@ -130,10 +130,10 @@ export const GlobalBackground3D: React.FC<GlobalBackground3DProps> = ({
           <bufferAttribute attach="attributes-color" args={[colors, 3]} />
         </bufferGeometry>
         <pointsMaterial
-          size={isMobile ? 0.026 : 0.022}
+          size={isMobile ? 0.038 : 0.032}
           vertexColors
           transparent
-          opacity={0.65}
+          opacity={0.88}
           sizeAttenuation
           blending={THREE.AdditiveBlending}
           depthWrite={false}
@@ -143,14 +143,14 @@ export const GlobalBackground3D: React.FC<GlobalBackground3DProps> = ({
       {/* Deep Cyber Horizon Grid Floor */}
       <group
         ref={gridGroupRef}
-        position={[0, -11, -9]}
+        position={[0, -12, -8.5]}
         rotation={[-Math.PI / 2.3, 0, 0]}
       >
         <lineSegments geometry={gridSegments}>
           <lineBasicMaterial
             color="#38bdf8"
             transparent
-            opacity={0.11}
+            opacity={0.22}
             blending={THREE.AdditiveBlending}
           />
         </lineSegments>

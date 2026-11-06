@@ -35,6 +35,20 @@ export interface ExperienceItem {
   isPlaceholder?: boolean;
 }
 
+export interface WinItem {
+  id: string;
+  title: string;
+  competition: string;
+  rank: string; // e.g., '1st Place Winner', 'Gold Medalist', 'National Finalist'
+  category: string; // e.g., 'HealthTech Track', 'Open AI Challenge', 'Hackathon'
+  date: string;
+  description: string;
+  image: string; // Path in /public/wins/ or placeholder
+  projectTitle?: string;
+  tags: string[];
+  proofUrl?: string;
+}
+
 export interface NavSection {
   id: string;
   label: string;

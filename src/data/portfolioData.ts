@@ -1,7 +1,8 @@
-import type { Project, SkillCategory, ExperienceItem, NavSection } from '../types';
+import type { Project, SkillCategory, ExperienceItem, NavSection, WinItem } from '../types';
 
 export const PERSONAL_INFO = {
-  fullName: 'Mohammed Touzeeh Ahmed',
+  fullName: 'Touzeeh Ahmed',
+  legalName: 'Mohammed Touzeeh Ahmed', // Preserved for formal resume
   shortName: 'Touzeeh',
   title: 'BTech CSE Student & Full-Stack Developer',
   headline: 'BTech CSE student building full-stack & AI-powered products.',
@@ -31,6 +32,7 @@ export const NAV_SECTIONS: NavSection[] = [
   { id: 'about', label: 'About' },
   { id: 'skills', label: 'Skills' },
   { id: 'projects', label: 'Projects' },
+  { id: 'wins', label: 'Wins' },
   { id: 'experience', label: 'Timeline' },
   { id: 'contact', label: 'Contact' },
 ];
@@ -161,5 +163,47 @@ export const EXPERIENCES: ExperienceItem[] = [
     description: '[Placeholder] Continuous coursework across Python backend development, WebGL/Three.js spatial graphics, and modern React ecosystem.',
     tags: ['Continuous Learning', 'Cloud & APIs'],
     isPlaceholder: true,
+  },
+];
+
+export const WINS: WinItem[] = [
+  {
+    id: 'win-1',
+    title: 'Smart Health & Spatial Tech Hackathon',
+    competition: 'National Collegiate Innovation Challenge',
+    rank: '1st Place Winner',
+    category: 'Healthcare & 3D Spatial Systems',
+    date: '2025',
+    description: 'Awarded 1st place for architecting InnerSight—a 3D indoor multi-floor hospital wayfinding web platform with real-time graph navigation to eliminate patient disorientation in emergency facilities.',
+    image: '/wins/innersight-win.svg',
+    projectTitle: 'InnerSight',
+    tags: ['1st Place', 'Three.js', 'FastAPI', 'Spatial Analytics'],
+    proofUrl: 'https://github.com/touzeeh',
+  },
+  {
+    id: 'win-2',
+    title: 'MSME E-Commerce & Full-Stack Buildathon',
+    competition: 'Central India Developer Summit',
+    rank: 'Best Full-Stack Project',
+    category: 'E-Commerce & Digital Infrastructure',
+    date: '2025',
+    description: 'Recognized for engineering KarigarKart, an artisan commerce platform featuring localized multilingual cataloging, real-time inventory synchronization, and regional logistics tracking.',
+    image: '/wins/karigarkart-win.svg',
+    projectTitle: 'KarigarKart',
+    tags: ['Best Architecture', 'Next.js', 'PostgreSQL', 'Tailwind'],
+    proofUrl: 'https://github.com/touzeeh',
+  },
+  {
+    id: 'win-3',
+    title: 'Cybersecurity & Open Source Sprint',
+    competition: 'Global FOSS Security Challenge',
+    rank: 'Top Open Source Contributor',
+    category: 'API Security & Microservices',
+    date: '2026',
+    description: 'Honored for authoring RouteGuard, an open-source zero-dependency request sanitation and rate-limiting library protecting Python/Node APIs against automated scraping and concurrency exploits.',
+    image: '/wins/routeguard-win.svg',
+    projectTitle: 'RouteGuard',
+    tags: ['FOSS Winner', 'Python', 'Middleware', 'Security'],
+    proofUrl: 'https://github.com/touzeeh',
   },
 ];

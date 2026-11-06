@@ -10,14 +10,15 @@ interface ScrollCameraProps {
   isMobile?: boolean;
 }
 
-// Keyframe waypoint coordinates along the scroll path (t from 0 to 1)
+// Keyframe waypoint coordinates along the scroll path (t from 0 to 1 across 7 sections)
 const WAYPOINTS = [
   { t: 0.0, pos: new THREE.Vector3(0, 0, 6.8), target: new THREE.Vector3(0, 0, 0), fogColor: '#030712' },
-  { t: 0.2, pos: new THREE.Vector3(2.2, -2.5, 6.0), target: new THREE.Vector3(0, -2.5, 0), fogColor: '#070b19' },
-  { t: 0.42, pos: new THREE.Vector3(-2.0, -6.0, 6.2), target: new THREE.Vector3(0, -6.0, 0), fogColor: '#09071f' },
-  { t: 0.65, pos: new THREE.Vector3(0, -9.8, 4.8), target: new THREE.Vector3(0, -9.8, 0), fogColor: '#04101d' },
-  { t: 0.82, pos: new THREE.Vector3(1.6, -13.5, 5.6), target: new THREE.Vector3(0, -13.5, 0), fogColor: '#08081a' },
-  { t: 1.0, pos: new THREE.Vector3(0, -17.0, 6.6), target: new THREE.Vector3(0, -17.0, 0), fogColor: '#030712' },
+  { t: 0.16, pos: new THREE.Vector3(2.2, -2.8, 6.0), target: new THREE.Vector3(0, -2.8, 0), fogColor: '#070b19' },
+  { t: 0.33, pos: new THREE.Vector3(-2.0, -6.2, 6.2), target: new THREE.Vector3(0, -6.2, 0), fogColor: '#09071f' },
+  { t: 0.50, pos: new THREE.Vector3(0, -9.8, 5.0), target: new THREE.Vector3(0, -9.8, 0), fogColor: '#04101d' },
+  { t: 0.67, pos: new THREE.Vector3(1.8, -13.5, 5.4), target: new THREE.Vector3(0, -13.5, 0), fogColor: '#120c02' },
+  { t: 0.84, pos: new THREE.Vector3(-1.6, -17.2, 5.8), target: new THREE.Vector3(0, -17.2, 0), fogColor: '#08081a' },
+  { t: 1.0, pos: new THREE.Vector3(0, -21.0, 6.6), target: new THREE.Vector3(0, -21.0, 0), fogColor: '#030712' },
 ];
 
 export const ScrollCamera: React.FC<ScrollCameraProps> = ({

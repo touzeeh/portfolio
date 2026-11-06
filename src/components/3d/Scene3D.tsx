@@ -8,6 +8,7 @@ import { HeroStage } from './HeroStage';
 import { AboutStage } from './AboutStage';
 import { SkillsStage } from './SkillsStage';
 import { ProjectsStage } from './ProjectsStage';
+import { WinsStage } from './WinsStage';
 import { ExperienceStage } from './ExperienceStage';
 import { ContactStage } from './ContactStage';
 
@@ -81,11 +82,12 @@ export const Scene3D: React.FC<Scene3DProps> = ({ scrollProgress, isMobile = fal
         }}
       >
         {/* Soft atmospheric depth fog allowing cosmic field & grid to shine */}
-        <fogExp2 attach="fog" args={['#030712', mobileState ? 0.025 : 0.02]} />
-        <ambientLight intensity={0.65} />
-        <directionalLight position={[6, 12, 8]} intensity={1.8} color="#ffffff" />
-        <directionalLight position={[-6, -10, -6]} intensity={1.2} color="#8b5cf6" />
-        <pointLight position={[0, 0, 5]} intensity={1.0} color="#06b6d4" distance={15} />
+        <fogExp2 attach="fog" args={['#030712', mobileState ? 0.02 : 0.016]} />
+        <ambientLight intensity={0.75} />
+        <directionalLight position={[6, 12, 8]} intensity={2.2} color="#ffffff" />
+        <directionalLight position={[-6, -10, -6]} intensity={1.6} color="#8b5cf6" />
+        <pointLight position={[0, 0, 5]} intensity={1.8} color="#06b6d4" distance={18} />
+        <pointLight position={[2, -13.5, 3]} intensity={2.5} color="#f59e0b" distance={12} />
 
         {/* Scroll-Driven Camera Path & Mouse Parallax */}
         <ScrollCamera
@@ -123,10 +125,13 @@ export const Scene3D: React.FC<Scene3DProps> = ({ scrollProgress, isMobile = fal
           {/* Section 4: Projects Stage */}
           <ProjectsStage reducedMotion={reducedMotion} />
 
-          {/* Section 5: Experience Stage */}
+          {/* Section 5: Wins Stage */}
+          <WinsStage reducedMotion={reducedMotion} />
+
+          {/* Section 6: Experience Stage */}
           <ExperienceStage reducedMotion={reducedMotion} />
 
-          {/* Section 6: Contact Stage */}
+          {/* Section 7: Contact Stage */}
           <ContactStage
             particleCount={particleCountContact}
             reducedMotion={reducedMotion}
