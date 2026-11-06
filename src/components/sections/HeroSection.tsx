@@ -18,9 +18,9 @@ export const HeroSection: React.FC = () => {
       id="hero"
       className="relative min-h-screen flex flex-col justify-center items-center px-4 sm:px-6 pt-28 pb-16"
     >
-      {/* Darkened Gradient Backdrop Overlay for Readability */}
+      {/* Soft Vignette Overlay for Readability while letting 3D universe shine */}
       <div
-        className="absolute inset-0 bg-gradient-to-b from-[#030712]/75 via-[#030712]/50 to-[#030712]/80 pointer-events-none"
+        className="absolute inset-0 bg-gradient-to-b from-[#030712]/40 via-transparent to-[#030712]/60 pointer-events-none"
         aria-hidden="true"
       />
 

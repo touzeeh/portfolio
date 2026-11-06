@@ -19,7 +19,7 @@ const Scene3D = dynamic(
     ssr: false,
     loading: () => (
       <div
-        className="fixed inset-0 -z-10 pointer-events-none w-full h-full bg-[#030712] flex items-center justify-center"
+        className="fixed inset-0 z-0 pointer-events-none w-full h-full bg-[#030712] flex items-center justify-center"
         aria-hidden="true"
       >
         <div className="w-6 h-6 border-2 border-violet-500/20 border-t-violet-400 rounded-full animate-spin" />
@@ -32,7 +32,7 @@ function PortfolioContent() {
   const { progress, isMobile } = useScrollProgress();
 
   return (
-    <div className="relative min-h-screen bg-[#030712] text-slate-100 overflow-x-hidden">
+    <div className="relative min-h-screen cosmic-backdrop text-slate-100 overflow-x-hidden">
       {/* ONE fixed full-screen Canvas behind all content */}
       <Scene3D scrollProgress={progress} isMobile={isMobile} />
 

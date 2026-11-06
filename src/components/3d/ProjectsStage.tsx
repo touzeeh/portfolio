@@ -13,51 +13,105 @@ export const ProjectsStage: React.FC<ProjectsStageProps> = ({ reducedMotion = fa
   const frame1 = useRef<THREE.Mesh>(null!);
   const frame2 = useRef<THREE.Mesh>(null!);
   const frame3 = useRef<THREE.Mesh>(null!);
+  const prismLeft = useRef<THREE.Mesh>(null!);
+  const prismRight = useRef<THREE.Mesh>(null!);
 
   useFrame((_, delta) => {
     if (reducedMotion) return;
-    if (frame1.current) frame1.current.rotation.z += delta * 0.08;
-    if (frame2.current) frame2.current.rotation.z -= delta * 0.06;
-    if (frame3.current) frame3.current.rotation.z += delta * 0.05;
+    if (frame1.current) frame1.current.rotation.z += delta * 0.12;
+    if (frame2.current) frame2.current.rotation.z -= delta * 0.09;
+    if (frame3.current) frame3.current.rotation.z += delta * 0.08;
+
+    if (prismLeft.current) {
+      prismLeft.current.rotation.x += delta * 0.2;
+      prismLeft.current.rotation.y += delta * 0.25;
+    }
+    if (prismRight.current) {
+      prismRight.current.rotation.y -= delta * 0.22;
+      prismRight.current.rotation.z += delta * 0.18;
+    }
   });
 
   return (
     <group ref={groupRef} position={[0, -9.8, 0]}>
-      {/* Depth Portal 1 (Closest) */}
-      <mesh ref={frame1} position={[0, 0, 1.5]}>
-        <torusGeometry args={[3.2, 0.012, 16, 64]} />
+      {/* Dimensional Depth Portal 1 (Closest) */}
+      <mesh ref={frame1} position={[0, 0, 1.8]}>
+        <torusGeometry args={[3.4, 0.016, 16, 80]} />
         <meshStandardMaterial
           color="#06b6d4"
-          wireframe={false}
           emissive="#06b6d4"
-          emissiveIntensity={0.6}
+          emissiveIntensity={0.8}
+          roughness={0.1}
         />
       </mesh>
 
-      {/* Depth Portal 2 (Mid) */}
-      <mesh ref={frame2} position={[0, 0, -1]}>
-        <torusGeometry args={[2.7, 0.015, 16, 64]} />
+      {/* Dimensional Depth Portal 2 (Mid) */}
+      <mesh ref={frame2} position={[0, 0, -0.8]}>
+        <torusGeometry args={[2.9, 0.018, 16, 80]} />
         <meshStandardMaterial
           color="#8b5cf6"
-          wireframe={false}
           emissive="#8b5cf6"
-          emissiveIntensity={0.7}
+          emissiveIntensity={0.9}
+          roughness={0.1}
         />
       </mesh>
 
-      {/* Depth Portal 3 (Far) */}
-      <mesh ref={frame3} position={[0, 0, -3.5]}>
-        <torusGeometry args={[2.2, 0.012, 16, 64]} />
+      {/* Dimensional Depth Portal 3 (Far) */}
+      <mesh ref={frame3} position={[0, 0, -3.2]}>
+        <torusGeometry args={[2.4, 0.014, 16, 80]} />
         <meshStandardMaterial
           color="#38bdf8"
-          wireframe={false}
           emissive="#38bdf8"
-          emissiveIntensity={0.5}
+          emissiveIntensity={0.7}
+          roughness={0.1}
         />
       </mesh>
 
-      {/* Ambient glow particles along depth tunnel */}
-      <pointLight color="#8b5cf6" intensity={2} distance={8} position={[0, 0, -1]} />
+      {/* Left Gutter: Floating Holographic Prism */}
+      <group position={[-3.8, 0.4, 0]}>
+        <mesh ref={prismLeft}>
+          <boxGeometry args={[0.9, 0.9, 0.9]} />
+          <meshStandardMaterial
+            color="#8b5cf6"
+            wireframe
+            emissive="#8b5cf6"
+            emissiveIntensity={0.9}
+          />
+        </mesh>
+        <mesh scale={0.5}>
+          <octahedronGeometry args={[0.5, 0]} />
+          <meshStandardMaterial
+            color="#06b6d4"
+            emissive="#06b6d4"
+            emissiveIntensity={1.2}
+          />
+        </mesh>
+      </group>
+
+      {/* Right Gutter: Floating Quantum Prism */}
+      <group position={[3.8, -0.4, -0.5]}>
+        <mesh ref={prismRight}>
+          <dodecahedronGeometry args={[0.8, 0]} />
+          <meshStandardMaterial
+            color="#06b6d4"
+            wireframe
+            emissive="#06b6d4"
+            emissiveIntensity={0.8}
+          />
+        </mesh>
+        <mesh scale={0.45}>
+          <sphereGeometry args={[0.5, 16, 16]} />
+          <meshStandardMaterial
+            color="#c084fc"
+            emissive="#a855f7"
+            emissiveIntensity={1.2}
+          />
+        </mesh>
+      </group>
+
+      {/* Ambient portal glow illumination */}
+      <pointLight color="#8b5cf6" intensity={3} distance={10} position={[0, 0, 0]} />
+      <pointLight color="#06b6d4" intensity={2} distance={8} position={[0, 0, -2]} />
     </group>
   );
 };

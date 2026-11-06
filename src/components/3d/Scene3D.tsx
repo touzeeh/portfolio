@@ -3,6 +3,7 @@
 import React, { useEffect, useState, Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { ScrollCamera } from './ScrollCamera';
+import { GlobalBackground3D } from './GlobalBackground3D';
 import { HeroStage } from './HeroStage';
 import { AboutStage } from './AboutStage';
 import { SkillsStage } from './SkillsStage';
@@ -38,7 +39,7 @@ export const Scene3D: React.FC<Scene3DProps> = ({ scrollProgress, isMobile = fal
     // Check WebGL availability
     try {
       const canvas = document.createElement('canvas');
-      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      const gl = canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
       if (!gl) setWebGlSupported(false);
     } catch {
       setWebGlSupported(false);
@@ -54,19 +55,19 @@ export const Scene3D: React.FC<Scene3DProps> = ({ scrollProgress, isMobile = fal
   if (!webGlSupported) {
     return (
       <div
-        className="fixed inset-0 -z-10 pointer-events-none w-full h-full bg-gradient-to-b from-[#030712] via-[#09071f] to-[#030712]"
+        className="fixed inset-0 z-0 pointer-events-none w-full h-full bg-gradient-to-b from-[#030712] via-[#09071f] to-[#030712]"
         aria-hidden="true"
       />
     );
   }
 
   // Optimized particle counts for mobile to maintain 60/120 FPS
-  const particleCountHero = mobileState ? 240 : 900;
-  const particleCountContact = mobileState ? 140 : 500;
+  const particleCountHero = mobileState ? 350 : 1100;
+  const particleCountContact = mobileState ? 200 : 650;
 
   return (
     <div
-      className="fixed inset-0 -z-10 pointer-events-none w-full h-full overflow-hidden"
+      className="fixed inset-0 z-0 pointer-events-none w-full h-full overflow-hidden"
       aria-hidden="true"
     >
       <Canvas
@@ -79,12 +80,12 @@ export const Scene3D: React.FC<Scene3DProps> = ({ scrollProgress, isMobile = fal
           depth: true,
         }}
       >
-        {/* Tuned global fog and ambient lighting */}
-        <color attach="background" args={['#030712']} />
-        <fogExp2 attach="fog" args={['#030712', mobileState ? 0.05 : 0.055]} />
-        <ambientLight intensity={0.55} />
-        <directionalLight position={[5, 10, 7]} intensity={1.5} color="#ffffff" />
-        <directionalLight position={[-5, -8, -5]} intensity={1.0} color="#8b5cf6" />
+        {/* Soft atmospheric depth fog allowing cosmic field & grid to shine */}
+        <fogExp2 attach="fog" args={['#030712', mobileState ? 0.025 : 0.02]} />
+        <ambientLight intensity={0.65} />
+        <directionalLight position={[6, 12, 8]} intensity={1.8} color="#ffffff" />
+        <directionalLight position={[-6, -10, -6]} intensity={1.2} color="#8b5cf6" />
+        <pointLight position={[0, 0, 5]} intensity={1.0} color="#06b6d4" distance={15} />
 
         {/* Scroll-Driven Camera Path & Mouse Parallax */}
         <ScrollCamera
@@ -94,32 +95,38 @@ export const Scene3D: React.FC<Scene3DProps> = ({ scrollProgress, isMobile = fal
         />
 
         <Suspense fallback={null}>
-          {/* Section 1: Hero */}
+          {/* Continuous Cosmic Dust Starfield, Cyber Grid & Gutter Relics across entire site */}
+          <GlobalBackground3D
+            reducedMotion={reducedMotion}
+            isMobile={mobileState}
+          />
+
+          {/* Section 1: Hero Stage */}
           <HeroStage
             particleCount={particleCountHero}
             reducedMotion={reducedMotion}
             isMobile={mobileState}
           />
 
-          {/* Section 2: About */}
+          {/* Section 2: About Stage */}
           <AboutStage
             reducedMotion={reducedMotion}
             isMobile={mobileState}
           />
 
-          {/* Section 3: Skills */}
+          {/* Section 3: Skills Stage */}
           <SkillsStage
             reducedMotion={reducedMotion}
             isMobile={mobileState}
           />
 
-          {/* Section 4: Projects */}
+          {/* Section 4: Projects Stage */}
           <ProjectsStage reducedMotion={reducedMotion} />
 
-          {/* Section 5: Experience */}
+          {/* Section 5: Experience Stage */}
           <ExperienceStage reducedMotion={reducedMotion} />
 
-          {/* Section 6: Contact */}
+          {/* Section 6: Contact Stage */}
           <ContactStage
             particleCount={particleCountContact}
             reducedMotion={reducedMotion}
