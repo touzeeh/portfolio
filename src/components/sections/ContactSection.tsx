@@ -6,58 +6,45 @@ import { TiltCard } from '@/components/ui/TiltCard';
 import { GithubIcon, LinkedinIcon, MailIcon } from '@/components/ui/Icons';
 
 export const ContactSection: React.FC = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: '',
-    website_hp: '', // Honeypot field
-  });
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [statusMessage, setStatusMessage] = useState('');
+  const [senderName, setSenderName] = useState('');
 
-  const validate = () => {
-    if (!formData.name.trim() || formData.name.trim().length < 2) {
-      return 'Please enter your name (at least 2 characters).';
-    }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!formData.email.trim() || !emailRegex.test(formData.email.trim())) {
-      return 'Please provide a valid email address.';
-    }
-    if (!formData.message.trim() || formData.message.trim().length < 10) {
-      return 'Please share a brief note (at least 10 characters).';
-    }
-    return '';
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const error = validate();
-    if (error) {
-      setErrorMessage(error);
-      return;
-    }
-
-    setErrorMessage('');
     setStatus('submitting');
+    setStatusMessage('Transmitting message...');
+
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    
+    // Web3Forms Public Access Key
+    formData.append('access_key', '6efb1fda-7860-4bbc-9978-bf37460a177f');
+    formData.append('subject', `New Inquiry on touzeeh.xyz from ${formData.get('name') || 'Visitor'}`);
+    formData.append('from_name', 'touzeeh.xyz Portfolio');
+
+    const name = (formData.get('name') as string) || '';
+    setSenderName(name);
 
     try {
-      const response = await fetch('/api/contact', {
+      const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: formData,
       });
 
       const data = await response.json();
 
-      if (response.ok && data.success) {
+      if (data.success) {
         setStatus('success');
+        setStatusMessage(data.message || 'Message sent successfully!');
+        form.reset();
       } else {
         setStatus('error');
-        setErrorMessage(data.error || 'Failed to dispatch message. Please try again.');
+        setStatusMessage(data.message || 'Failed to dispatch message. Please try again.');
       }
     } catch {
       setStatus('error');
-      setErrorMessage('Network error. Please try again or reach out directly via email.');
+      setStatusMessage('Network connection error. Please try again or reach out via email directly.');
     }
   };
 
@@ -96,14 +83,13 @@ export const ContactSection: React.FC = () => {
                   Message Dispatched
                 </h3>
                 <p className="text-sm text-slate-300 max-w-sm mx-auto leading-relaxed">
-                  Thank you, <span className="text-white font-medium">{formData.name}</span>. Your message has been received. I'll get back to you at{' '}
-                  <span className="text-violet-300 font-mono text-xs">{formData.email}</span> soon.
+                  Thank you, <span className="text-white font-medium">{senderName || 'there'}</span>! Your message has been sent directly to Touzeeh's inbox.
                 </p>
                 <button
                   type="button"
                   onClick={() => {
                     setStatus('idle');
-                    setFormData({ name: '', email: '', message: '', website_hp: '' });
+                    setStatusMessage('');
                   }}
                   className="btn-secondary text-xs mt-2"
                 >
@@ -111,20 +97,16 @@ export const ContactSection: React.FC = () => {
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-5" noValidate>
-                {/* Honeypot Field (Hidden from real users, traps spam bots) */}
-                <div className="hidden" aria-hidden="true">
-                  <label htmlFor="website_hp">Website</label>
-                  <input
-                    type="text"
-                    id="website_hp"
-                    name="website_hp"
-                    tabIndex={-1}
-                    autoComplete="off"
-                    value={formData.website_hp}
-                    onChange={(e) => setFormData({ ...formData, website_hp: e.target.value })}
-                  />
-                </div>
+              <form onSubmit={handleSubmit} className="space-y-5">
+                {/* Honeypot Botcheck (Hidden from humans, traps spam bots) */}
+                <input
+                  type="checkbox"
+                  name="botcheck"
+                  className="hidden"
+                  style={{ display: 'none' }}
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
@@ -134,10 +116,9 @@ export const ContactSection: React.FC = () => {
                     <input
                       type="text"
                       id="name"
+                      name="name"
                       required
                       placeholder="Your name"
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       className="w-full px-4 py-2.5 rounded-[12px] bg-slate-900/90 border border-white/[0.08] text-white text-sm placeholder:text-slate-600 focus:outline-none focus:border-violet-400/60 transition"
                     />
                   </div>
@@ -149,10 +130,9 @@ export const ContactSection: React.FC = () => {
                     <input
                       type="email"
                       id="email"
+                      name="email"
                       required
                       placeholder="you@example.com"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       className="w-full px-4 py-2.5 rounded-[12px] bg-slate-900/90 border border-white/[0.08] text-white text-sm placeholder:text-slate-600 focus:outline-none focus:border-violet-400/60 transition"
                     />
                   </div>
@@ -164,18 +144,17 @@ export const ContactSection: React.FC = () => {
                   </label>
                   <textarea
                     id="message"
+                    name="message"
                     required
                     rows={4}
                     placeholder="Tell me about your project, idea, or role..."
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     className="w-full px-4 py-2.5 rounded-[12px] bg-slate-900/90 border border-white/[0.08] text-white text-sm placeholder:text-slate-600 focus:outline-none focus:border-violet-400/60 transition resize-none"
                   />
                 </div>
 
-                {errorMessage && (
+                {status === 'error' && (
                   <p className="text-xs text-rose-400 font-mono">
-                    {errorMessage}
+                    {statusMessage}
                   </p>
                 )}
 
