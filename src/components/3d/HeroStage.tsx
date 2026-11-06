@@ -82,7 +82,7 @@ export const HeroStage: React.FC<HeroStageProps> = ({
   });
 
   return (
-    <group ref={groupRef} position={[0, 0, -1.8]}>
+    <group ref={groupRef} position={[0, 0, -3.0]}>
       {/* Central Kinetic Distorted Core Sphere */}
       <mesh ref={meshRef}>
         <sphereGeometry args={[isMobile ? 1.05 : 1.25, isMobile ? 32 : 48, isMobile ? 32 : 48]} />

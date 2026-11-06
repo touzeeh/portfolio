@@ -24,7 +24,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL('https://touzeeh.xyz'),
   title: `${PERSONAL_INFO.fullName} • ${PERSONAL_INFO.title}`,
-  description: `${PERSONAL_INFO.headline} 2nd-year BTech CSE student at LNCT Bhopal specializing in full-stack web platforms, 3D spatial experiences, and intelligent AI tools.`,
+  description: `${PERSONAL_INFO.headline} 2nd-year BTech CSE student at LNCT Bhopal specializing in full-stack web platforms and interactive 3D spatial experiences.`,
   keywords: [
     'Mohammed Touzeeh Ahmed',
     'Touzeeh Ahmed',

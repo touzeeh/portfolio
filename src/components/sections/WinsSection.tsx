@@ -117,7 +117,7 @@ export const WinsSection: React.FC = () => {
                     onClick={() => setSelectedWin(win)}
                     className="text-xs font-medium text-amber-300 hover:text-amber-200 inline-flex items-center gap-1 transition"
                   >
-                    <span>View Full Boundary Proof</span>
+                    <span>View Certificate Proof</span>
                     <EyeIcon className="w-3.5 h-3.5" />
                   </button>
 
@@ -126,10 +126,10 @@ export const WinsSection: React.FC = () => {
                       href={win.proofUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="text-xs font-medium text-slate-400 hover:text-white inline-flex items-center gap-1 transition"
+                      className="text-xs font-medium text-slate-300 hover:text-white inline-flex items-center gap-1 transition"
                       aria-label={`View code for ${win.title}`}
                     >
-                      <span>Code</span>
+                      <span>Repository</span>
                       <ArrowUpRightIcon className="w-3 h-3" />
                     </a>
                   )}
@@ -221,7 +221,7 @@ export const WinsSection: React.FC = () => {
                     rel="noreferrer"
                     className="btn-primary text-xs py-2 px-3.5 inline-flex items-center gap-1.5"
                   >
-                    <span>Inspect Repository</span>
+                    <span>Verify on GitHub</span>
                     <ArrowUpRightIcon className="w-3.5 h-3.5" />
                   </a>
                 )}
@@ -230,14 +230,6 @@ export const WinsSection: React.FC = () => {
           </div>
         </div>
       )}
-
-      {/* Helper Tip for easy photo updates */}
-      <div className="mt-10 p-4 rounded-xl bg-slate-900/60 border border-white/[0.08] flex items-center gap-3 text-xs text-slate-400 font-mono">
-        <SparklesIcon className="w-4 h-4 text-amber-400 shrink-0" />
-        <span>
-          To showcase personal certificates or event ceremony photos, place your image files in <code className="text-slate-200">public/wins/</code> and link them in <code className="text-slate-200">src/data/portfolioData.ts</code>.
-        </span>
-      </div>
     </section>
   );
 };

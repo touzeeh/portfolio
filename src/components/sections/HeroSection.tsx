@@ -9,7 +9,6 @@ import {
   FileTextIcon,
   ArrowDownIcon,
   ArrowUpRightIcon,
-  SparklesIcon,
 } from '@/components/ui/Icons';
 
 export const HeroSection: React.FC = () => {
@@ -25,40 +24,40 @@ export const HeroSection: React.FC = () => {
       />
 
       <div className="relative z-10 max-w-4xl mx-auto text-center flex flex-col items-center gap-6">
-        {/* Status Pill Badge */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-950/85 border border-white/10 text-xs text-slate-300 backdrop-blur-md shadow-lg shadow-black/60 max-w-full">
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
-          <span className="font-mono text-[11px] tracking-wide text-slate-300 text-center">
+        {/* Prominent Status Pill Badge for Recruiters */}
+        <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-slate-950/90 border border-emerald-500/35 text-xs sm:text-sm text-slate-200 backdrop-blur-xl shadow-xl shadow-black/70 max-w-full">
+          <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+          <span className="font-medium tracking-wide">
             {PERSONAL_INFO.status}
           </span>
         </div>
 
         {/* Headline */}
         <div className="space-y-4">
-          <h1 className="font-display text-hero-fluid font-bold tracking-tight text-white max-w-3xl mx-auto drop-shadow-[0_4px_16px_rgba(0,0,0,0.9)]">
+          <h1 className="font-display text-hero-fluid font-bold tracking-tight text-white max-w-3xl mx-auto drop-shadow-[0_4px_20px_rgba(0,0,0,0.95)]">
             Hi, I'm{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-300 via-white to-cyan-300">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-white to-violet-300">
               {PERSONAL_INFO.fullName}
             </span>
           </h1>
-          <p className="text-lg sm:text-xl md:text-2xl font-medium text-slate-200 max-w-2xl mx-auto leading-relaxed drop-shadow-[0_2px_10px_rgba(0,0,0,0.85)]">
+          <p className="text-xl sm:text-2xl md:text-3xl font-medium text-slate-100 max-w-2xl mx-auto leading-relaxed drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
             {PERSONAL_INFO.headline}
           </p>
         </div>
 
         {/* Subtext */}
-        <p className="max-w-xl text-slate-300 text-sm sm:text-base leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+        <p className="max-w-xl text-slate-300 text-base sm:text-lg leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
           {PERSONAL_INFO.subheadline}
         </p>
 
         {/* Action Row: Primary + Secondary + Small Icon Socials */}
-        <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+        <div className="flex flex-wrap items-center justify-center gap-3.5 pt-2">
           {/* Primary CTA */}
           <a
             href="#projects"
-            className="btn-primary"
+            className="btn-primary px-7 py-3.5 text-sm sm:text-base font-semibold"
           >
-            <span>View Work</span>
+            <span>View Projects</span>
             <ArrowUpRightIcon className="w-4 h-4" />
           </a>
 
@@ -67,10 +66,10 @@ export const HeroSection: React.FC = () => {
             href={PERSONAL_INFO.resumeUrl}
             target="_blank"
             rel="noreferrer"
-            className="btn-secondary"
-            aria-label="Download Resume (PDF placeholder)"
+            className="btn-secondary px-6 py-3.5 text-sm sm:text-base font-medium"
+            aria-label="Download Resume"
           >
-            <FileTextIcon className="w-4 h-4 text-violet-400" />
+            <FileTextIcon className="w-4 h-4 text-cyan-400" />
             <span>Download Resume</span>
           </a>
 
@@ -83,7 +82,7 @@ export const HeroSection: React.FC = () => {
               className="btn-icon"
               aria-label="GitHub Profile"
             >
-              <GithubIcon size={16} />
+              <GithubIcon size={18} />
             </a>
 
             <a
@@ -93,33 +92,27 @@ export const HeroSection: React.FC = () => {
               className="btn-icon text-cyan-400 hover:text-cyan-300"
               aria-label="LinkedIn Profile"
             >
-              <LinkedinIcon size={16} />
+              <LinkedinIcon size={18} />
             </a>
 
             <a
               href={`mailto:${PERSONAL_INFO.email}`}
               className="btn-icon text-violet-400 hover:text-violet-300"
-              aria-label="Email Address"
+              aria-label="Email Touzeeh"
             >
-              <MailIcon size={16} />
+              <MailIcon size={18} />
             </a>
           </div>
         </div>
-
-        {/* 3D Interaction Hint */}
-        <div className="pt-6 flex items-center gap-2 text-xs text-slate-500 font-mono">
-          <SparklesIcon className="w-3.5 h-3.5 text-violet-400 animate-pulse" />
-          <span>Scroll to travel through the 3D stages</span>
-        </div>
       </div>
 
-      {/* Down Arrow Indicator */}
+      {/* Down Arrow Indicator directly pointing to Projects */}
       <a
-        href="#about"
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 p-2 rounded-xl text-slate-500 hover:text-white transition"
-        aria-label="Scroll to About section"
+        href="#projects"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 p-2 rounded-xl text-slate-400 hover:text-white transition"
+        aria-label="Scroll to Projects section"
       >
-        <ArrowDownIcon className="w-4 h-4 animate-bounce" />
+        <ArrowDownIcon className="w-5 h-5 animate-bounce" />
       </a>
     </section>
   );

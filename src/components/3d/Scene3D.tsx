@@ -87,7 +87,7 @@ export const Scene3D: React.FC<Scene3DProps> = ({ scrollProgress, isMobile = fal
         <directionalLight position={[6, 12, 8]} intensity={2.2} color="#ffffff" />
         <directionalLight position={[-6, -10, -6]} intensity={1.6} color="#8b5cf6" />
         <pointLight position={[0, 0, 5]} intensity={1.8} color="#06b6d4" distance={18} />
-        <pointLight position={[2, -13.5, 3]} intensity={2.5} color="#f59e0b" distance={12} />
+        <pointLight position={[2, -9.8, 3]} intensity={2.5} color="#f59e0b" distance={12} />
 
         {/* Scroll-Driven Camera Path & Mouse Parallax */}
         <ScrollCamera

@@ -2,7 +2,6 @@
 
 import React, { useRef, useState, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Text } from '@react-three/drei';
 import * as THREE from 'three';
 import { TECH_CONSTELLATION } from '@/data/portfolioData';
 
@@ -48,46 +47,46 @@ export const SkillsStage: React.FC<SkillsStageProps> = ({
     }
   });
 
-  const constellationScale = isMobile ? 0.8 : 1.15;
+  const constellationScale = isMobile ? 0.75 : 1.1;
 
   return (
-    <group position={[0, -6.0, isMobile ? -5.0 : -2.6]} scale={constellationScale}>
+    <group position={[0, -6.2, isMobile ? -5.0 : -2.8]} scale={constellationScale}>
       {/* Central Constellation Anchor Core */}
       <mesh>
         <sphereGeometry args={[0.55, 24, 24]} />
         <meshStandardMaterial
-          color="#8b5cf6"
+          color="#06b6d4"
           roughness={0.2}
           metalness={0.8}
-          emissive="#8b5cf6"
+          emissive="#06b6d4"
           emissiveIntensity={0.8}
         />
       </mesh>
       <mesh scale={1.3}>
         <octahedronGeometry args={[0.55, 0]} />
         <meshStandardMaterial
-          color="#06b6d4"
+          color="#8b5cf6"
           wireframe
           transparent
-          opacity={0.5}
-          emissive="#06b6d4"
-          emissiveIntensity={1.0}
+          opacity={0.4}
+          emissive="#8b5cf6"
+          emissiveIntensity={0.8}
         />
       </mesh>
 
       {/* Orbit Hairline Ring 1 */}
       <mesh rotation={[Math.PI / 2, 0, 0]}>
-        <torusGeometry args={[2.5, 0.01, 16, isMobile ? 48 : 96]} />
-        <meshBasicMaterial color="#06b6d4" transparent opacity={0.4} />
+        <torusGeometry args={[2.5, 0.008, 16, isMobile ? 48 : 96]} />
+        <meshBasicMaterial color="#06b6d4" transparent opacity={0.3} />
       </mesh>
 
       {/* Orbit Hairline Ring 2 */}
       <mesh rotation={[Math.PI / 2.3, 0, 0]}>
-        <torusGeometry args={[3.6, 0.01, 16, isMobile ? 48 : 96]} />
-        <meshBasicMaterial color="#8b5cf6" transparent opacity={0.35} />
+        <torusGeometry args={[3.6, 0.008, 16, isMobile ? 48 : 96]} />
+        <meshBasicMaterial color="#8b5cf6" transparent opacity={0.25} />
       </mesh>
 
-      {/* Ring 1 Orbit Group with Laser Filaments */}
+      {/* Ring 1 Orbit Group with Laser Filaments (No 3D Text Quads to prevent clipping artifacts) */}
       <group ref={ringGroup1}>
         <lineSegments geometry={constellationLines}>
           <lineBasicMaterial
@@ -123,15 +122,6 @@ export const SkillsStage: React.FC<SkillsStageProps> = ({
                   roughness={0.2}
                 />
               </mesh>
-              <Text
-                position={[0, 0.38, 0]}
-                fontSize={isMobile ? 0.24 : 0.2}
-                color={isHovered ? '#ffffff' : '#cbd5e1'}
-                anchorX="center"
-                anchorY="middle"
-              >
-                {node.name}
-              </Text>
             </group>
           );
         })}
@@ -164,23 +154,14 @@ export const SkillsStage: React.FC<SkillsStageProps> = ({
                   roughness={0.2}
                 />
               </mesh>
-              <Text
-                position={[0, 0.35, 0]}
-                fontSize={isMobile ? 0.22 : 0.18}
-                color={isHovered ? '#ffffff' : '#cbd5e1'}
-                anchorX="center"
-                anchorY="middle"
-              >
-                {node.name}
-              </Text>
             </group>
           );
         })}
       </group>
 
       {/* Central Lights */}
-      <pointLight color="#8b5cf6" intensity={3} distance={9} />
-      <pointLight color="#06b6d4" intensity={2.5} distance={9} position={[0, 1, 0]} />
+      <pointLight color="#06b6d4" intensity={3} distance={9} />
+      <pointLight color="#8b5cf6" intensity={2.5} distance={9} position={[0, 1, 0]} />
     </group>
   );
 };

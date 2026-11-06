@@ -10,6 +10,7 @@ export interface Project {
   result: string;
   liveUrl?: string;
   githubUrl: string;
+  image?: string;
   secondaryGithubUrl?: string;
   secondaryGithubLabel?: string;
   featured?: boolean;

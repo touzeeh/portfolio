@@ -53,7 +53,7 @@ export const WinsStage: React.FC<WinsStageProps> = ({ reducedMotion = false }) =
   });
 
   return (
-    <group ref={groupRef} position={[0, -13.5, -2.5]}>
+    <group ref={groupRef} position={[0, -9.8, -2.5]}>
       {/* Central Holographic Victory Polyhedron */}
       <mesh ref={trophyCore}>
         <dodecahedronGeometry args={[0.9, 0]} />

@@ -33,7 +33,7 @@ export const ProjectsStage: React.FC<ProjectsStageProps> = ({ reducedMotion = fa
   });
 
   return (
-    <group ref={groupRef} position={[0, -9.8, -2.5]}>
+    <group ref={groupRef} position={[0, -2.8, -2.5]}>
       {/* Dimensional Depth Portal 1 */}
       <mesh ref={frame1} position={[0, 0, 0]}>
         <torusGeometry args={[3.6, 0.016, 16, 80]} />

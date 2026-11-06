@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a1220"/>
+      <stop offset="100%" stop-color="#020409"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="480" fill="url(#bg)"/>
+
+  <!-- Top App Window Bar -->
+  <rect width="800" height="38" fill="#0f172a"/>
+  <circle cx="20" cy="19" r="6" fill="#ef4444"/>
+  <circle cx="38" cy="19" r="6" fill="#f59e0b"/>
+  <circle cx="56" cy="19" r="6" fill="#10b981"/>
+  <text x="400" y="24" fill="#94a3b8" font-family="monospace" font-size="12" text-anchor="middle">bash: routeguard-benchmark • zero-dependency test suite</text>
+
+  <!-- Terminal Code Window -->
+  <g transform="translate(30, 60)">
+    <rect width="740" height="380" rx="8" fill="#030712" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.3"/>
+    
+    <!-- Code Lines -->
+    <text x="25" y="40" fill="#38bdf8" font-family="monospace" font-size="13">$ npm test -- --coverage</text>
+    
+    <text x="25" y="75" fill="#4ade80" font-family="monospace" font-size="12">✓ routeguard/interceptor: Token verification hierarchy (14 tests passed)</text>
+    <text x="25" y="100" fill="#4ade80" font-family="monospace" font-size="12">✓ routeguard/rate-limiter: Sliding window algorithm (22 tests passed)</text>
+    <text x="25" y="125" fill="#4ade80" font-family="monospace" font-size="12">✓ routeguard/fallback: Auto-redirect on 401/403 status (8 tests passed)</text>
+    <text x="25" y="150" fill="#4ade80" font-family="monospace" font-size="12">✓ routeguard/zero-deps: External dependency count: 0</text>
+
+    <!-- Benchmark Table -->
+    <rect x="25" y="180" width="690" height="150" rx="6" fill="#0f172a" stroke="#ffffff" stroke-opacity="0.08"/>
+    <text x="45" y="210" fill="#a78bfa" font-family="monospace" font-size="12" font-weight="bold">BENCHMARK SUMMARY (100,000 CONCURRENT REQUESTS)</text>
+    
+    <text x="45" y="240" fill="#94a3b8" font-family="monospace" font-size="11">Throughput:      42,850 req/sec</text>
+    <text x="45" y="265" fill="#94a3b8" font-family="monospace" font-size="11">Execution:       Zero external dependencies (pure JS)</text>
+    <text x="45" y="290" fill="#94a3b8" font-family="monospace" font-size="11">Memory footprint: &lt; 140 KB bundled</text>
+
+    <text x="420" y="240" fill="#38bdf8" font-family="monospace" font-size="11">Runtime: Node.js 18+ / Browser</text>
+    <text x="420" y="265" fill="#38bdf8" font-family="monospace" font-size="11">License: MIT Open Source</text>
+    <text x="420" y="290" fill="#4ade80" font-family="monospace" font-size="11">Build Status: PASSING (100%)</text>
+  </g>
+</svg>
