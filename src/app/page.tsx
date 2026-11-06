@@ -11,7 +11,6 @@ import { SkillsSection } from '@/components/sections/SkillsSection';
 import { ProjectsSection } from '@/components/sections/ProjectsSection';
 import { ExperienceSection } from '@/components/sections/ExperienceSection';
 import { ContactSection } from '@/components/sections/ContactSection';
-import { Footer } from '@/components/sections/Footer';
 
 // Dynamic import with ssr: false for Three.js Canvas per performance budget
 const Scene3D = dynamic(
@@ -44,7 +43,7 @@ function PortfolioContent() {
       <Navbar />
 
       {/* Main Scroll Content */}
-      <main id="main-content" className="relative z-10">
+      <main id="main-content" className="relative z-10 pb-20">
         <HeroSection />
         <AboutSection />
         <SkillsSection />
@@ -52,9 +51,6 @@ function PortfolioContent() {
         <ExperienceSection />
         <ContactSection />
       </main>
-
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }
