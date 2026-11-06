@@ -148,7 +148,7 @@ export const ProjectsSection: React.FC = () => {
                     href={project.liveUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="btn-primary text-xs py-2 px-3 flex-1 text-center justify-center"
+                    className="btn-primary text-xs py-2.5 px-3 flex-1 min-h-[42px] text-center justify-center"
                     aria-label={`View Live Demo of ${project.title}`}
                   >
                     <ExternalLinkIcon className="w-3.5 h-3.5" />
@@ -161,7 +161,7 @@ export const ProjectsSection: React.FC = () => {
                   href={project.githubUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="btn-secondary text-xs py-2 px-3 flex-1 text-center justify-center"
+                  className="btn-secondary text-xs py-2.5 px-3 flex-1 min-h-[42px] text-center justify-center"
                   aria-label={`View GitHub repository for ${project.title}`}
                 >
                   <GithubIcon className="w-3.5 h-3.5" />
@@ -174,7 +174,7 @@ export const ProjectsSection: React.FC = () => {
                     href={project.secondaryGithubUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="btn-secondary text-xs py-2 px-3 w-full text-center justify-center mt-1"
+                    className="btn-secondary text-xs py-2.5 px-3 w-full min-h-[42px] text-center justify-center mt-1"
                     aria-label={`View ${project.secondaryGithubLabel || 'Frontend Repo'}`}
                   >
                     <ArrowUpRightIcon className="w-3.5 h-3.5" />

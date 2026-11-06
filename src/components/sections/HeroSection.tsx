@@ -26,9 +26,9 @@ export const HeroSection: React.FC = () => {
 
       <div className="relative z-10 max-w-4xl mx-auto text-center flex flex-col items-center gap-6">
         {/* Status Pill Badge */}
-        <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-slate-900/80 border border-white/10 text-xs text-slate-300 backdrop-blur-md shadow-lg shadow-black/40">
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-          <span className="font-mono text-[11px] tracking-wide text-slate-300">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/80 border border-white/10 text-xs text-slate-300 backdrop-blur-md shadow-lg shadow-black/40 max-w-full">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+          <span className="font-mono text-[11px] tracking-wide text-slate-300 text-center">
             {PERSONAL_INFO.status}
           </span>
         </div>

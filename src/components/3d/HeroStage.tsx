@@ -8,11 +8,13 @@ import * as THREE from 'three';
 interface HeroStageProps {
   particleCount?: number;
   reducedMotion?: boolean;
+  isMobile?: boolean;
 }
 
 export const HeroStage: React.FC<HeroStageProps> = ({
   particleCount = 900,
   reducedMotion = false,
+  isMobile = false,
 }) => {
   const groupRef = useRef<THREE.Group>(null!);
   const meshRef = useRef<THREE.Mesh>(null!);
@@ -43,8 +45,8 @@ export const HeroStage: React.FC<HeroStageProps> = ({
     if (reducedMotion) return;
     const time = state.clock.getElapsedTime();
 
-    // Mouse parallax
-    if (groupRef.current) {
+    // Mouse parallax: desktop only
+    if (groupRef.current && !isMobile) {
       groupRef.current.rotation.y = THREE.MathUtils.lerp(
         groupRef.current.rotation.y,
         pointer.x * 0.35,
@@ -83,14 +85,14 @@ export const HeroStage: React.FC<HeroStageProps> = ({
     <group ref={groupRef} position={[0, 0, 0]}>
       {/* Central Kinetic Distorted Core Sphere */}
       <mesh ref={meshRef}>
-        <sphereGeometry args={[1.35, 48, 48]} />
+        <sphereGeometry args={[1.35, isMobile ? 32 : 48, isMobile ? 32 : 48]} />
         <MeshDistortMaterial
           color="#8b5cf6"
-          distort={reducedMotion ? 0 : 0.38}
+          distort={reducedMotion ? 0 : isMobile ? 0.28 : 0.38}
           speed={reducedMotion ? 0 : 1.8}
           roughness={0.15}
           metalness={0.85}
-          clearcoat={1}
+          clearcoat={isMobile ? 0 : 1}
           clearcoatRoughness={0.1}
         />
       </mesh>
@@ -110,7 +112,7 @@ export const HeroStage: React.FC<HeroStageProps> = ({
 
       {/* Gyroscopic Hairline Ring 1 (Teal) */}
       <mesh ref={ringRef1}>
-        <torusGeometry args={[2.3, 0.015, 16, 100]} />
+        <torusGeometry args={[2.3, 0.015, 16, isMobile ? 64 : 100]} />
         <meshStandardMaterial
           color="#06b6d4"
           roughness={0.1}
@@ -122,7 +124,7 @@ export const HeroStage: React.FC<HeroStageProps> = ({
 
       {/* Gyroscopic Hairline Ring 2 (Violet) */}
       <mesh ref={ringRef2} rotation={[Math.PI / 3, 0, 0]}>
-        <torusGeometry args={[2.7, 0.012, 16, 100]} />
+        <torusGeometry args={[2.7, 0.012, 16, isMobile ? 64 : 100]} />
         <meshStandardMaterial
           color="#a78bfa"
           roughness={0.1}
@@ -138,7 +140,7 @@ export const HeroStage: React.FC<HeroStageProps> = ({
           <bufferAttribute attach="attributes-position" args={[positions, 3]} />
         </bufferGeometry>
         <pointsMaterial
-          size={0.035}
+          size={isMobile ? 0.045 : 0.035}
           color="#c4b5fd"
           transparent
           opacity={0.7}
@@ -148,8 +150,8 @@ export const HeroStage: React.FC<HeroStageProps> = ({
       </points>
 
       {/* Stage lights */}
-      <pointLight color="#8b5cf6" intensity={3} distance={10} position={[2, 2, 2]} />
-      <pointLight color="#06b6d4" intensity={2.5} distance={8} position={[-2, -2, -1]} />
+      <pointLight color="#8b5cf6" intensity={isMobile ? 2.2 : 3} distance={10} position={[2, 2, 2]} />
+      <pointLight color="#06b6d4" intensity={isMobile ? 1.8 : 2.5} distance={8} position={[-2, -2, -1]} />
     </group>
   );
 };

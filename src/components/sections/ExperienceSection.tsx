@@ -21,12 +21,12 @@ export const ExperienceSection: React.FC = () => {
       </div>
 
       {/* Timeline Vertical Track */}
-      <div className="relative pl-6 sm:pl-8 border-l border-white/[0.08] space-y-8">
+      <div className="relative ml-2 sm:ml-4 pl-6 sm:pl-8 border-l border-white/[0.12] space-y-8">
         {EXPERIENCES.map((item) => (
           <div key={item.id} className="relative group">
-            {/* Timeline Node Dot */}
+            {/* Timeline Node Dot centered on vertical line */}
             <div
-              className={`absolute -left-[31px] sm:-left-[39px] top-1.5 w-4 h-4 rounded-full border-2 transition-transform duration-300 group-hover:scale-125 ${
+              className={`absolute -left-[33px] sm:-left-[41px] top-2 w-4 h-4 rounded-full border-2 transition-transform duration-300 group-hover:scale-125 ${
                 item.isPlaceholder
                   ? 'border-slate-600 bg-slate-900'
                   : 'border-violet-400 bg-violet-600 shadow-[0_0_10px_rgba(139,92,246,0.6)]'

@@ -12,17 +12,19 @@ import { ContactStage } from './ContactStage';
 
 interface Scene3DProps {
   scrollProgress: number;
+  isMobile?: boolean;
 }
 
-export const Scene3D: React.FC<Scene3DProps> = ({ scrollProgress }) => {
-  const [isMobile, setIsMobile] = useState(false);
+export const Scene3D: React.FC<Scene3DProps> = ({ scrollProgress, isMobile = false }) => {
+  const [mobileState, setMobileState] = useState(isMobile);
   const [reducedMotion, setReducedMotion] = useState(false);
   const [webGlSupported, setWebGlSupported] = useState(true);
 
   useEffect(() => {
-    // Check mobile screen
+    // Check mobile screen & pointer capability
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
+      const isTouch = window.matchMedia('(pointer: coarse)').matches || window.innerWidth < 768;
+      setMobileState(isTouch);
     };
     checkMobile();
     window.addEventListener('resize', checkMobile);
@@ -58,8 +60,9 @@ export const Scene3D: React.FC<Scene3DProps> = ({ scrollProgress }) => {
     );
   }
 
-  const particleCountHero = isMobile ? 350 : 900;
-  const particleCountContact = isMobile ? 200 : 500;
+  // Optimized particle counts for mobile to maintain 60/120 FPS
+  const particleCountHero = mobileState ? 240 : 900;
+  const particleCountContact = mobileState ? 140 : 500;
 
   return (
     <div
@@ -67,18 +70,19 @@ export const Scene3D: React.FC<Scene3DProps> = ({ scrollProgress }) => {
       aria-hidden="true"
     >
       <Canvas
-        camera={{ position: [0, 0, 6.8], fov: 45 }}
-        dpr={[1, 1.5]}
+        camera={{ position: [0, 0, 6.8], fov: mobileState ? 52 : 45 }}
+        dpr={mobileState ? [1, 1.25] : [1, 1.5]}
         gl={{
-          antialias: !isMobile,
+          antialias: !mobileState,
           alpha: true,
           powerPreference: 'high-performance',
+          depth: true,
         }}
       >
         {/* Tuned global fog and ambient lighting */}
         <color attach="background" args={['#030712']} />
-        <fogExp2 attach="fog" args={['#030712', 0.055]} />
-        <ambientLight intensity={0.5} />
+        <fogExp2 attach="fog" args={['#030712', mobileState ? 0.05 : 0.055]} />
+        <ambientLight intensity={0.55} />
         <directionalLight position={[5, 10, 7]} intensity={1.5} color="#ffffff" />
         <directionalLight position={[-5, -8, -5]} intensity={1.0} color="#8b5cf6" />
 
@@ -86,6 +90,7 @@ export const Scene3D: React.FC<Scene3DProps> = ({ scrollProgress }) => {
         <ScrollCamera
           scrollProgress={scrollProgress}
           reducedMotion={reducedMotion}
+          isMobile={mobileState}
         />
 
         <Suspense fallback={null}>
@@ -93,13 +98,20 @@ export const Scene3D: React.FC<Scene3DProps> = ({ scrollProgress }) => {
           <HeroStage
             particleCount={particleCountHero}
             reducedMotion={reducedMotion}
+            isMobile={mobileState}
           />
 
           {/* Section 2: About */}
-          <AboutStage reducedMotion={reducedMotion} />
+          <AboutStage
+            reducedMotion={reducedMotion}
+            isMobile={mobileState}
+          />
 
           {/* Section 3: Skills */}
-          <SkillsStage reducedMotion={reducedMotion} />
+          <SkillsStage
+            reducedMotion={reducedMotion}
+            isMobile={mobileState}
+          />
 
           {/* Section 4: Projects */}
           <ProjectsStage reducedMotion={reducedMotion} />

@@ -8,9 +8,13 @@ import { TECH_CONSTELLATION } from '@/data/portfolioData';
 
 interface SkillsStageProps {
   reducedMotion?: boolean;
+  isMobile?: boolean;
 }
 
-export const SkillsStage: React.FC<SkillsStageProps> = ({ reducedMotion = false }) => {
+export const SkillsStage: React.FC<SkillsStageProps> = ({
+  reducedMotion = false,
+  isMobile = false,
+}) => {
   const ringGroup1 = useRef<THREE.Group>(null!);
   const ringGroup2 = useRef<THREE.Group>(null!);
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
@@ -21,18 +25,20 @@ export const SkillsStage: React.FC<SkillsStageProps> = ({ reducedMotion = false 
   useFrame((_, delta) => {
     if (reducedMotion) return;
     if (ringGroup1.current) {
-      ringGroup1.current.rotation.y += delta * 0.18;
+      ringGroup1.current.rotation.y += delta * (isMobile ? 0.12 : 0.18);
     }
     if (ringGroup2.current) {
-      ringGroup2.current.rotation.y -= delta * 0.14;
+      ringGroup2.current.rotation.y -= delta * (isMobile ? 0.09 : 0.14);
     }
   });
 
+  const constellationScale = isMobile ? 0.75 : 1.0;
+
   return (
-    <group position={[0, -6.0, 0]}>
+    <group position={[0, -6.0, 0]} scale={constellationScale}>
       {/* Central Constellation Anchor */}
       <mesh>
-        <sphereGeometry args={[0.6, 24, 24]} />
+        <sphereGeometry args={[0.55, 24, 24]} />
         <meshStandardMaterial
           color="#8b5cf6"
           roughness={0.2}
@@ -44,13 +50,13 @@ export const SkillsStage: React.FC<SkillsStageProps> = ({ reducedMotion = false 
 
       {/* Orbit Hairline Ring 1 */}
       <mesh rotation={[Math.PI / 2, 0, 0]}>
-        <torusGeometry args={[2.5, 0.008, 16, 96]} />
+        <torusGeometry args={[2.5, 0.008, 16, isMobile ? 48 : 96]} />
         <meshBasicMaterial color="#06b6d4" transparent opacity={0.35} />
       </mesh>
 
       {/* Orbit Hairline Ring 2 */}
       <mesh rotation={[Math.PI / 2.3, 0, 0]}>
-        <torusGeometry args={[3.6, 0.008, 16, 96]} />
+        <torusGeometry args={[3.6, 0.008, 16, isMobile ? 48 : 96]} />
         <meshBasicMaterial color="#8b5cf6" transparent opacity={0.3} />
       </mesh>
 
@@ -83,7 +89,7 @@ export const SkillsStage: React.FC<SkillsStageProps> = ({ reducedMotion = false 
               </mesh>
               <Text
                 position={[0, 0.38, 0]}
-                fontSize={0.2}
+                fontSize={isMobile ? 0.24 : 0.2}
                 color={isHovered ? '#ffffff' : '#94a3b8'}
                 anchorX="center"
                 anchorY="middle"
@@ -124,7 +130,7 @@ export const SkillsStage: React.FC<SkillsStageProps> = ({ reducedMotion = false 
               </mesh>
               <Text
                 position={[0, 0.35, 0]}
-                fontSize={0.18}
+                fontSize={isMobile ? 0.22 : 0.18}
                 color={isHovered ? '#ffffff' : '#94a3b8'}
                 anchorX="center"
                 anchorY="middle"

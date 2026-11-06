@@ -30,14 +30,14 @@ const Scene3D = dynamic(
 );
 
 function PortfolioContent() {
-  const { progress } = useScrollProgress();
+  const { progress, isMobile } = useScrollProgress();
 
   return (
-    <div className="relative min-h-screen bg-[#030712] text-slate-100">
+    <div className="relative min-h-screen bg-[#030712] text-slate-100 overflow-x-hidden">
       {/* ONE fixed full-screen Canvas behind all content */}
-      <Scene3D scrollProgress={progress} />
+      <Scene3D scrollProgress={progress} isMobile={isMobile} />
 
-      {/* Desktop Custom Glowing Cursor */}
+      {/* Desktop Custom Glowing Cursor (automatically hidden on mobile) */}
       <CustomCursor />
 
       {/* Sticky Blurred Navbar */}

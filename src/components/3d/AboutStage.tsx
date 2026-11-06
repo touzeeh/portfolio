@@ -6,9 +6,13 @@ import * as THREE from 'three';
 
 interface AboutStageProps {
   reducedMotion?: boolean;
+  isMobile?: boolean;
 }
 
-export const AboutStage: React.FC<AboutStageProps> = ({ reducedMotion = false }) => {
+export const AboutStage: React.FC<AboutStageProps> = ({
+  reducedMotion = false,
+  isMobile = false,
+}) => {
   const groupRef = useRef<THREE.Group>(null!);
   const shape1 = useRef<THREE.Mesh>(null!);
   const shape2 = useRef<THREE.Mesh>(null!);
@@ -45,15 +49,27 @@ export const AboutStage: React.FC<AboutStageProps> = ({ reducedMotion = false })
       {/* Shape 1: Floating Glass Octahedron */}
       <mesh ref={shape1} position={[-2.4, 0.5, -0.5]}>
         <octahedronGeometry args={[0.95, 0]} />
-        <meshPhysicalMaterial
-          color="#06b6d4"
-          roughness={0.1}
-          metalness={0.2}
-          transmission={0.65}
-          ior={1.4}
-          thickness={0.5}
-          wireframe={false}
-        />
+        {isMobile ? (
+          <meshStandardMaterial
+            color="#06b6d4"
+            roughness={0.15}
+            metalness={0.6}
+            transparent
+            opacity={0.8}
+            emissive="#06b6d4"
+            emissiveIntensity={0.2}
+          />
+        ) : (
+          <meshPhysicalMaterial
+            color="#06b6d4"
+            roughness={0.1}
+            metalness={0.2}
+            transmission={0.65}
+            ior={1.4}
+            thickness={0.5}
+            wireframe={false}
+          />
+        )}
       </mesh>
 
       {/* Shape 2: Floating Metallic Dodecahedron */}
@@ -82,7 +98,7 @@ export const AboutStage: React.FC<AboutStageProps> = ({ reducedMotion = false })
 
       {/* Shape 4: Floating Torus Ring */}
       <mesh ref={shape4} position={[1.8, 1.2, -1]}>
-        <torusGeometry args={[0.75, 0.12, 16, 48]} />
+        <torusGeometry args={[0.75, 0.12, 16, isMobile ? 32 : 48]} />
         <meshStandardMaterial
           color="#c084fc"
           roughness={0.15}

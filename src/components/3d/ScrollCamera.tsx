@@ -7,6 +7,7 @@ import * as THREE from 'three';
 interface ScrollCameraProps {
   scrollProgress: number;
   reducedMotion?: boolean;
+  isMobile?: boolean;
 }
 
 // Keyframe waypoint coordinates along the scroll path (t from 0 to 1)
@@ -22,6 +23,7 @@ const WAYPOINTS = [
 export const ScrollCamera: React.FC<ScrollCameraProps> = ({
   scrollProgress,
   reducedMotion = false,
+  isMobile = false,
 }) => {
   const { camera, scene, pointer } = useThree();
   const currentTarget = useRef(new THREE.Vector3(0, 0, 0));
@@ -51,14 +53,17 @@ export const ScrollCamera: React.FC<ScrollCameraProps> = ({
     const desiredPos = new THREE.Vector3().lerpVectors(p0.pos, p1.pos, easedT);
     const desiredTarget = new THREE.Vector3().lerpVectors(p0.target, p1.target, easedT);
 
-    // Subtle mouse parallax influence
-    const parallaxX = pointer.x * 0.4;
-    const parallaxY = pointer.y * 0.3;
-    desiredPos.x += parallaxX;
-    desiredPos.y += parallaxY;
+    // Mouse parallax: only on desktop pointer devices, zero on mobile touch
+    if (!isMobile) {
+      const parallaxX = pointer.x * 0.35;
+      const parallaxY = pointer.y * 0.25;
+      desiredPos.x += parallaxX;
+      desiredPos.y += parallaxY;
+    }
 
-    // Smooth camera lerp
-    const lerpFactor = Math.min(delta * 4, 0.15);
+    // Adaptive smooth camera lerp (faster on mobile to match thumb swipe)
+    const lerpRate = isMobile ? delta * 7 : delta * 4;
+    const lerpFactor = Math.min(lerpRate, 0.2);
     currentPos.current.lerp(desiredPos, lerpFactor);
     currentTarget.current.lerp(desiredTarget, lerpFactor);
 
