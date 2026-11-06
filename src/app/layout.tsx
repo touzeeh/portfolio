@@ -22,7 +22,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://touzeehverse.xyz'),
+  metadataBase: new URL('https://touzeeh.xyz'),
   title: `${PERSONAL_INFO.fullName} • ${PERSONAL_INFO.title}`,
   description: `${PERSONAL_INFO.headline} 2nd-year BTech CSE student at LNCT Bhopal specializing in full-stack web platforms, 3D spatial experiences, and intelligent AI tools.`,
   keywords: [
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://touzeehverse.xyz',
+    url: 'https://touzeeh.xyz',
     title: `${PERSONAL_INFO.fullName} • Portfolio`,
     description: PERSONAL_INFO.headline,
     siteName: `${PERSONAL_INFO.fullName} Portfolio`,
@@ -86,7 +86,7 @@ export default function RootLayout({
       '@type': 'CollegeOrUniversity',
       name: PERSONAL_INFO.institution,
     },
-    url: 'https://touzeehverse.xyz',
+    url: 'https://touzeeh.xyz',
     sameAs: [PERSONAL_INFO.github, PERSONAL_INFO.linkedin],
     description: PERSONAL_INFO.headline,
   };

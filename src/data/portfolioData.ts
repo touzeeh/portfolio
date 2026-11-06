@@ -9,7 +9,7 @@ export const PERSONAL_INFO = {
   bio: 'Passionate about building innovative technology and solving real-world problems through code. I love creating AI-powered applications, full-stack web platforms, and intelligent tools, constantly experimenting with emerging technologies and turning ambitious ideas into functional products.',
   
   // Real details & placeholders
-  website: 'https://touzeehverse.xyz',
+  website: 'https://touzeeh.xyz',
   email: 'touzeeh@engineer.com',
   github: 'https://github.com/touzeeh',
   githubHandle: 'touzeeh',
