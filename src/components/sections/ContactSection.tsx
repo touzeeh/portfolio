@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { PERSONAL_INFO } from '@/data/portfolioData';
 import { GithubIcon, LinkedinIcon, MailIcon, CheckIcon, CopyIcon } from '@/components/ui/Icons';
+import { TiltCard } from '@/components/ui/TiltCard';
 import {
   scrollRevealVariants,
   staggerGridVariants,
@@ -60,6 +61,7 @@ export const ContactSection: React.FC = () => {
     setStatusMessage('Transmitting message...');
 
     const data = new FormData();
+    // Verified Web3Forms Public Access Key
     data.append('access_key', '6efb1fda-7860-4bbc-9978-bf37460a177f');
     data.append('name', formData.name);
     data.append('email', formData.email);
@@ -82,15 +84,15 @@ export const ContactSection: React.FC = () => {
         setTouched({ name: false, email: false, message: false });
       } else {
         setStatus('error');
-        setStatusMessage(result.message || 'Submission failed. Please email touzeeh.dev@gmail.com directly.');
+        setStatusMessage(result.message || `Submission failed. Please email ${PERSONAL_INFO.email} directly.`);
       }
     } catch {
       setStatus('error');
-      setStatusMessage('Network issue. Please email touzeeh.dev@gmail.com directly.');
+      setStatusMessage(`Network issue. Please email ${PERSONAL_INFO.email} directly.`);
     }
   };
 
-  // (8) Copy-to-clipboard feedback on email
+  // (8) Copy-to-clipboard feedback on verified email
   const handleCopyEmail = async () => {
     try {
       await navigator.clipboard.writeText(PERSONAL_INFO.email);
@@ -99,17 +101,6 @@ export const ContactSection: React.FC = () => {
     } catch {
       window.location.href = `mailto:${PERSONAL_INFO.email}`;
     }
-  };
-
-  const cardVariants = {
-    initial: { y: 0 },
-    hover: {
-      y: shouldReduceMotion ? 0 : -5,
-      transition: {
-        duration: 0.25,
-        ease: SHARED_EASE,
-      },
-    },
   };
 
   return (
@@ -142,41 +133,38 @@ export const ContactSection: React.FC = () => {
       >
         {/* Contact Form Card (spans 7 cols) */}
         <motion.div variants={staggerItemVariants} className="lg:col-span-7 h-full">
-          <motion.div
-            initial="initial"
-            whileHover="hover"
-            variants={cardVariants}
-            className="glass-card p-6 sm:p-8 border border-white/10 hover:border-cyan-400/40 hover:shadow-[0_16px_36px_-8px_rgba(6,182,212,0.18)] transition-colors rounded-[20px] h-full"
-            style={{ willChange: 'transform' }}
+          <TiltCard
+            glareColor="rgba(6, 182, 212, 0.2)"
+            className="glass-card p-6 sm:p-8 border border-white/10 hover:border-cyan-400/40 hover:shadow-[0_16px_36px_-8px_rgba(6,182,212,0.2)] transition-all rounded-[20px] h-full"
           >
             {status === 'success' ? (
               <motion.div
-                initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, ease: SHARED_EASE }}
+                initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.35, ease: SHARED_EASE }}
                 className="text-center py-12 space-y-4"
               >
-                <div className="w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center mx-auto">
-                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
+                <div className="w-14 h-14 rounded-full bg-emerald-500/20 border-2 border-emerald-500/50 text-emerald-400 flex items-center justify-center mx-auto shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+                  <CheckIcon className="w-7 h-7" />
                 </div>
                 <h3 className="font-display text-2xl font-bold text-white">
                   Message Transmitted
                 </h3>
                 <p className="text-sm text-slate-200 max-w-sm mx-auto leading-relaxed">
-                  Thank you! Your message has been sent directly to Touzeeh's verified inbox.
+                  Thank you! Your message has been sent directly to <span className="text-white font-medium">{PERSONAL_INFO.email}</span>.
                 </p>
-                <button
+                <motion.button
                   type="button"
+                  whileHover={shouldReduceMotion ? undefined : { scale: 1.04 }}
+                  whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
                   onClick={() => {
                     setStatus('idle');
                     setStatusMessage('');
                   }}
-                  className="btn-secondary text-xs mt-2"
+                  className="btn-secondary text-xs mt-3"
                 >
                   Send Another Message
-                </button>
+                </motion.button>
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit} noValidate className="space-y-5">
@@ -199,7 +187,7 @@ export const ContactSection: React.FC = () => {
                         touched.name && errors.name
                           ? 'border-rose-400/80 focus:ring-rose-400/30'
                           : 'border-white/20 focus:border-cyan-400 focus:ring-cyan-400/30'
-                      } text-white text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 transition`}
+                      } text-white text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 transition-all`}
                     />
                     {touched.name && errors.name && (
                       <p className="text-xs text-rose-400 font-mono mt-1">
@@ -226,7 +214,7 @@ export const ContactSection: React.FC = () => {
                         touched.email && errors.email
                           ? 'border-rose-400/80 focus:ring-rose-400/30'
                           : 'border-white/20 focus:border-cyan-400 focus:ring-cyan-400/30'
-                      } text-white text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 transition`}
+                      } text-white text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 transition-all`}
                     />
                     {touched.email && errors.email && (
                       <p className="text-xs text-rose-400 font-mono mt-1">
@@ -254,7 +242,7 @@ export const ContactSection: React.FC = () => {
                       touched.message && errors.message
                         ? 'border-rose-400/80 focus:ring-rose-400/30'
                         : 'border-white/20 focus:border-cyan-400 focus:ring-cyan-400/30'
-                    } text-white text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 transition resize-none`}
+                    } text-white text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 transition-all resize-none`}
                   />
                   {touched.message && errors.message && (
                     <p className="text-xs text-rose-400 font-mono mt-1">
@@ -270,13 +258,14 @@ export const ContactSection: React.FC = () => {
                   </p>
                 )}
 
-                {/* (6) Send button with loading/success/error states */}
+                {/* (6) Send button with loading/success/error states and spring physics */}
                 <motion.button
                   type="submit"
                   disabled={status === 'loading'}
-                  whileHover={shouldReduceMotion ? undefined : { y: -1 }}
+                  whileHover={shouldReduceMotion ? undefined : { scale: 1.02, y: -1 }}
+                  whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
                   transition={{ duration: 0.2, ease: SHARED_EASE }}
-                  className={`btn-primary w-full py-3 text-sm font-semibold flex items-center justify-center gap-2 cursor-pointer ${
+                  className={`btn-primary w-full py-3 text-sm font-semibold flex items-center justify-center gap-2 cursor-pointer shadow-lg hover:shadow-cyan-500/20 ${
                     status === 'loading' ? 'opacity-70 cursor-wait' : ''
                   }`}
                 >
@@ -293,17 +282,14 @@ export const ContactSection: React.FC = () => {
                 </motion.button>
               </form>
             )}
-          </motion.div>
+          </TiltCard>
         </motion.div>
 
         {/* Direct Channels (spans 5 cols) */}
         <motion.div variants={staggerItemVariants} className="lg:col-span-5 flex flex-col justify-between space-y-6 h-full">
-          <motion.div
-            initial="initial"
-            whileHover="hover"
-            variants={cardVariants}
-            className="glass-card p-6 sm:p-8 h-full flex flex-col justify-between border border-white/10 hover:border-violet-400/40 hover:shadow-[0_16px_36px_-8px_rgba(139,92,246,0.18)] transition-colors rounded-[20px]"
-            style={{ willChange: 'transform' }}
+          <TiltCard
+            glareColor="rgba(139, 92, 246, 0.2)"
+            className="glass-card p-6 sm:p-8 h-full flex flex-col justify-between border border-white/10 hover:border-violet-400/40 hover:shadow-[0_16px_36px_-8px_rgba(139,92,246,0.2)] transition-all rounded-[20px]"
           >
             <div className="space-y-6">
               <div>
@@ -315,30 +301,32 @@ export const ContactSection: React.FC = () => {
                 </p>
               </div>
 
-              {/* Channels as clear links */}
+              {/* Channels as clear interactive links */}
               <div className="space-y-3.5">
                 {/* (8) Email with Copy-to-Clipboard Feedback */}
                 <div className="relative group">
-                  <div className="flex items-center justify-between p-3.5 rounded-xl bg-slate-950/80 border border-white/10 group-hover:border-cyan-400/50 transition">
+                  <div className="flex items-center justify-between p-3.5 rounded-xl bg-slate-950/80 border border-white/10 group-hover:border-cyan-400/50 transition-all">
                     <a
                       href={`mailto:${PERSONAL_INFO.email}`}
                       className="flex items-center gap-3.5 flex-1 min-w-0"
                     >
-                      <div className="p-2.5 rounded-lg bg-cyan-600/15 text-cyan-400 shrink-0">
+                      <div className="p-2.5 rounded-lg bg-cyan-600/15 text-cyan-400 shrink-0 group-hover:scale-105 transition-transform">
                         <MailIcon className="w-4 h-4" />
                       </div>
                       <div className="truncate">
                         <span className="text-xs font-mono text-slate-400 block">Email Address</span>
-                        <span className="text-sm font-medium text-slate-200 group-hover:text-cyan-300 transition truncate block">
+                        <span className="text-sm font-medium text-slate-200 group-hover:text-cyan-300 transition-colors truncate block">
                           {PERSONAL_INFO.email}
                         </span>
                       </div>
                     </a>
 
-                    <button
+                    <motion.button
                       type="button"
                       onClick={handleCopyEmail}
-                      className="ml-2 px-3 py-1.5 rounded-lg bg-slate-900 border border-white/10 hover:border-cyan-400/50 text-xs font-mono text-slate-300 hover:text-white flex items-center gap-1.5 transition shrink-0"
+                      whileHover={shouldReduceMotion ? undefined : { scale: 1.06 }}
+                      whileTap={shouldReduceMotion ? undefined : { scale: 0.94 }}
+                      className="ml-2 px-3 py-1.5 rounded-lg bg-slate-900 border border-white/10 hover:border-cyan-400/50 text-xs font-mono text-slate-300 hover:text-white flex items-center gap-1.5 transition-colors shrink-0"
                       aria-label="Copy email address"
                     >
                       {copied ? (
@@ -352,48 +340,52 @@ export const ContactSection: React.FC = () => {
                           <span>Copy</span>
                         </>
                       )}
-                    </button>
+                    </motion.button>
                   </div>
                 </div>
 
                 {/* GitHub Channel */}
-                <a
+                <motion.a
                   href={PERSONAL_INFO.github}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center gap-3.5 p-3.5 rounded-xl bg-slate-950/80 border border-white/10 hover:border-white/30 transition group"
+                  whileHover={shouldReduceMotion ? undefined : { x: 3 }}
+                  transition={{ duration: 0.2, ease: SHARED_EASE }}
+                  className="flex items-center gap-3.5 p-3.5 rounded-xl bg-slate-950/80 border border-white/10 hover:border-white/30 transition-all group"
                 >
-                  <div className="p-2.5 rounded-lg bg-slate-800 text-white shrink-0">
+                  <div className="p-2.5 rounded-lg bg-slate-800 text-white shrink-0 group-hover:scale-105 transition-transform">
                     <GithubIcon className="w-4 h-4" />
                   </div>
                   <div>
                     <span className="text-xs font-mono text-slate-400 block">GitHub</span>
-                    <span className="text-sm font-medium text-slate-200 group-hover:text-white transition">
+                    <span className="text-sm font-medium text-slate-200 group-hover:text-white transition-colors">
                       github.com/{PERSONAL_INFO.githubHandle}
                     </span>
                   </div>
-                </a>
+                </motion.a>
 
                 {/* LinkedIn Channel */}
-                <a
+                <motion.a
                   href={PERSONAL_INFO.linkedin}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center gap-3.5 p-3.5 rounded-xl bg-slate-950/80 border border-white/10 hover:border-violet-400/50 transition group"
+                  whileHover={shouldReduceMotion ? undefined : { x: 3 }}
+                  transition={{ duration: 0.2, ease: SHARED_EASE }}
+                  className="flex items-center gap-3.5 p-3.5 rounded-xl bg-slate-950/80 border border-white/10 hover:border-violet-400/50 transition-all group"
                 >
-                  <div className="p-2.5 rounded-lg bg-violet-600/15 text-violet-400 shrink-0">
+                  <div className="p-2.5 rounded-lg bg-violet-600/15 text-violet-400 shrink-0 group-hover:scale-105 transition-transform">
                     <LinkedinIcon className="w-4 h-4" />
                   </div>
                   <div>
                     <span className="text-xs font-mono text-slate-400 block">LinkedIn</span>
-                    <span className="text-sm font-medium text-slate-200 group-hover:text-violet-300 transition">
+                    <span className="text-sm font-medium text-slate-200 group-hover:text-violet-300 transition-colors">
                       linkedin.com/in/{PERSONAL_INFO.linkedinHandle}
                     </span>
                   </div>
-                </a>
+                </motion.a>
               </div>
             </div>
-          </motion.div>
+          </TiltCard>
         </motion.div>
       </motion.div>
     </section>

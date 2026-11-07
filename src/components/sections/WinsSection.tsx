@@ -6,6 +6,7 @@ import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { WINS } from '@/data/portfolioData';
 import type { WinItem } from '@/types';
 import { TrophyIcon, ArrowUpRightIcon, EyeIcon, SparklesIcon } from '@/components/ui/Icons';
+import { TiltCard } from '@/components/ui/TiltCard';
 import {
   scrollRevealVariants,
   staggerGridVariants,
@@ -17,17 +18,6 @@ import {
 export const WinsSection: React.FC = () => {
   const [selectedWin, setSelectedWin] = useState<WinItem | null>(null);
   const shouldReduceMotion = useReducedMotion();
-
-  const cardVariants = {
-    initial: { y: 0 },
-    hover: {
-      y: shouldReduceMotion ? 0 : -5,
-      transition: {
-        duration: 0.25,
-        ease: SHARED_EASE,
-      },
-    },
-  };
 
   return (
     <section id="wins" className="py-24 px-4 sm:px-6 max-w-6xl mx-auto">
@@ -65,12 +55,9 @@ export const WinsSection: React.FC = () => {
             variants={staggerItemVariants}
             className="h-full"
           >
-            <motion.div
-              initial="initial"
-              whileHover="hover"
-              variants={cardVariants}
-              className="glass-card flex flex-col justify-between h-full p-5 sm:p-6 border border-white/10 hover:border-amber-400/40 hover:shadow-[0_16px_36px_-8px_rgba(245,158,11,0.2)] transition-colors rounded-[20px] group"
-              style={{ willChange: 'transform' }}
+            <TiltCard
+              glareColor="rgba(245, 158, 11, 0.25)"
+              className="glass-card flex flex-col justify-between h-full p-5 sm:p-6 border border-white/10 hover:border-amber-400/40 hover:shadow-[0_16px_36px_-8px_rgba(245,158,11,0.2)] transition-all rounded-[20px] group"
             >
               <div className="space-y-4">
                 {/* Image Frame with Viewfinder Tech Boundaries */}
@@ -78,11 +65,11 @@ export const WinsSection: React.FC = () => {
                   className="relative aspect-[16/10] w-full rounded-xl overflow-hidden bg-slate-950 border border-amber-500/30 group-hover:border-amber-400/70 transition-colors shadow-lg cursor-pointer"
                   onClick={() => setSelectedWin(win)}
                 >
-                  {/* Viewfinder Corner Brackets */}
-                  <div className="absolute top-2 left-2 w-3.5 h-3.5 border-t-2 border-l-2 border-amber-400 z-10 pointer-events-none" />
-                  <div className="absolute top-2 right-2 w-3.5 h-3.5 border-t-2 border-r-2 border-amber-400 z-10 pointer-events-none" />
-                  <div className="absolute bottom-2 left-2 w-3.5 h-3.5 border-b-2 border-l-2 border-amber-400 z-10 pointer-events-none" />
-                  <div className="absolute bottom-2 right-2 w-3.5 h-3.5 border-b-2 border-r-2 border-amber-400 z-10 pointer-events-none" />
+                  {/* Viewfinder Corner Brackets with hover reaction */}
+                  <div className="absolute top-2 left-2 w-3.5 h-3.5 border-t-2 border-l-2 border-amber-400 z-10 pointer-events-none group-hover:scale-110 transition-transform" />
+                  <div className="absolute top-2 right-2 w-3.5 h-3.5 border-t-2 border-r-2 border-amber-400 z-10 pointer-events-none group-hover:scale-110 transition-transform" />
+                  <div className="absolute bottom-2 left-2 w-3.5 h-3.5 border-b-2 border-l-2 border-amber-400 z-10 pointer-events-none group-hover:scale-110 transition-transform" />
+                  <div className="absolute bottom-2 right-2 w-3.5 h-3.5 border-b-2 border-r-2 border-amber-400 z-10 pointer-events-none group-hover:scale-110 transition-transform" />
 
                   {/* Image Display */}
                   <Image
@@ -94,7 +81,7 @@ export const WinsSection: React.FC = () => {
                   />
 
                   {/* Top Rank Badge */}
-                  <div className="absolute top-3 left-3 z-10 flex items-center gap-1 px-2.5 py-1 rounded-md bg-slate-950/85 backdrop-blur-md border border-amber-400/50 text-[11px] font-mono font-bold text-amber-300">
+                  <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-950/85 backdrop-blur-md border border-amber-400/50 text-[11px] font-mono font-bold text-amber-300 shadow-md">
                     <SparklesIcon className="w-3 h-3 text-amber-400" />
                     <span>{win.rank}</span>
                   </div>
@@ -118,44 +105,52 @@ export const WinsSection: React.FC = () => {
                   {win.description}
                 </p>
 
-                {/* Tags */}
+                {/* Tags with sensitive hover */}
                 <div className="flex flex-wrap gap-1.5 pt-1">
                   {win.tags.map((tag) => (
-                    <span
+                    <motion.span
                       key={tag}
-                      className="px-2 py-0.5 rounded-md text-[11px] font-mono bg-slate-900 border border-white/10 text-slate-300"
+                      whileHover={shouldReduceMotion ? undefined : { y: -2, scale: 1.05 }}
+                      transition={{ duration: 0.15, ease: SHARED_EASE }}
+                      className="px-2 py-0.5 rounded-md text-[11px] font-mono bg-slate-900 border border-white/10 text-slate-300 hover:border-amber-400/40 hover:text-white transition-colors cursor-default"
                     >
                       {tag}
-                    </span>
+                    </motion.span>
                   ))}
                 </div>
               </div>
 
               {/* Action Buttons */}
               <div className="pt-4 border-t border-white/[0.08] mt-4 flex items-center justify-between gap-2">
-                <button
+                <motion.button
                   type="button"
                   onClick={() => setSelectedWin(win)}
-                  className="btn-secondary text-xs py-2 px-3 flex items-center gap-1.5 hover:border-amber-400/40 text-amber-300"
+                  whileHover={shouldReduceMotion ? undefined : { scale: 1.04, y: -1 }}
+                  whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
+                  transition={{ duration: 0.2, ease: SHARED_EASE }}
+                  className="btn-secondary text-xs py-2 px-3 flex items-center gap-1.5 hover:border-amber-400/40 text-amber-300 group/btn"
                 >
                   <span>View Proof</span>
-                  <EyeIcon className="w-3.5 h-3.5" />
-                </button>
+                  <EyeIcon className="w-3.5 h-3.5 group-hover/btn:scale-110 transition-transform" />
+                </motion.button>
 
                 {win.proofUrl && (
-                  <a
+                  <motion.a
                     href={win.proofUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-xs font-medium text-slate-300 hover:text-white inline-flex items-center gap-1 transition"
+                    whileHover={shouldReduceMotion ? undefined : { scale: 1.04, y: -1 }}
+                    whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
+                    transition={{ duration: 0.2, ease: SHARED_EASE }}
+                    className="text-xs font-medium text-slate-300 hover:text-white inline-flex items-center gap-1 transition-colors"
                     aria-label={`View code for ${win.title}`}
                   >
                     <span>Repository</span>
                     <ArrowUpRightIcon className="w-3 h-3" />
-                  </a>
+                  </motion.a>
                 )}
               </div>
-            </motion.div>
+            </TiltCard>
           </motion.div>
         ))}
       </motion.div>
@@ -174,9 +169,9 @@ export const WinsSection: React.FC = () => {
             aria-modal="true"
           >
             <motion.div
-              initial={shouldReduceMotion ? { scale: 1, opacity: 1 } : { scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={shouldReduceMotion ? { scale: 1, opacity: 0 } : { scale: 0.95, opacity: 0 }}
+              initial={shouldReduceMotion ? { scale: 1, opacity: 1 } : { scale: 0.94, opacity: 0, y: 15 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={shouldReduceMotion ? { scale: 1, opacity: 0 } : { scale: 0.94, opacity: 0, y: 15 }}
               transition={{ duration: 0.3, ease: SHARED_EASE }}
               className="relative w-full max-w-2xl bg-slate-900 border-2 border-amber-400/50 rounded-2xl overflow-hidden shadow-2xl shadow-amber-500/20"
               onClick={(e) => e.stopPropagation()}
@@ -244,15 +239,18 @@ export const WinsSection: React.FC = () => {
                   </div>
 
                   {selectedWin.proofUrl && (
-                    <a
+                    <motion.a
                       href={selectedWin.proofUrl}
                       target="_blank"
                       rel="noreferrer"
+                      whileHover={shouldReduceMotion ? undefined : { scale: 1.04, y: -1 }}
+                      whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
+                      transition={{ duration: 0.2, ease: SHARED_EASE }}
                       className="btn-primary text-xs py-2 px-3.5 inline-flex items-center gap-1.5"
                     >
                       <span>Verify on GitHub</span>
                       <ArrowUpRightIcon className="w-3.5 h-3.5" />
-                    </a>
+                    </motion.a>
                   )}
                 </div>
               </div>

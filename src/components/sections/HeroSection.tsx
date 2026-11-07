@@ -16,7 +16,7 @@ import { SHARED_EASE } from '@/lib/animations';
 export const HeroSection: React.FC = () => {
   const shouldReduceMotion = useReducedMotion();
 
-  // (3) Hero entrance sequence under 1s using shared easing and transform/opacity only
+  // Entrance sequence under 1s
   const containerVariants = {
     hidden: { opacity: shouldReduceMotion ? 1 : 0 },
     visible: {
@@ -48,7 +48,7 @@ export const HeroSection: React.FC = () => {
       id="hero"
       className="relative min-h-screen flex flex-col justify-center items-center px-4 sm:px-6 pt-28 pb-16"
     >
-      {/* Targeted radial backdrop for text contrast */}
+      {/* Targeted radial backdrop */}
       <div
         className="absolute inset-0 bg-[radial-gradient(ellipse_65%_55%_at_center,rgba(3,7,18,0.78)_0%,rgba(3,7,18,0.4)_60%,transparent_90%)] pointer-events-none"
         aria-hidden="true"
@@ -60,22 +60,29 @@ export const HeroSection: React.FC = () => {
         animate="visible"
         className="relative z-10 max-w-4xl mx-auto text-center flex flex-col items-center gap-6"
       >
-        {/* 1. Status Pill Badge (No infinite pulse loop) */}
+        {/* 1. Sensitive Status Pill Badge with Pinging Radar Beacon */}
         <motion.div
           variants={itemVariants}
-          className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-slate-950/90 border border-emerald-500/35 text-xs sm:text-sm text-slate-200 backdrop-blur-xl shadow-xl shadow-black/70 max-w-full"
+          whileHover={shouldReduceMotion ? undefined : { scale: 1.03 }}
+          transition={{ duration: 0.2, ease: SHARED_EASE }}
+          className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-slate-950/90 border border-emerald-500/35 text-xs sm:text-sm text-slate-200 backdrop-blur-xl shadow-xl shadow-black/70 cursor-default"
         >
-          <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 ring-emerald-500/30 shrink-0" />
+          <span className="relative flex h-2.5 w-2.5 shrink-0">
+            {!shouldReduceMotion && (
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60" />
+            )}
+            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400 ring-2 ring-emerald-500/40" />
+          </span>
           <span className="font-medium tracking-wide">
             {PERSONAL_INFO.status}
           </span>
         </motion.div>
 
-        {/* 2. Headline */}
+        {/* 2. Headline with Shimmering Gradient Text */}
         <motion.div variants={itemVariants} className="space-y-4">
           <h1 className="font-display text-hero-fluid font-bold tracking-tight text-white max-w-3xl mx-auto drop-shadow-[0_4px_20px_rgba(0,0,0,0.95)]">
             Hi, I'm{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-white to-violet-300">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-violet-300 to-cyan-300 bg-[length:200%_auto] hover:brightness-110 transition-all">
               {PERSONAL_INFO.fullName}
             </span>
           </h1>
@@ -92,7 +99,7 @@ export const HeroSection: React.FC = () => {
           {PERSONAL_INFO.subheadline}
         </motion.p>
 
-        {/* 4. Action Row: Primary + Secondary + Small Icon Socials */}
+        {/* 4. Action Row with Sensitive Spring Physics */}
         <motion.div
           variants={itemVariants}
           className="flex flex-wrap items-center justify-center gap-3.5 pt-2"
@@ -100,12 +107,13 @@ export const HeroSection: React.FC = () => {
           {/* Primary CTA */}
           <motion.a
             href="#projects"
-            whileHover={shouldReduceMotion ? undefined : { y: -2 }}
+            whileHover={shouldReduceMotion ? undefined : { scale: 1.04, y: -2 }}
+            whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
             transition={{ duration: 0.2, ease: SHARED_EASE }}
-            className="btn-primary px-7 py-3.5 text-sm sm:text-base font-semibold"
+            className="btn-primary px-7 py-3.5 text-sm sm:text-base font-semibold group"
           >
             <span>View Projects</span>
-            <ArrowUpRightIcon className="w-4 h-4" />
+            <ArrowUpRightIcon className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
           </motion.a>
 
           {/* Secondary CTA */}
@@ -113,7 +121,8 @@ export const HeroSection: React.FC = () => {
             href={PERSONAL_INFO.resumeUrl}
             target="_blank"
             rel="noreferrer"
-            whileHover={shouldReduceMotion ? undefined : { y: -2 }}
+            whileHover={shouldReduceMotion ? undefined : { scale: 1.04, y: -2 }}
+            whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
             transition={{ duration: 0.2, ease: SHARED_EASE }}
             className="btn-secondary px-6 py-3.5 text-sm sm:text-base font-medium"
             aria-label="Download Resume"
@@ -122,13 +131,14 @@ export const HeroSection: React.FC = () => {
             <span>Download Resume</span>
           </motion.a>
 
-          {/* Icon Links */}
+          {/* Icon Links with Sensitive Hover Bounce */}
           <div className="flex items-center gap-2 sm:ml-2">
             <motion.a
               href={PERSONAL_INFO.github}
               target="_blank"
               rel="noreferrer"
-              whileHover={shouldReduceMotion ? undefined : { y: -2 }}
+              whileHover={shouldReduceMotion ? undefined : { scale: 1.12, y: -3 }}
+              whileTap={shouldReduceMotion ? undefined : { scale: 0.95 }}
               transition={{ duration: 0.2, ease: SHARED_EASE }}
               className="btn-icon"
               aria-label="GitHub Profile"
@@ -140,7 +150,8 @@ export const HeroSection: React.FC = () => {
               href={PERSONAL_INFO.linkedin}
               target="_blank"
               rel="noreferrer"
-              whileHover={shouldReduceMotion ? undefined : { y: -2 }}
+              whileHover={shouldReduceMotion ? undefined : { scale: 1.12, y: -3 }}
+              whileTap={shouldReduceMotion ? undefined : { scale: 0.95 }}
               transition={{ duration: 0.2, ease: SHARED_EASE }}
               className="btn-icon text-cyan-400 hover:text-cyan-300"
               aria-label="LinkedIn Profile"
@@ -150,7 +161,8 @@ export const HeroSection: React.FC = () => {
 
             <motion.a
               href={`mailto:${PERSONAL_INFO.email}`}
-              whileHover={shouldReduceMotion ? undefined : { y: -2 }}
+              whileHover={shouldReduceMotion ? undefined : { scale: 1.12, y: -3 }}
+              whileTap={shouldReduceMotion ? undefined : { scale: 0.95 }}
               transition={{ duration: 0.2, ease: SHARED_EASE }}
               className="btn-icon text-violet-400 hover:text-violet-300"
               aria-label="Email Touzeeh"
@@ -161,14 +173,22 @@ export const HeroSection: React.FC = () => {
         </motion.div>
       </motion.div>
 
-      {/* Down Arrow Indicator (No infinite bounce loop) */}
+      {/* Down Arrow Indicator with Sensitive Floating Wave Motion */}
       <motion.a
         href="#projects"
         initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.6, duration: 0.35, ease: SHARED_EASE }}
-        whileHover={shouldReduceMotion ? undefined : { y: 3 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 p-2 rounded-xl text-slate-400 hover:text-white transition-colors"
+        animate={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 1, y: [0, 6, 0] }}
+        transition={
+          shouldReduceMotion
+            ? { delay: 0.6, duration: 0.35, ease: SHARED_EASE }
+            : {
+                repeat: Infinity,
+                duration: 2.2,
+                ease: 'easeInOut',
+              }
+        }
+        whileHover={shouldReduceMotion ? undefined : { scale: 1.15, y: 3 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 p-2 rounded-xl text-slate-400 hover:text-cyan-400 transition-colors"
         aria-label="Scroll to Projects section"
       >
         <ArrowDownIcon className="w-5 h-5" />

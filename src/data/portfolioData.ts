@@ -10,7 +10,7 @@ export const PERSONAL_INFO = {
   bio: '2nd-year CSE student at LNCT Bhopal. I build full-stack web applications with Next.js & FastAPI and 3D web interfaces with Three.js. Seeking a summer internship in full-stack engineering.',
   
   website: 'https://touzeeh.xyz',
-  email: 'touzeeh.dev@gmail.com',
+  email: 'touzeeh@engineer.com',
   github: 'https://github.com/touzeeh',
   githubHandle: 'touzeeh',
   linkedin: 'https://www.linkedin.com/in/touzeeh/',

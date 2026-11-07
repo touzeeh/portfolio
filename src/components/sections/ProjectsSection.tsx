@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { motion, useReducedMotion } from 'framer-motion';
 import { PROJECTS } from '@/data/portfolioData';
 import { ExternalLinkIcon, GithubIcon } from '@/components/ui/Icons';
+import { TiltCard } from '@/components/ui/TiltCard';
 import {
   scrollRevealVariants,
   staggerGridVariants,
@@ -16,27 +17,13 @@ import {
 export const ProjectsSection: React.FC = () => {
   const shouldReduceMotion = useReducedMotion();
 
-  // (4) Card hover lift (4-6px) + border glow
-  const cardVariants = {
-    initial: {
-      y: 0,
-    },
-    hover: {
-      y: shouldReduceMotion ? 0 : -5,
-      transition: {
-        duration: 0.25,
-        ease: SHARED_EASE,
-      },
-    },
-  };
-
-  // (4) Inner image zoom 1.03x on card hover
+  // Inner image zoom 1.03x on card hover
   const imageVariants = {
     initial: {
       scale: 1,
     },
     hover: {
-      scale: shouldReduceMotion ? 1 : 1.03,
+      scale: shouldReduceMotion ? 1 : 1.04,
       transition: {
         duration: 0.5,
         ease: SHARED_EASE,
@@ -46,7 +33,7 @@ export const ProjectsSection: React.FC = () => {
 
   return (
     <section id="projects" className="py-24 px-4 sm:px-6 max-w-6xl mx-auto">
-      {/* (1) Section Header Scroll Reveal */}
+      {/* Section Header Scroll Reveal */}
       <motion.div
         initial="hidden"
         whileInView="visible"
@@ -65,7 +52,7 @@ export const ProjectsSection: React.FC = () => {
         </p>
       </motion.div>
 
-      {/* (1) 3 Projects Grid with 70ms stagger (max 5 items) */}
+      {/* 3 Projects Grid with 70ms stagger */}
       <motion.div
         initial="hidden"
         whileInView="visible"
@@ -79,13 +66,9 @@ export const ProjectsSection: React.FC = () => {
             variants={staggerItemVariants}
             className="h-full"
           >
-            {/* (4) Card Container with hover lift and border glow */}
-            <motion.div
-              initial="initial"
-              whileHover="hover"
-              variants={cardVariants}
-              className="glass-card flex flex-col justify-between h-full overflow-hidden border border-white/10 hover:border-cyan-400/40 hover:shadow-[0_16px_36px_-8px_rgba(6,182,212,0.18)] transition-colors rounded-[20px] group"
-              style={{ willChange: 'transform' }}
+            <TiltCard
+              glareColor="rgba(6, 182, 212, 0.22)"
+              className="glass-card flex flex-col justify-between h-full overflow-hidden border border-white/10 hover:border-cyan-400/40 hover:shadow-[0_16px_36px_-8px_rgba(6,182,212,0.22)] transition-all rounded-[20px] group"
             >
               <div>
                 {/* Real UI Mockup Thumbnail with Defined Boundary */}
@@ -93,6 +76,7 @@ export const ProjectsSection: React.FC = () => {
                   {project.image ? (
                     <motion.div
                       variants={imageVariants}
+                      whileHover="hover"
                       className="relative w-full h-full"
                       style={{ willChange: 'transform' }}
                     >
@@ -100,7 +84,7 @@ export const ProjectsSection: React.FC = () => {
                         src={project.image}
                         alt={`${project.title} interface preview`}
                         fill
-                        className="object-cover"
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       />
                     </motion.div>
@@ -110,9 +94,9 @@ export const ProjectsSection: React.FC = () => {
                     </div>
                   )}
 
-                  {/* Corner Viewfinder Tech Brackets */}
-                  <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-cyan-400 z-10 pointer-events-none" />
-                  <div className="absolute top-2 right-2 w-3 h-3 border-t-2 border-r-2 border-cyan-400 z-10 pointer-events-none" />
+                  {/* Corner Viewfinder Tech Brackets with hover reaction */}
+                  <div className="absolute top-2 left-2 w-3.5 h-3.5 border-t-2 border-l-2 border-cyan-400 z-10 pointer-events-none group-hover:scale-110 transition-transform" />
+                  <div className="absolute top-2 right-2 w-3.5 h-3.5 border-t-2 border-r-2 border-cyan-400 z-10 pointer-events-none group-hover:scale-110 transition-transform" />
                 </div>
 
                 {/* Card Content: Concise & Scannable */}
@@ -145,12 +129,14 @@ export const ProjectsSection: React.FC = () => {
                   {/* 3 Core Tech Chips */}
                   <div className="flex flex-wrap gap-1.5 pt-1">
                     {project.stack.slice(0, 3).map((tech) => (
-                      <span
+                      <motion.span
                         key={tech}
-                        className="px-2.5 py-1 rounded-md bg-slate-900/90 border border-white/10 text-xs font-mono text-slate-200"
+                        whileHover={shouldReduceMotion ? undefined : { y: -2, scale: 1.05 }}
+                        transition={{ duration: 0.15, ease: SHARED_EASE }}
+                        className="px-2.5 py-1 rounded-md bg-slate-900/90 border border-white/10 text-xs font-mono text-slate-200 hover:border-cyan-400/50 hover:text-white transition-colors cursor-default"
                       >
                         {tech}
-                      </span>
+                      </motion.span>
                     ))}
                   </div>
                 </div>
@@ -164,12 +150,13 @@ export const ProjectsSection: React.FC = () => {
                       href={project.liveUrl}
                       target="_blank"
                       rel="noreferrer"
-                      whileHover={shouldReduceMotion ? undefined : { y: -1 }}
+                      whileHover={shouldReduceMotion ? undefined : { scale: 1.03, y: -2 }}
+                      whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
                       transition={{ duration: 0.2, ease: SHARED_EASE }}
-                      className="btn-primary text-xs py-2 px-3 flex items-center justify-center gap-1.5 w-full"
+                      className="btn-primary text-xs py-2 px-3 flex items-center justify-center gap-1.5 w-full group/btn"
                     >
                       <span>Live Demo</span>
-                      <ExternalLinkIcon className="w-3.5 h-3.5" />
+                      <ExternalLinkIcon className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
                     </motion.a>
                   ) : (
                     <span className="btn-secondary text-xs py-2 px-3 opacity-50 cursor-not-allowed flex items-center justify-center">
@@ -181,16 +168,17 @@ export const ProjectsSection: React.FC = () => {
                     href={project.githubUrl}
                     target="_blank"
                     rel="noreferrer"
-                    whileHover={shouldReduceMotion ? undefined : { y: -1 }}
+                    whileHover={shouldReduceMotion ? undefined : { scale: 1.03, y: -2 }}
+                    whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
                     transition={{ duration: 0.2, ease: SHARED_EASE }}
-                    className="btn-secondary text-xs py-2 px-3 flex items-center justify-center gap-1.5 w-full text-slate-200 hover:text-white"
+                    className="btn-secondary text-xs py-2 px-3 flex items-center justify-center gap-1.5 w-full text-slate-200 hover:text-white group/btn"
                   >
                     <GithubIcon size={14} />
                     <span>Code</span>
                   </motion.a>
                 </div>
               </div>
-            </motion.div>
+            </TiltCard>
           </motion.div>
         ))}
       </motion.div>
