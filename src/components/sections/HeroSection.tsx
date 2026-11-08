@@ -61,12 +61,16 @@ export const HeroSection: React.FC = () => {
         animate="visible"
         className="relative z-10 max-w-4xl mx-auto text-center flex flex-col items-center gap-6"
       >
-        {/* 1. Leading with Proof: Hackathon 1st Place + Summer Internship Availability */}
+        {/* 1. Leading with Proof: Hackathon 1st Place + Summer 2027 Internship Availability */}
         <motion.div variants={itemVariants} className="flex flex-wrap items-center justify-center gap-2.5">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-xs font-mono font-medium text-amber-300 backdrop-blur-md shadow-lg shadow-black/50">
+          <a
+            href="#wins"
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-xs font-mono font-medium text-amber-300 backdrop-blur-md shadow-lg shadow-black/50 hover:border-amber-400/70 hover:text-amber-200 transition-colors"
+            title="View Hackathon Awards"
+          >
             <TrophyIcon className="w-3.5 h-3.5 text-amber-400" />
             <span>{PERSONAL_INFO.proofHighlight}</span>
-          </div>
+          </a>
 
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-950/90 border border-emerald-500/35 text-xs font-mono text-emerald-300 backdrop-blur-xl shadow-lg shadow-black/50">
             <span className="relative flex h-2 w-2 shrink-0">
@@ -105,16 +109,16 @@ export const HeroSection: React.FC = () => {
           variants={itemVariants}
           className="flex flex-wrap items-center justify-center gap-3.5 pt-2"
         >
-          {/* Primary CTA */}
+          {/* Primary Action Button (Distinct styling that doesn't compete with Navbar Connect) */}
           <motion.a
             href="#projects"
             whileHover={shouldReduceMotion ? undefined : { scale: 1.04, y: -2 }}
             whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
             transition={{ duration: 0.2, ease: SHARED_EASE }}
-            className="btn-primary px-7 py-3.5 text-sm sm:text-base font-semibold group"
+            className="btn-secondary px-7 py-3.5 text-sm sm:text-base font-semibold group border-cyan-400/40 hover:border-cyan-400 text-white shadow-lg shadow-cyan-500/10"
           >
-            <span>Explore Engineering Work</span>
-            <ArrowUpRightIcon className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+            <span>Explore Projects</span>
+            <ArrowUpRightIcon className="w-4 h-4 text-cyan-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
           </motion.a>
 
           {/* Secondary CTA */}

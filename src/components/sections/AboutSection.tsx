@@ -3,7 +3,7 @@
 import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { PERSONAL_INFO } from '@/data/portfolioData';
-import { GraduationCapIcon, MapPinIcon, CalendarIcon } from '@/components/ui/Icons';
+import { GraduationCapIcon, MapPinIcon, TerminalIcon } from '@/components/ui/Icons';
 import { TiltCard } from '@/components/ui/TiltCard';
 import {
   scrollRevealVariants,
@@ -33,147 +33,135 @@ export const AboutSection: React.FC = () => {
           About Me
         </h2>
         <p className="text-slate-300 text-base max-w-xl drop-shadow-[0_1px_6px_rgba(0,0,0,0.7)]">
-          Engineering trajectory, academic foundation, and technical focus.
+          Background, technical interests, and current focus areas.
         </p>
       </motion.div>
 
-      {/* Grid: 2 columns on desktop with stagger */}
+      {/* Grid: 2 columns on desktop */}
       <motion.div
         initial="hidden"
         whileInView="visible"
         viewport={VIEWPORT_CONFIG}
         variants={staggerGridVariants}
-        className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-7"
+        className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-7 items-stretch"
       >
         {/* Story Card (spans 7 cols) */}
-        <motion.div variants={staggerItemVariants} className="lg:col-span-7 h-full">
+        <motion.div variants={staggerItemVariants} className="lg:col-span-7 flex flex-col">
           <TiltCard
-            glareColor="rgba(6, 182, 212, 0.2)"
-            className="glass-card p-6 sm:p-8 h-full flex flex-col justify-between border border-white/10 hover:border-cyan-400/40 hover:shadow-[0_16px_36px_-8px_rgba(6,182,212,0.2)] transition-all rounded-[20px]"
+            glareColor="rgba(6, 182, 212, 0.18)"
+            className="glass-card p-6 sm:p-8 flex flex-col justify-between border border-white/10 hover:border-cyan-400/40 hover:shadow-[0_16px_36px_-8px_rgba(6,182,212,0.2)] transition-all rounded-[20px] flex-1"
           >
-            <div className="space-y-6">
-              <div className="flex items-center gap-4">
-                {/* Photo / Avatar with Animated Gradient Ring */}
-                <motion.div
-                  whileHover={shouldReduceMotion ? undefined : { scale: 1.08 }}
-                  transition={{ duration: 0.25, ease: SHARED_EASE }}
-                  className="relative w-16 h-16 rounded-[16px] bg-gradient-to-tr from-cyan-400 via-violet-500 to-cyan-400 p-[2px] shrink-0 shadow-[0_0_15px_rgba(6,182,212,0.3)]"
-                >
-                  <div className="w-full h-full rounded-[14px] bg-slate-950 flex items-center justify-center font-display font-bold text-lg text-white">
-                    TA
-                  </div>
-                </motion.div>
+            <div className="space-y-5">
+              <div className="flex items-center gap-3.5">
+                <div className="w-11 h-11 rounded-xl bg-cyan-500/15 border border-cyan-400/30 text-cyan-400 flex items-center justify-center shrink-0">
+                  <TerminalIcon className="w-5 h-5" />
+                </div>
                 <div>
                   <h3 className="font-display text-xl font-bold text-white">
                     {PERSONAL_INFO.fullName}
                   </h3>
-                  <p className="text-sm text-cyan-400 font-mono">
-                    2nd-Year Computer Science Student
+                  <p className="text-xs font-mono text-cyan-400">
+                    Full-Stack &amp; 3D Web Engineering
                   </p>
                 </div>
               </div>
 
-              <div className="space-y-4 text-slate-200 text-base leading-relaxed">
-                <p className="text-base font-medium text-slate-100">
-                  {PERSONAL_INFO.bio}
+              <div className="space-y-3.5 text-slate-200 text-sm sm:text-base leading-relaxed">
+                <p>
+                  I'm a developer who enjoys building software where visual craft meets backend reliability. Over the past year, I built <span className="text-white font-medium">InnerSight</span>, an interactive 3D hospital wayfinding tool in Three.js, and <span className="text-white font-medium">KarigarKart</span>, an inventory and order management platform built with FastAPI and Flutter.
                 </p>
-                <p className="text-sm text-slate-300">
-                  Balancing core computer science coursework (DSA, OOP, DBMS, OS) with hands-on full-stack development, 3D WebGL implementations, and microservices in Python and TypeScript.
+                <p className="text-slate-300 text-sm">
+                  I care about practical system design: clean REST endpoints, normalized database schemas, and efficient algorithms like A* for spatial graphs. When I'm not writing application code, I study core computer science fundamentals and publish small developer utilities like RouteGuard.
                 </p>
               </div>
             </div>
 
-            <div className="pt-6 border-t border-white/[0.08] mt-6 flex items-center justify-between">
-              <div className="text-xs text-slate-300 font-mono">
-                Academic Stage: <span className="text-white font-semibold">2nd-Year Undergrad</span>
-              </div>
-              <span className="text-xs font-mono text-cyan-400">
-                BTech CSE
-              </span>
+            <div className="pt-5 border-t border-white/[0.08] mt-6 flex items-center justify-between text-xs font-mono">
+              <span className="text-slate-400">Primary Focus:</span>
+              <span className="text-cyan-300 font-medium">Three.js / WebGL • FastAPI • TypeScript</span>
             </div>
           </TiltCard>
         </motion.div>
 
-        {/* Education & Quick Facts Card (spans 5 cols) */}
-        <motion.div variants={staggerItemVariants} className="lg:col-span-5 flex flex-col gap-6 h-full">
+        {/* Education & Focus Card (spans 5 cols) */}
+        <motion.div variants={staggerItemVariants} className="lg:col-span-5 flex flex-col">
           <TiltCard
-            glareColor="rgba(139, 92, 246, 0.2)"
-            className="glass-card p-6 sm:p-8 h-full flex flex-col justify-between border border-white/10 hover:border-violet-400/40 hover:shadow-[0_16px_36px_-8px_rgba(139,92,246,0.2)] transition-all rounded-[20px]"
+            glareColor="rgba(139, 92, 246, 0.18)"
+            className="glass-card p-6 sm:p-8 flex flex-col justify-between border border-white/10 hover:border-violet-400/40 hover:shadow-[0_16px_36px_-8px_rgba(139,92,246,0.2)] transition-all rounded-[20px] flex-1"
           >
             <div className="space-y-6">
               <h3 className="font-display text-lg font-bold text-white">
-                Education &amp; Focus
+                Education &amp; Availability
               </h3>
 
-              <div className="space-y-5">
-                {/* Education Item */}
+              <div className="space-y-4">
+                {/* Academic Item */}
                 <div className="flex items-start gap-3.5 group">
                   <motion.div
-                    whileHover={shouldReduceMotion ? undefined : { scale: 1.15, rotate: 5 }}
+                    whileHover={shouldReduceMotion ? undefined : { scale: 1.1, rotate: 5 }}
                     transition={{ duration: 0.2, ease: SHARED_EASE }}
-                    className="p-2.5 rounded-[12px] bg-cyan-600/15 border border-cyan-500/25 text-cyan-400 mt-1 shrink-0 group-hover:shadow-[0_0_12px_rgba(6,182,212,0.4)] transition-shadow"
+                    className="p-2.5 rounded-[12px] bg-cyan-600/15 border border-cyan-500/25 text-cyan-400 shrink-0"
                   >
                     <GraduationCapIcon className="w-5 h-5" />
                   </motion.div>
                   <div>
                     <h4 className="text-sm font-semibold text-white">
-                      {PERSONAL_INFO.degree}
+                      BTech in Computer Science
                     </h4>
-                    <p className="text-sm text-slate-300 mt-0.5">
-                      Undergraduate Engineering Degree
+                    <p className="text-xs text-slate-300 mt-0.5">
+                      Core focus: Data Structures, Algorithms, DBMS, and OS
                     </p>
-                    <p className="text-xs text-slate-400 mt-1 font-mono">
-                      {PERSONAL_INFO.year} • In Progress
+                    <p className="text-xs text-cyan-400 font-mono mt-1">
+                      2nd Year • In Progress
                     </p>
                   </div>
                 </div>
 
-                {/* Location Item */}
+                {/* Location & Relocation */}
                 <div className="flex items-start gap-3.5 group">
                   <motion.div
-                    whileHover={shouldReduceMotion ? undefined : { scale: 1.15, rotate: -5 }}
+                    whileHover={shouldReduceMotion ? undefined : { scale: 1.1, rotate: -5 }}
                     transition={{ duration: 0.2, ease: SHARED_EASE }}
-                    className="p-2.5 rounded-[12px] bg-violet-600/15 border border-violet-500/25 text-violet-400 mt-1 shrink-0 group-hover:shadow-[0_0_12px_rgba(139,92,246,0.4)] transition-shadow"
+                    className="p-2.5 rounded-[12px] bg-violet-600/15 border border-violet-500/25 text-violet-400 shrink-0"
                   >
                     <MapPinIcon className="w-5 h-5" />
                   </motion.div>
                   <div>
                     <h4 className="text-sm font-semibold text-white">Location</h4>
-                    <p className="text-sm text-slate-300 mt-0.5">
+                    <p className="text-xs text-slate-300 mt-0.5">
                       {PERSONAL_INFO.location}
                     </p>
                     <p className="text-xs text-slate-400 mt-1">
-                      Available for Summer 2026 internships (Remote &amp; On-site)
+                      Open to remote and on-site relocation
                     </p>
                   </div>
                 </div>
 
-                {/* Shipped Work */}
+                {/* Internship Window */}
                 <div className="flex items-start gap-3.5 group">
                   <motion.div
-                    whileHover={shouldReduceMotion ? undefined : { scale: 1.15, rotate: 5 }}
+                    whileHover={shouldReduceMotion ? undefined : { scale: 1.1, rotate: 5 }}
                     transition={{ duration: 0.2, ease: SHARED_EASE }}
-                    className="p-2.5 rounded-[12px] bg-emerald-600/15 border border-emerald-500/25 text-emerald-400 mt-1 shrink-0 group-hover:shadow-[0_0_12px_rgba(16,185,129,0.4)] transition-shadow"
+                    className="p-2.5 rounded-[12px] bg-emerald-600/15 border border-emerald-500/25 text-emerald-400 shrink-0"
                   >
-                    <CalendarIcon className="w-5 h-5" />
+                    <TerminalIcon className="w-5 h-5" />
                   </motion.div>
                   <div>
-                    <h4 className="text-sm font-semibold text-white">Core Focus</h4>
-                    <p className="text-sm text-slate-300 mt-0.5">
-                      Full-Stack Web &amp; 3D Spatial Systems
+                    <h4 className="text-sm font-semibold text-white">Internship Window</h4>
+                    <p className="text-xs text-emerald-300 mt-0.5 font-medium">
+                      Available for Summer 2027 internships
                     </p>
                     <p className="text-xs text-slate-400 mt-1">
-                      3 core engineering projects developed &amp; maintained
+                      Full-Stack &amp; Frontend Web Engineering
                     </p>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="pt-6 border-t border-white/[0.08] mt-6">
-              <span className="text-xs font-mono text-slate-300">
-                Core: Python, TypeScript, JavaScript, Dart
-              </span>
+            <div className="pt-5 border-t border-white/[0.08] mt-6 flex items-center justify-between text-xs font-mono text-slate-400">
+              <span>Status:</span>
+              <span className="text-emerald-400 font-medium">Open to opportunities</span>
             </div>
           </TiltCard>
         </motion.div>

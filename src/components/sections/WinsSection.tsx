@@ -31,33 +31,33 @@ export const WinsSection: React.FC = () => {
       >
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-300 text-xs font-mono font-medium mb-1">
           <TrophyIcon className="w-3.5 h-3.5 text-amber-400" />
-          <span>Accolades &amp; Victories</span>
+          <span>Competitions</span>
         </div>
         <h2 className="font-display text-section-fluid text-white tracking-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)]">
-          Wins &amp; Competition Proof
+          Hackathons
         </h2>
         <p className="text-slate-300 text-base max-w-2xl drop-shadow-[0_1px_6px_rgba(0,0,0,0.7)]">
-          A showcase of hackathon victories, engineering challenge awards, and recognized buildathons with verified project credentials.
+          Collegiate and regional technical buildathon challenges with working project deliverables.
         </p>
       </motion.div>
 
-      {/* Wins Grid: 1 col on mobile, 3 cols on desktop with 70ms stagger */}
+      {/* 2 Authentic Hackathon Cards Grid with 70ms stagger */}
       <motion.div
         initial="hidden"
         whileInView="visible"
         viewport={VIEWPORT_CONFIG}
         variants={staggerGridVariants}
-        className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-7"
+        className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-7"
       >
         {WINS.map((win) => (
           <motion.div
             key={win.id}
             variants={staggerItemVariants}
-            className="h-full"
+            className="h-full flex flex-col"
           >
             <TiltCard
-              glareColor="rgba(245, 158, 11, 0.25)"
-              className="glass-card flex flex-col justify-between h-full p-5 sm:p-6 border border-white/10 hover:border-amber-400/40 hover:shadow-[0_16px_36px_-8px_rgba(245,158,11,0.2)] transition-all rounded-[20px] group"
+              glareColor="rgba(245, 158, 11, 0.22)"
+              className="glass-card flex flex-col justify-between h-full p-6 border border-white/10 hover:border-amber-400/40 hover:shadow-[0_16px_36px_-8px_rgba(245,158,11,0.2)] transition-all rounded-[20px] group flex-1"
             >
               <div className="space-y-4">
                 {/* Image Frame with Viewfinder Tech Boundaries */}
@@ -65,7 +65,7 @@ export const WinsSection: React.FC = () => {
                   className="relative aspect-[16/10] w-full rounded-xl overflow-hidden bg-slate-950 border border-amber-500/30 group-hover:border-amber-400/70 transition-colors shadow-lg cursor-pointer"
                   onClick={() => setSelectedWin(win)}
                 >
-                  {/* Viewfinder Corner Brackets with hover reaction */}
+                  {/* Viewfinder Corner Brackets */}
                   <div className="absolute top-2 left-2 w-3.5 h-3.5 border-t-2 border-l-2 border-amber-400 z-10 pointer-events-none group-hover:scale-110 transition-transform" />
                   <div className="absolute top-2 right-2 w-3.5 h-3.5 border-t-2 border-r-2 border-amber-400 z-10 pointer-events-none group-hover:scale-110 transition-transform" />
                   <div className="absolute bottom-2 left-2 w-3.5 h-3.5 border-b-2 border-l-2 border-amber-400 z-10 pointer-events-none group-hover:scale-110 transition-transform" />
@@ -74,10 +74,10 @@ export const WinsSection: React.FC = () => {
                   {/* Image Display */}
                   <Image
                     src={win.image}
-                    alt={`${win.title} win award`}
+                    alt={`${win.title} certificate display`}
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    sizes="(max-width: 768px) 100vw, 50vw"
                   />
 
                   {/* Top Rank Badge */}
@@ -105,23 +105,21 @@ export const WinsSection: React.FC = () => {
                   {win.description}
                 </p>
 
-                {/* Tags with sensitive hover */}
+                {/* Tags */}
                 <div className="flex flex-wrap gap-1.5 pt-1">
                   {win.tags.map((tag) => (
-                    <motion.span
+                    <span
                       key={tag}
-                      whileHover={shouldReduceMotion ? undefined : { y: -2, scale: 1.05 }}
-                      transition={{ duration: 0.15, ease: SHARED_EASE }}
-                      className="px-2 py-0.5 rounded-md text-[11px] font-mono bg-slate-900 border border-white/10 text-slate-300 hover:border-amber-400/40 hover:text-white transition-colors cursor-default"
+                      className="px-2 py-0.5 rounded-md text-[11px] font-mono bg-slate-900 border border-white/10 text-slate-300"
                     >
                       {tag}
-                    </motion.span>
+                    </span>
                   ))}
                 </div>
               </div>
 
-              {/* Action Buttons */}
-              <div className="pt-4 border-t border-white/[0.08] mt-4 flex items-center justify-start">
+              {/* Action Buttons: Unified baseline with mt-auto */}
+              <div className="pt-4 border-t border-white/[0.08] mt-6 flex items-center justify-start">
                 <motion.button
                   type="button"
                   onClick={() => setSelectedWin(win)}
@@ -160,13 +158,13 @@ export const WinsSection: React.FC = () => {
               className="relative w-full max-w-2xl bg-slate-900 border-2 border-amber-400/50 rounded-2xl overflow-hidden shadow-2xl shadow-amber-500/20"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Viewfinder Frame Accents on Modal */}
+              {/* Viewfinder Frame Accents */}
               <div className="absolute top-3 left-3 w-4 h-4 border-t-2 border-l-2 border-amber-400 z-10" />
               <div className="absolute top-3 right-3 w-4 h-4 border-t-2 border-r-2 border-amber-400 z-10" />
               <div className="absolute bottom-3 left-3 w-4 h-4 border-b-2 border-l-2 border-amber-400 z-10" />
               <div className="absolute bottom-3 right-3 w-4 h-4 border-b-2 border-r-2 border-amber-400 z-10" />
 
-              {/* Modal Image with boundary */}
+              {/* Modal Image */}
               <div className="relative aspect-[16/10] w-full bg-slate-950 border-b border-white/10">
                 <Image
                   src={selectedWin.image}

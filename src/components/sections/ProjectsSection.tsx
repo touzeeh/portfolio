@@ -139,26 +139,26 @@ export const ProjectsSection: React.FC = () => {
                 </p>
               </div>
 
-              <div className="space-y-3 text-slate-200 text-sm leading-relaxed">
+              <div className="space-y-3.5 text-slate-200 text-sm sm:text-base leading-relaxed">
                 <div>
-                  <span className="text-xs font-mono text-slate-400 uppercase font-semibold block mb-1">
+                  <span className="text-xs font-mono text-cyan-300 uppercase font-bold tracking-wider block mb-1">
                     Problem &amp; Motivation
                   </span>
-                  <p>{featuredProject.problem}</p>
+                  <p className="text-slate-300">{featuredProject.problem}</p>
                 </div>
 
                 <div>
-                  <span className="text-xs font-mono text-slate-400 uppercase font-semibold block mb-1">
+                  <span className="text-xs font-mono text-cyan-300 uppercase font-bold tracking-wider block mb-1">
                     Algorithmic Architecture
                   </span>
-                  <p>{featuredProject.whatIBuilt}</p>
+                  <p className="text-slate-300">{featuredProject.whatIBuilt}</p>
                 </div>
 
                 <div>
-                  <span className="text-xs font-mono text-slate-400 uppercase font-semibold block mb-1">
+                  <span className="text-xs font-mono text-cyan-300 uppercase font-bold tracking-wider block mb-1">
                     Measured Result
                   </span>
-                  <p className="text-slate-100 font-medium">{featuredProject.result}</p>
+                  <p className="text-white font-medium">{featuredProject.result}</p>
                 </div>
               </div>
 
@@ -222,18 +222,18 @@ export const ProjectsSection: React.FC = () => {
                 </div>
 
                 {/* Problem & Solution */}
-                <div className="space-y-2.5 text-sm text-slate-300 leading-snug">
+                <div className="space-y-3 text-sm text-slate-200 leading-snug">
                   <p>
-                    <span className="text-xs font-mono text-slate-400 uppercase font-semibold block mb-0.5">
+                    <span className="text-xs font-mono text-cyan-300 uppercase font-bold tracking-wider block mb-0.5">
                       Problem:
                     </span>
-                    {project.problem}
+                    <span className="text-slate-300">{project.problem}</span>
                   </p>
                   <p>
-                    <span className="text-xs font-mono text-slate-400 uppercase font-semibold block mb-0.5">
+                    <span className="text-xs font-mono text-cyan-300 uppercase font-bold tracking-wider block mb-0.5">
                       Solution:
                     </span>
-                    {project.whatIBuilt}
+                    <span className="text-slate-300">{project.whatIBuilt}</span>
                   </p>
                 </div>
 
