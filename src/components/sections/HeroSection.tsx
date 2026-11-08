@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { SITE_DATA } from '@/data/site';
+import { PERSONAL_INFO } from '@/data/portfolioData';
 import {
   GithubIcon,
   LinkedinIcon,
@@ -16,7 +16,7 @@ import { SHARED_EASE } from '@/lib/animations';
 export const HeroSection: React.FC = () => {
   const shouldReduceMotion = useReducedMotion();
 
-  // Entrance sequence finishing under 1.2s
+  // Entrance sequence under 1.2s
   const containerVariants = {
     hidden: { opacity: shouldReduceMotion ? 1 : 0 },
     visible: {
@@ -55,41 +55,39 @@ export const HeroSection: React.FC = () => {
         animate="visible"
         className="relative z-10 max-w-3xl mx-auto text-center flex flex-col items-center gap-6"
       >
-        {/* Eyebrow Proof Row: Hackathon 1st Place + Summer 2027 Availability */}
+        {/* Eyebrow Proof Row */}
         <motion.div variants={itemVariants} className="flex flex-wrap items-center justify-center gap-3">
           <a
-            href={SITE_DATA.personal.highlightAward.href}
+            href="#wins"
             className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--surface-2)] border border-[var(--border)] hover:border-[var(--award)] text-xs font-mono font-medium text-[var(--award)] transition-colors focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
-            title="View Hackathon Proof"
+            title="View Hackathon Awards"
           >
             <TrophyIcon className="w-3.5 h-3.5 text-[var(--award)]" />
-            <span>
-              {SITE_DATA.personal.highlightAward.placement} • {SITE_DATA.personal.highlightAward.eventName}
-            </span>
+            <span>{PERSONAL_INFO.proofHighlight}</span>
           </a>
 
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--surface-2)] border border-[var(--border)] text-xs font-mono text-[var(--text-muted)]">
             <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" aria-hidden="true" />
-            <span>{SITE_DATA.personal.availability}</span>
+            <span>{PERSONAL_INFO.status}</span>
           </div>
         </motion.div>
 
-        {/* 1-Line Proof-Led Headline: Calm, precise, premium */}
+        {/* 1-Line Proof-Led Headline */}
         <motion.div variants={itemVariants} className="space-y-4">
           <h1 className="font-display text-hero-fluid font-bold tracking-tight text-[var(--text)] max-w-2xl mx-auto">
-            Hi, I'm <span className="text-gradient">{SITE_DATA.personal.fullName}</span>.
+            Hi, I'm <span className="text-gradient">{PERSONAL_INFO.fullName}</span>.
           </h1>
           <p className="text-xl sm:text-2xl md:text-[26px] font-medium text-[var(--text)] max-w-2xl mx-auto leading-relaxed">
-            {SITE_DATA.personal.headline}
+            {PERSONAL_INFO.headline}
           </p>
         </motion.div>
 
-        {/* Supporting Line: Grounded facts, no buzzwords */}
+        {/* Supporting Line */}
         <motion.p
           variants={itemVariants}
           className="max-w-xl text-[var(--text-muted)] text-base sm:text-lg leading-relaxed max-w-[65ch]"
         >
-          {SITE_DATA.personal.supportingLine}
+          {PERSONAL_INFO.subheadline}
         </motion.p>
 
         {/* Action Row: Hero owns the only solid primary CTA */}
@@ -108,7 +106,7 @@ export const HeroSection: React.FC = () => {
 
           {/* Secondary Outline CTA */}
           <a
-            href={SITE_DATA.personal.resumeUrl}
+            href={PERSONAL_INFO.resumeUrl}
             target="_blank"
             rel="noreferrer"
             className="btn-secondary"
@@ -122,18 +120,18 @@ export const HeroSection: React.FC = () => {
           {/* Labelled Social Links */}
           <div className="flex items-center gap-2 sm:ml-2">
             <a
-              href={SITE_DATA.personal.github}
+              href={PERSONAL_INFO.github}
               target="_blank"
               rel="noreferrer"
               className="btn-icon"
-              aria-label="GitHub Profile (github.com/touzeeh)"
+              aria-label="GitHub Profile"
               title="GitHub Profile"
             >
               <GithubIcon size={18} />
             </a>
 
             <a
-              href={SITE_DATA.personal.linkedin}
+              href={PERSONAL_INFO.linkedin}
               target="_blank"
               rel="noreferrer"
               className="btn-icon"
@@ -144,10 +142,10 @@ export const HeroSection: React.FC = () => {
             </a>
 
             <a
-              href={`mailto:${SITE_DATA.personal.email}`}
+              href={`mailto:${PERSONAL_INFO.email}`}
               className="btn-icon"
-              aria-label={`Email ${SITE_DATA.personal.fullName} (${SITE_DATA.personal.email})`}
-              title="Send Direct Email"
+              aria-label="Send direct email"
+              title="Send direct email"
             >
               <MailIcon size={18} />
             </a>

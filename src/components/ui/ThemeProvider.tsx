@@ -31,9 +31,25 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, []);
 
   useEffect(() => {
-    // Read the current data-theme set by the inline head script
-    const currentTheme = (document.documentElement.getAttribute('data-theme') as Theme) || 'dark';
-    applyTheme(currentTheme);
+    let resolved: Theme = 'dark';
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const qTheme = params.get('theme') as Theme | null;
+      if (qTheme === 'light' || qTheme === 'dark') {
+        resolved = qTheme;
+      } else {
+        const saved = localStorage.getItem('theme') as Theme | null;
+        if (saved === 'light' || saved === 'dark') {
+          resolved = saved;
+        } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          resolved = 'dark';
+        } else {
+          resolved = 'light';
+        }
+      }
+    } catch {}
+
+    applyTheme(resolved);
 
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const handleChange = (e: MediaQueryListEvent) => {

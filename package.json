@@ -30,6 +30,7 @@
     "@types/react-dom": "^19.3.0",
     "oxlint": "^1.90.0",
     "postcss": "^8.5.3",
+    "puppeteer-core": "^25.16.0",
     "tailwindcss": "^4.3.4",
     "typescript": "~7.0.2"
   }

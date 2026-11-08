@@ -1,133 +1,169 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
-import { SITE_DATA } from '@/data/site';
-import { FileTextIcon, TerminalIcon } from '@/components/ui/Icons';
+import { motion, useReducedMotion } from 'framer-motion';
+import { PERSONAL_INFO } from '@/data/portfolioData';
+import { GraduationCapIcon, MapPinIcon, TerminalIcon } from '@/components/ui/Icons';
+import { TiltCard } from '@/components/ui/TiltCard';
 import {
   scrollRevealVariants,
   staggerGridVariants,
   staggerItemVariants,
   VIEWPORT_CONFIG,
+  SHARED_EASE,
 } from '@/lib/animations';
 
 export const AboutSection: React.FC = () => {
+  const shouldReduceMotion = useReducedMotion();
+
   return (
-    <section id="about" className="section-padding max-w-6xl mx-auto px-4 sm:px-6">
-      {/* Section Header with Numbered Eyebrow */}
+    <section id="about" className="py-24 px-4 sm:px-6 max-w-6xl mx-auto">
+      {/* Section Header */}
       <motion.div
         initial="hidden"
         whileInView="visible"
         viewport={VIEWPORT_CONFIG}
         variants={scrollRevealVariants}
-        className="mb-12 space-y-2"
+        className="mb-14 space-y-2"
       >
-        <span className="eyebrow-label">
-          04 / About
+        <span className="text-xs font-mono uppercase tracking-widest text-cyan-400 font-semibold drop-shadow-sm">
+          Background
         </span>
-        <h2 className="font-display text-section-fluid text-[var(--text)] tracking-tight">
-          Background & Technical Focus
+        <h2 className="font-display text-section-fluid text-white tracking-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)]">
+          About Me
         </h2>
-        <p className="text-[var(--text-muted)] text-base sm:text-lg max-w-2xl leading-relaxed">
-          How I approach software architecture, spatial visualization, and backend system engineering.
+        <p className="text-slate-300 text-base max-w-xl drop-shadow-[0_1px_6px_rgba(0,0,0,0.7)]">
+          Background, technical interests, and current focus areas.
         </p>
       </motion.div>
 
-      {/* Grid: 2 Columns (Narrative & Facts) */}
+      {/* Grid: 2 columns on desktop */}
       <motion.div
         initial="hidden"
         whileInView="visible"
         viewport={VIEWPORT_CONFIG}
         variants={staggerGridVariants}
-        className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-stretch"
+        className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-7 items-stretch"
       >
-        {/* Narrative Card (Spans 7 Cols) */}
-        <motion.div variants={staggerItemVariants} className="lg:col-span-7 flex flex-col h-full">
-          <div className="site-card p-6 sm:p-8 flex flex-col justify-between h-full space-y-6">
-            <div className="flex items-center gap-4 pb-4 border-b border-[var(--border)]">
-              {/* Photo Slot with Initials Fallback */}
-              <div
-                className="w-14 h-14 rounded-[12px] bg-[var(--surface-2)] border border-[var(--border)] flex items-center justify-center font-display font-bold text-lg text-[var(--accent)] shrink-0 shadow-sm"
-                aria-label="Profile Initials Fallback"
-              >
-                <span>TA</span>
+        {/* Story Card (spans 7 cols) */}
+        <motion.div variants={staggerItemVariants} className="lg:col-span-7 flex flex-col">
+          <TiltCard
+            glareColor="rgba(6, 182, 212, 0.18)"
+            className="glass-card p-6 sm:p-8 flex flex-col justify-between border border-white/10 hover:border-cyan-400/40 hover:shadow-[0_16px_36px_-8px_rgba(6,182,212,0.2)] transition-all rounded-[20px] flex-1"
+          >
+            <div className="space-y-5">
+              <div className="flex items-center gap-3.5">
+                <div className="w-11 h-11 rounded-xl bg-cyan-500/15 border border-cyan-400/30 text-cyan-400 flex items-center justify-center shrink-0">
+                  <TerminalIcon className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-display text-xl font-bold text-white">
+                    {PERSONAL_INFO.fullName}
+                  </h3>
+                  <p className="text-xs font-mono text-cyan-400">
+                    Full-Stack &amp; 3D Web Engineering
+                  </p>
+                </div>
               </div>
-              <div>
-                <h3 className="font-display text-xl font-bold text-[var(--text)]">
-                  {SITE_DATA.personal.fullName}
-                </h3>
-                <p className="text-xs font-mono text-[var(--accent)]">
-                  {SITE_DATA.personal.title}
+
+              <div className="space-y-3.5 text-slate-200 text-sm sm:text-base leading-relaxed">
+                <p>
+                  I'm a developer who enjoys building software where visual craft meets backend reliability. Over the past year, I built <span className="text-white font-medium">InnerSight</span>, an interactive 3D hospital wayfinding tool in Three.js, and <span className="text-white font-medium">KarigarKart</span>, an inventory and order management platform built with FastAPI and Flutter.
+                </p>
+                <p className="text-slate-300 text-sm">
+                  I care about practical system design: clean REST endpoints, normalized database schemas, and efficient algorithms like A* for spatial graphs. When I'm not writing application code, I study core computer science fundamentals and publish small developer utilities like RouteGuard.
                 </p>
               </div>
             </div>
 
-            {/* 3 Short First-Person Paragraphs */}
-            <div className="space-y-4 text-base leading-relaxed text-[var(--text)] max-w-[65ch]">
-              {SITE_DATA.about.paragraphs.map((p, idx) => (
-                <p key={idx} className="text-[var(--text)]">
-                  {p}
-                </p>
-              ))}
+            <div className="pt-5 border-t border-white/[0.08] mt-6 flex items-center justify-between text-xs font-mono">
+              <span className="text-slate-400">Primary Focus:</span>
+              <span className="text-cyan-300 font-medium">Three.js / WebGL • FastAPI • TypeScript</span>
             </div>
-
-            {/* Quick Actions */}
-            <div className="pt-4 border-t border-[var(--border)] mt-auto flex flex-wrap items-center gap-3">
-              <a
-                href={SITE_DATA.personal.resumeUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="btn-secondary text-xs"
-              >
-                <FileTextIcon className="w-3.5 h-3.5 text-[var(--accent)]" />
-                <span>Download Resume (PDF)</span>
-              </a>
-              <a
-                href="#contact"
-                className="btn-ghost text-xs"
-              >
-                <span>Get in touch →</span>
-              </a>
-            </div>
-          </div>
+          </TiltCard>
         </motion.div>
 
-        {/* Facts List Card (Spans 5 Cols) */}
-        <motion.div variants={staggerItemVariants} className="lg:col-span-5 flex flex-col h-full">
-          <div className="site-card p-6 sm:p-8 flex flex-col justify-between h-full space-y-6">
-            <div>
-              <span className="eyebrow-label text-[var(--accent)]">
-                Verified Facts
-              </span>
-              <h3 className="font-display text-xl font-bold text-[var(--text)] mt-1">
-                At a Glance
+        {/* Education & Focus Card (spans 5 cols) */}
+        <motion.div variants={staggerItemVariants} className="lg:col-span-5 flex flex-col">
+          <TiltCard
+            glareColor="rgba(139, 92, 246, 0.18)"
+            className="glass-card p-6 sm:p-8 flex flex-col justify-between border border-white/10 hover:border-violet-400/40 hover:shadow-[0_16px_36px_-8px_rgba(139,92,246,0.2)] transition-all rounded-[20px] flex-1"
+          >
+            <div className="space-y-6">
+              <h3 className="font-display text-lg font-bold text-white">
+                Education &amp; Availability
               </h3>
-            </div>
 
-            <div className="space-y-4">
-              {SITE_DATA.about.facts.map((fact) => (
-                <div
-                  key={fact.label}
-                  className="p-3.5 rounded-[12px] bg-[var(--surface-2)] border border-[var(--border)]"
-                >
-                  <span className="eyebrow-label block mb-1">
-                    {fact.label}
-                  </span>
-                  <span className="font-sans text-sm font-semibold text-[var(--text)]">
-                    {fact.value}
-                  </span>
+              <div className="space-y-4">
+                {/* Academic Item */}
+                <div className="flex items-start gap-3.5 group">
+                  <motion.div
+                    whileHover={shouldReduceMotion ? undefined : { scale: 1.1, rotate: 5 }}
+                    transition={{ duration: 0.2, ease: SHARED_EASE }}
+                    className="p-2.5 rounded-[12px] bg-cyan-600/15 border border-cyan-500/25 text-cyan-400 shrink-0"
+                  >
+                    <GraduationCapIcon className="w-5 h-5" />
+                  </motion.div>
+                  <div>
+                    <h4 className="text-sm font-semibold text-white">
+                      BTech in Computer Science
+                    </h4>
+                    <p className="text-xs text-slate-300 mt-0.5">
+                      Core focus: Data Structures, Algorithms, DBMS, and OS
+                    </p>
+                    <p className="text-xs text-cyan-400 font-mono mt-1">
+                      2nd Year • In Progress
+                    </p>
+                  </div>
                 </div>
-              ))}
+
+                {/* Location & Relocation */}
+                <div className="flex items-start gap-3.5 group">
+                  <motion.div
+                    whileHover={shouldReduceMotion ? undefined : { scale: 1.1, rotate: -5 }}
+                    transition={{ duration: 0.2, ease: SHARED_EASE }}
+                    className="p-2.5 rounded-[12px] bg-violet-600/15 border border-violet-500/25 text-violet-400 shrink-0"
+                  >
+                    <MapPinIcon className="w-5 h-5" />
+                  </motion.div>
+                  <div>
+                    <h4 className="text-sm font-semibold text-white">Location</h4>
+                    <p className="text-xs text-slate-300 mt-0.5">
+                      {PERSONAL_INFO.location}
+                    </p>
+                    <p className="text-xs text-slate-400 mt-1">
+                      Open to remote and on-site relocation
+                    </p>
+                  </div>
+                </div>
+
+                {/* Internship Window */}
+                <div className="flex items-start gap-3.5 group">
+                  <motion.div
+                    whileHover={shouldReduceMotion ? undefined : { scale: 1.1, rotate: 5 }}
+                    transition={{ duration: 0.2, ease: SHARED_EASE }}
+                    className="p-2.5 rounded-[12px] bg-emerald-600/15 border border-emerald-500/25 text-emerald-400 shrink-0"
+                  >
+                    <TerminalIcon className="w-5 h-5" />
+                  </motion.div>
+                  <div>
+                    <h4 className="text-sm font-semibold text-white">Internship Window</h4>
+                    <p className="text-xs text-emerald-300 mt-0.5 font-medium">
+                      Available for Summer 2027 internships
+                    </p>
+                    <p className="text-xs text-slate-400 mt-1">
+                      Full-Stack &amp; Frontend Web Engineering
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            {/* Floorplan Signature Accent Micro-Card */}
-            <div className="p-4 rounded-[12px] bg-[var(--surface-2)] border border-[var(--border)] flex items-start gap-3 mt-auto">
-              <TerminalIcon className="w-4 h-4 text-[var(--accent)] shrink-0 mt-0.5" />
-              <p className="text-xs text-[var(--text-muted)] leading-relaxed">
-                Currently building experimental indoor navigation meshes and deterministic token bucket algorithms.
-              </p>
+            <div className="pt-5 border-t border-white/[0.08] mt-6 flex items-center justify-between text-xs font-mono text-slate-400">
+              <span>Status:</span>
+              <span className="text-emerald-400 font-medium">Open to opportunities</span>
             </div>
-          </div>
+          </TiltCard>
         </motion.div>
       </motion.div>
     </section>

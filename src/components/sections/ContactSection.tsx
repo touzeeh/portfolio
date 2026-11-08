@@ -1,342 +1,395 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { SITE_DATA } from '@/data/site';
-import { MailIcon, CopyIcon, CheckIcon, ArrowUpRightIcon } from '@/components/ui/Icons';
+import { motion, useReducedMotion } from 'framer-motion';
+import { PERSONAL_INFO } from '@/data/portfolioData';
+import { GithubIcon, LinkedinIcon, MailIcon, CheckIcon, CopyIcon } from '@/components/ui/Icons';
+import { TiltCard } from '@/components/ui/TiltCard';
 import {
   scrollRevealVariants,
   staggerGridVariants,
   staggerItemVariants,
   VIEWPORT_CONFIG,
+  SHARED_EASE,
 } from '@/lib/animations';
 
-interface FormState {
-  name: string;
-  email: string;
-  message: string;
-  website_hp: string; // Honeypot field
-}
-
-interface FormErrors {
-  name?: string;
-  email?: string;
-  message?: string;
-}
-
 export const ContactSection: React.FC = () => {
-  const [formData, setFormData] = useState<FormState>({
-    name: '',
-    email: '',
-    message: '',
-    website_hp: '',
-  });
+  const shouldReduceMotion = useReducedMotion();
 
-  const [errors, setErrors] = useState<FormErrors>({});
+  // Form input state
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [touched, setTouched] = useState({ name: false, email: false, message: false });
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-  const [statusMessage, setStatusMessage] = useState<string>('');
-  const [emailCopied, setEmailCopied] = useState(false);
+  const [statusMessage, setStatusMessage] = useState('');
+  const [copied, setCopied] = useState(false);
 
-  const validate = (): boolean => {
-    const errs: FormErrors = {};
-
+  // (6) Inline validation logic
+  const validate = () => {
+    const errors: { name?: string; email?: string; message?: string } = {};
     if (!formData.name.trim() || formData.name.trim().length < 2) {
-      errs.name = 'Please enter your name (at least 2 characters).';
+      errors.name = 'Please provide your name (min 2 characters).';
     }
-
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!formData.email.trim() || !emailRegex.test(formData.email.trim())) {
-      errs.email = 'Please enter a valid email address.';
+      errors.email = 'Please provide a valid email address.';
     }
-
     if (!formData.message.trim() || formData.message.trim().length < 10) {
-      errs.message = 'Please provide a message with at least 10 characters.';
+      errors.message = 'Message must be at least 10 characters.';
     }
-
-    setErrors(errs);
-    return Object.keys(errs).length === 0;
+    return errors;
   };
 
-  const handleCopyEmail = () => {
-    navigator.clipboard.writeText(SITE_DATA.personal.email);
-    setEmailCopied(true);
-    setTimeout(() => setEmailCopied(false), 2000);
+  const errors = validate();
+  const isValid = Object.keys(errors).length === 0;
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleBlur = (field: 'name' | 'email' | 'message') => {
+    setTouched((prev) => ({ ...prev, [field]: true }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!validate()) return;
+    setTouched({ name: true, email: true, message: true });
+
+    if (!isValid) return;
 
     setStatus('loading');
-    setStatusMessage('');
+    setStatusMessage('Transmitting message...');
+
+    const data = new FormData();
+    // Verified Web3Forms Public Access Key
+    data.append('access_key', '6efb1fda-7860-4bbc-9978-bf37460a177f');
+    data.append('name', formData.name);
+    data.append('email', formData.email);
+    data.append('message', formData.message);
+    data.append('subject', `Inquiry on touzeeh.xyz from ${formData.name}`);
+    data.append('from_name', 'Touzeeh Ahmed Portfolio');
+    data.append('botcheck', '');
 
     try {
-      const res = await fetch('/api/contact', {
+      const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: data,
       });
 
-      const data = await res.json();
+      const result = await response.json();
 
-      if (res.ok && data.success) {
+      if (result.success) {
         setStatus('success');
-        setStatusMessage('Thank you! Your message has been sent successfully. I will get back to you shortly.');
-        setFormData({ name: '', email: '', message: '', website_hp: '' });
+        setStatusMessage('Message transmitted successfully!');
+        setFormData({ name: '', email: '', message: '' });
+        setTouched({ name: false, email: false, message: false });
       } else {
         setStatus('error');
-        setStatusMessage(data.error || 'Failed to send message. Please try again or use direct email.');
+        setStatusMessage(result.message || `Submission failed. Please email ${PERSONAL_INFO.email} directly.`);
       }
     } catch {
       setStatus('error');
-      setStatusMessage('Network error occurred. Please use direct email to contact me.');
+      setStatusMessage(`Network issue. Please email ${PERSONAL_INFO.email} directly.`);
+    }
+  };
+
+  // (8) Copy-to-clipboard feedback on verified email
+  const handleCopyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(PERSONAL_INFO.email);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      window.location.href = `mailto:${PERSONAL_INFO.email}`;
     }
   };
 
   return (
-    <section id="contact" className="section-padding max-w-6xl mx-auto px-4 sm:px-6">
-      {/* Section Header with Numbered Eyebrow */}
+    <section id="contact" className="py-24 px-4 sm:px-6 max-w-6xl mx-auto">
+      {/* (1) Section Header Scroll Reveal */}
       <motion.div
         initial="hidden"
         whileInView="visible"
         viewport={VIEWPORT_CONFIG}
         variants={scrollRevealVariants}
-        className="mb-12 space-y-2"
+        className="mb-14 space-y-2"
       >
-        <span className="eyebrow-label">
-          05 / Contact
+        <span className="text-xs font-mono uppercase tracking-widest text-cyan-400 font-semibold drop-shadow-sm">
+          Get in Touch
         </span>
-        <h2 className="font-display text-section-fluid text-[var(--text)] tracking-tight">
-          Initiate Conversation
+        <h2 className="font-display text-section-fluid text-white tracking-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)]">
+          Let's Connect
         </h2>
-        <p className="text-[var(--text-muted)] text-base sm:text-lg max-w-2xl leading-relaxed">
-          Open for Summer 2027 internship discussions, technical collaboration, or engineering inquiries.
+        <p className="text-slate-300 text-base max-w-xl drop-shadow-[0_1px_6px_rgba(0,0,0,0.7)]">
+          Whether you have an internship opportunity, an engineering project, or want to connect, send a message below.
         </p>
       </motion.div>
 
-      {/* Grid: Direct Contact Info (Left) + Form (Right) */}
       <motion.div
         initial="hidden"
         whileInView="visible"
         viewport={VIEWPORT_CONFIG}
         variants={staggerGridVariants}
-        className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start"
+        className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-7"
       >
-        {/* Left Column: Direct Inquiries & Copy Email (5 Cols) */}
-        <motion.div variants={staggerItemVariants} className="lg:col-span-5 space-y-6">
-          <div className="site-card p-6 sm:p-7 space-y-5">
-            <div>
-              <span className="eyebrow-label text-[var(--accent)]">
-                Direct Channel
-              </span>
-              <h3 className="font-display text-xl font-bold text-[var(--text)] mt-1">
-                Reach Me Directly
-              </h3>
-              <p className="text-xs text-[var(--text-muted)] leading-relaxed mt-2">
-                Prefer email over forms? Copy my direct email address or send a quick mailto request.
-              </p>
-            </div>
-
-            {/* Email Address Row with Copy & Mailto Buttons */}
-            <div className="p-3.5 rounded-[12px] bg-[var(--surface-2)] border border-[var(--border)] space-y-3">
-              <div className="flex items-center gap-2">
-                <MailIcon className="w-4 h-4 text-[var(--accent)] shrink-0" />
-                <span className="font-mono text-sm text-[var(--text)] font-semibold select-all break-all">
-                  {SITE_DATA.personal.email}
-                </span>
-              </div>
-
-              <div className="flex items-center gap-2 pt-1">
-                {/* 1-Click Copy Email Button */}
-                <button
+        {/* Contact Form Card (spans 7 cols) */}
+        <motion.div variants={staggerItemVariants} className="lg:col-span-7 h-full">
+          <TiltCard
+            glareColor="rgba(6, 182, 212, 0.2)"
+            className="glass-card p-6 sm:p-8 border border-white/10 hover:border-cyan-400/40 hover:shadow-[0_16px_36px_-8px_rgba(6,182,212,0.2)] transition-all rounded-[20px] h-full"
+          >
+            {status === 'success' ? (
+              <motion.div
+                initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.35, ease: SHARED_EASE }}
+                className="text-center py-12 space-y-4"
+              >
+                <div className="w-14 h-14 rounded-full bg-emerald-500/20 border-2 border-emerald-500/50 text-emerald-400 flex items-center justify-center mx-auto shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+                  <CheckIcon className="w-7 h-7" />
+                </div>
+                <h3 className="font-display text-2xl font-bold text-white">
+                  Message Transmitted
+                </h3>
+                <p className="text-sm text-slate-200 max-w-sm mx-auto leading-relaxed">
+                  Thank you! Your message has been sent directly to <span className="text-white font-medium">{PERSONAL_INFO.email}</span>.
+                </p>
+                <motion.button
                   type="button"
-                  onClick={handleCopyEmail}
-                  className="btn-secondary text-xs flex-1 justify-center min-h-[38px]"
-                  aria-label="Copy email address to clipboard"
+                  whileHover={shouldReduceMotion ? undefined : { scale: 1.04 }}
+                  whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
+                  onClick={() => {
+                    setStatus('idle');
+                    setStatusMessage('');
+                  }}
+                  className="btn-secondary text-xs mt-3"
                 >
-                  {emailCopied ? (
-                    <>
-                      <CheckIcon className="w-3.5 h-3.5 text-emerald-500" />
-                      <span>Copied to clipboard</span>
-                    </>
-                  ) : (
-                    <>
-                      <CopyIcon className="w-3.5 h-3.5" />
-                      <span>Copy Email</span>
-                    </>
+                  Send Another Message
+                </motion.button>
+              </motion.div>
+            ) : (
+              <form onSubmit={handleSubmit} noValidate className="space-y-5">
+                {/* Anti-Spam Honeypot */}
+                <input type="checkbox" name="botcheck" className="hidden" style={{ display: 'none' }} tabIndex={-1} autoComplete="off" />
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {/* Name Field */}
+                  <div className="space-y-1.5">
+                    <label htmlFor="name" className="text-sm font-medium text-slate-200">
+                      Your Name <span className="text-cyan-400">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      onBlur={() => handleBlur('name')}
+                      required
+                      placeholder="e.g. Alex Smith"
+                      className={`w-full px-4 py-2.5 rounded-xl bg-slate-950/90 border ${
+                        touched.name && errors.name
+                          ? 'border-rose-400/80 focus:ring-rose-400/30'
+                          : 'border-white/20 focus:border-cyan-400 focus:ring-cyan-400/30'
+                      } text-white text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 transition-all`}
+                    />
+                    {touched.name && errors.name && (
+                      <p className="text-xs text-rose-400 font-mono mt-1">
+                        {errors.name}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Email Field */}
+                  <div className="space-y-1.5">
+                    <label htmlFor="email" className="text-sm font-medium text-slate-200">
+                      Email Address <span className="text-cyan-400">*</span>
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      onBlur={() => handleBlur('email')}
+                      required
+                      placeholder="alex@company.com"
+                      className={`w-full px-4 py-2.5 rounded-xl bg-slate-950/90 border ${
+                        touched.email && errors.email
+                          ? 'border-rose-400/80 focus:ring-rose-400/30'
+                          : 'border-white/20 focus:border-cyan-400 focus:ring-cyan-400/30'
+                      } text-white text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 transition-all`}
+                    />
+                    {touched.email && errors.email && (
+                      <p className="text-xs text-rose-400 font-mono mt-1">
+                        {errors.email}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Message Field */}
+                <div className="space-y-1.5">
+                  <label htmlFor="message" className="text-sm font-medium text-slate-200">
+                    Message <span className="text-cyan-400">*</span>
+                  </label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    onBlur={() => handleBlur('message')}
+                    required
+                    rows={4}
+                    placeholder="Tell me about your team, role, or project..."
+                    className={`w-full px-4 py-2.5 rounded-xl bg-slate-950/90 border ${
+                      touched.message && errors.message
+                        ? 'border-rose-400/80 focus:ring-rose-400/30'
+                        : 'border-white/20 focus:border-cyan-400 focus:ring-cyan-400/30'
+                    } text-white text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 transition-all resize-none`}
+                  />
+                  {touched.message && errors.message && (
+                    <p className="text-xs text-rose-400 font-mono mt-1">
+                      {errors.message}
+                    </p>
                   )}
-                </button>
+                </div>
 
-                {/* Direct Mailto Fallback */}
-                <a
-                  href={`mailto:${SITE_DATA.personal.email}`}
-                  className="btn-ghost text-xs min-h-[38px] px-3 flex items-center gap-1"
-                  aria-label="Open default mail client"
-                >
-                  <span>Mailto</span>
-                  <ArrowUpRightIcon className="w-3 h-3" />
-                </a>
-              </div>
-            </div>
-
-            {/* Location & Response Expectation */}
-            <div className="space-y-2 text-xs font-mono text-[var(--text-muted)] pt-1">
-              <div className="flex items-center justify-between">
-                <span>Location:</span>
-                <span className="text-[var(--text)]">{SITE_DATA.personal.location}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span>Hiring Window:</span>
-                <span className="text-[var(--accent)]">Summer 2027</span>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Right Column: Accessible Form with Visible Labels (7 Cols) */}
-        <motion.div variants={staggerItemVariants} className="lg:col-span-7">
-          <div className="site-card p-6 sm:p-8">
-            <form onSubmit={handleSubmit} noValidate className="space-y-5">
-              {/* Visible Live Status Message for Screen Readers */}
-              <div aria-live="polite" className="min-h-[1.5rem]">
-                {status === 'success' && (
-                  <p className="p-3 rounded-[10px] bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-xs font-medium">
-                    {statusMessage}
-                  </p>
-                )}
+                {/* Status Message */}
                 {status === 'error' && (
-                  <p className="p-3 rounded-[10px] bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-400 text-xs font-medium">
+                  <p className="text-xs text-rose-400 font-mono">
                     {statusMessage}
                   </p>
                 )}
-              </div>
 
-              {/* Honeypot Field (Spam bot trap, completely hidden from humans) */}
-              <div className="hidden" aria-hidden="true">
-                <label htmlFor="website_hp">Leave this empty</label>
-                <input
-                  id="website_hp"
-                  type="text"
-                  name="website_hp"
-                  tabIndex={-1}
-                  autoComplete="off"
-                  value={formData.website_hp}
-                  onChange={(e) => setFormData({ ...formData, website_hp: e.target.value })}
-                />
-              </div>
-
-              {/* Full Name Field: Visible Label */}
-              <div className="space-y-1.5">
-                <label
-                  htmlFor="contact-name"
-                  className="block text-xs font-semibold text-[var(--text)] tracking-wide uppercase"
-                >
-                  Your Name <span className="text-[var(--accent)]">*</span>
-                </label>
-                <input
-                  id="contact-name"
-                  type="text"
-                  required
-                  value={formData.name}
-                  onChange={(e) => {
-                    setFormData({ ...formData, name: e.target.value });
-                    if (errors.name) setErrors({ ...errors, name: undefined });
-                  }}
-                  placeholder="e.g. Alex Morgan"
-                  className={`w-full min-h-[44px] px-3.5 py-2.5 rounded-[10px] bg-[var(--surface-2)] border text-sm text-[var(--text)] placeholder-[var(--text-muted)]/60 transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--accent)] ${
-                    errors.name ? 'border-red-500' : 'border-[var(--border)]'
-                  }`}
-                  aria-invalid={!!errors.name}
-                  aria-describedby={errors.name ? 'name-error' : undefined}
-                />
-                {errors.name && (
-                  <p id="name-error" className="text-xs font-mono text-red-500 mt-1">
-                    {errors.name}
-                  </p>
-                )}
-              </div>
-
-              {/* Email Field: Visible Label */}
-              <div className="space-y-1.5">
-                <label
-                  htmlFor="contact-email"
-                  className="block text-xs font-semibold text-[var(--text)] tracking-wide uppercase"
-                >
-                  Email Address <span className="text-[var(--accent)]">*</span>
-                </label>
-                <input
-                  id="contact-email"
-                  type="email"
-                  required
-                  value={formData.email}
-                  onChange={(e) => {
-                    setFormData({ ...formData, email: e.target.value });
-                    if (errors.email) setErrors({ ...errors, email: undefined });
-                  }}
-                  placeholder="name@organization.com"
-                  className={`w-full min-h-[44px] px-3.5 py-2.5 rounded-[10px] bg-[var(--surface-2)] border text-sm text-[var(--text)] placeholder-[var(--text-muted)]/60 transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--accent)] ${
-                    errors.email ? 'border-red-500' : 'border-[var(--border)]'
-                  }`}
-                  aria-invalid={!!errors.email}
-                  aria-describedby={errors.email ? 'email-error' : undefined}
-                />
-                {errors.email && (
-                  <p id="email-error" className="text-xs font-mono text-red-500 mt-1">
-                    {errors.email}
-                  </p>
-                )}
-              </div>
-
-              {/* Message Field: Visible Label */}
-              <div className="space-y-1.5">
-                <label
-                  htmlFor="contact-message"
-                  className="block text-xs font-semibold text-[var(--text)] tracking-wide uppercase"
-                >
-                  Message <span className="text-[var(--accent)]">*</span>
-                </label>
-                <textarea
-                  id="contact-message"
-                  required
-                  rows={4}
-                  value={formData.message}
-                  onChange={(e) => {
-                    setFormData({ ...formData, message: e.target.value });
-                    if (errors.message) setErrors({ ...errors, message: undefined });
-                  }}
-                  placeholder="Details regarding your team, role requirements, or collaboration..."
-                  className={`w-full px-3.5 py-2.5 rounded-[10px] bg-[var(--surface-2)] border text-sm text-[var(--text)] placeholder-[var(--text-muted)]/60 transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--accent)] resize-y ${
-                    errors.message ? 'border-red-500' : 'border-[var(--border)]'
-                  }`}
-                  aria-invalid={!!errors.message}
-                  aria-describedby={errors.message ? 'message-error' : undefined}
-                />
-                {errors.message && (
-                  <p id="message-error" className="text-xs font-mono text-red-500 mt-1">
-                    {errors.message}
-                  </p>
-                )}
-              </div>
-
-              {/* Submit Button with Spinner & Disabled State */}
-              <div className="pt-2">
-                <button
+                {/* (6) Send button with loading/success/error states and spring physics */}
+                <motion.button
                   type="submit"
                   disabled={status === 'loading'}
-                  className="btn-primary w-full sm:w-auto min-w-[160px]"
+                  whileHover={shouldReduceMotion ? undefined : { scale: 1.02, y: -1 }}
+                  whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
+                  transition={{ duration: 0.2, ease: SHARED_EASE }}
+                  className={`btn-primary w-full py-3 text-sm font-semibold flex items-center justify-center gap-2 cursor-pointer shadow-lg hover:shadow-cyan-500/20 ${
+                    status === 'loading' ? 'opacity-70 cursor-wait' : ''
+                  }`}
                 >
-                  {status === 'loading' ? (
-                    <span className="flex items-center gap-2">
-                      <span className="w-4 h-4 border-2 border-[var(--btn-primary-text)] border-t-transparent rounded-full animate-spin" />
-                      <span>Sending message...</span>
-                    </span>
-                  ) : (
-                    <span>Send Message</span>
+                  {status === 'loading' && (
+                    <div className="w-4 h-4 border-2 border-slate-900/30 border-t-slate-900 rounded-full animate-spin" />
                   )}
-                </button>
+                  <span>
+                    {status === 'loading'
+                      ? 'Transmitting...'
+                      : status === 'error'
+                      ? 'Retry Transmission'
+                      : 'Send Message'}
+                  </span>
+                </motion.button>
+              </form>
+            )}
+          </TiltCard>
+        </motion.div>
+
+        {/* Direct Channels (spans 5 cols) */}
+        <motion.div variants={staggerItemVariants} className="lg:col-span-5 flex flex-col justify-between space-y-6 h-full">
+          <TiltCard
+            glareColor="rgba(139, 92, 246, 0.2)"
+            className="glass-card p-6 sm:p-8 h-full flex flex-col justify-between border border-white/10 hover:border-violet-400/40 hover:shadow-[0_16px_36px_-8px_rgba(139,92,246,0.2)] transition-all rounded-[20px]"
+          >
+            <div className="space-y-6">
+              <div>
+                <h3 className="font-display text-lg font-bold text-white mb-2">
+                  Direct Communication
+                </h3>
+                <p className="text-sm text-slate-300 leading-relaxed">
+                  Feel free to email directly or copy the address to your clipboard.
+                </p>
               </div>
-            </form>
-          </div>
+
+              {/* Channels as clear interactive links */}
+              <div className="space-y-3.5">
+                {/* (8) Email with Copy-to-Clipboard Feedback */}
+                <div className="relative group">
+                  <div className="flex items-center justify-between p-3.5 rounded-xl bg-slate-950/80 border border-white/10 group-hover:border-cyan-400/50 transition-all">
+                    <a
+                      href={`mailto:${PERSONAL_INFO.email}`}
+                      className="flex items-center gap-3.5 flex-1 min-w-0"
+                    >
+                      <div className="p-2.5 rounded-lg bg-cyan-600/15 text-cyan-400 shrink-0 group-hover:scale-105 transition-transform">
+                        <MailIcon className="w-4 h-4" />
+                      </div>
+                      <div className="truncate">
+                        <span className="text-xs font-mono text-slate-400 block">Email Address</span>
+                        <span className="text-sm font-medium text-slate-200 group-hover:text-cyan-300 transition-colors truncate block">
+                          {PERSONAL_INFO.email}
+                        </span>
+                      </div>
+                    </a>
+
+                    <motion.button
+                      type="button"
+                      onClick={handleCopyEmail}
+                      whileHover={shouldReduceMotion ? undefined : { scale: 1.06 }}
+                      whileTap={shouldReduceMotion ? undefined : { scale: 0.94 }}
+                      className="ml-2 px-3 py-1.5 rounded-lg bg-slate-900 border border-white/10 hover:border-cyan-400/50 text-xs font-mono text-slate-300 hover:text-white flex items-center gap-1.5 transition-colors shrink-0"
+                      aria-label="Copy email address"
+                    >
+                      {copied ? (
+                        <>
+                          <CheckIcon className="w-3.5 h-3.5 text-emerald-400" />
+                          <span className="text-emerald-400 font-medium">Copied!</span>
+                        </>
+                      ) : (
+                        <>
+                          <CopyIcon className="w-3.5 h-3.5" />
+                          <span>Copy</span>
+                        </>
+                      )}
+                    </motion.button>
+                  </div>
+                </div>
+
+                {/* GitHub Channel */}
+                <motion.a
+                  href={PERSONAL_INFO.github}
+                  target="_blank"
+                  rel="noreferrer"
+                  whileHover={shouldReduceMotion ? undefined : { x: 3 }}
+                  transition={{ duration: 0.2, ease: SHARED_EASE }}
+                  className="flex items-center gap-3.5 p-3.5 rounded-xl bg-slate-950/80 border border-white/10 hover:border-white/30 transition-all group"
+                >
+                  <div className="p-2.5 rounded-lg bg-slate-800 text-white shrink-0 group-hover:scale-105 transition-transform">
+                    <GithubIcon className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <span className="text-xs font-mono text-slate-400 block">GitHub</span>
+                    <span className="text-sm font-medium text-slate-200 group-hover:text-white transition-colors">
+                      github.com/{PERSONAL_INFO.githubHandle}
+                    </span>
+                  </div>
+                </motion.a>
+
+                {/* LinkedIn Channel */}
+                <motion.a
+                  href={PERSONAL_INFO.linkedin}
+                  target="_blank"
+                  rel="noreferrer"
+                  whileHover={shouldReduceMotion ? undefined : { x: 3 }}
+                  transition={{ duration: 0.2, ease: SHARED_EASE }}
+                  className="flex items-center gap-3.5 p-3.5 rounded-xl bg-slate-950/80 border border-white/10 hover:border-violet-400/50 transition-all group"
+                >
+                  <div className="p-2.5 rounded-lg bg-violet-600/15 text-violet-400 shrink-0 group-hover:scale-105 transition-transform">
+                    <LinkedinIcon className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <span className="text-xs font-mono text-slate-400 block">LinkedIn</span>
+                    <span className="text-sm font-medium text-slate-200 group-hover:text-violet-300 transition-colors">
+                      linkedin.com/in/{PERSONAL_INFO.linkedinHandle}
+                    </span>
+                  </div>
+                </motion.a>
+              </div>
+            </div>
+          </TiltCard>
         </motion.div>
       </motion.div>
     </section>

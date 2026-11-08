@@ -72,9 +72,11 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `(function() {
               try {
+                var params = new URLSearchParams(window.location.search);
+                var qTheme = params.get('theme');
                 var saved = localStorage.getItem('theme');
                 var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                var theme = saved ? saved : (prefersDark ? 'dark' : 'light');
+                var theme = (qTheme === 'light' || qTheme === 'dark') ? qTheme : (saved ? saved : (prefersDark ? 'dark' : 'light'));
                 document.documentElement.setAttribute('data-theme', theme);
                 document.documentElement.style.colorScheme = theme;
               } catch(e) {}
