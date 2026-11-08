@@ -30,6 +30,7 @@ export const Footer: React.FC = () => {
             transition={{ duration: 0.2, ease: SHARED_EASE }}
             className="w-9 h-9 rounded-lg bg-slate-900 border border-white/10 hover:border-white/30 text-slate-300 hover:text-white flex items-center justify-center transition-colors"
             aria-label="GitHub Profile"
+            title="GitHub Profile"
           >
             <GithubIcon size={16} />
           </motion.a>
@@ -43,6 +44,7 @@ export const Footer: React.FC = () => {
             transition={{ duration: 0.2, ease: SHARED_EASE }}
             className="w-9 h-9 rounded-lg bg-slate-900 border border-white/10 hover:border-cyan-400/50 text-slate-300 hover:text-cyan-400 flex items-center justify-center transition-colors"
             aria-label="LinkedIn Profile"
+            title="LinkedIn Profile"
           >
             <LinkedinIcon size={16} />
           </motion.a>
@@ -54,6 +56,7 @@ export const Footer: React.FC = () => {
             transition={{ duration: 0.2, ease: SHARED_EASE }}
             className="w-9 h-9 rounded-lg bg-slate-900 border border-white/10 hover:border-violet-400/50 text-slate-300 hover:text-violet-400 flex items-center justify-center transition-colors"
             aria-label="Send Email"
+            title="Send Email"
           >
             <MailIcon size={16} />
           </motion.a>
@@ -65,6 +68,7 @@ export const Footer: React.FC = () => {
             transition={{ duration: 0.2, ease: SHARED_EASE }}
             className="w-9 h-9 rounded-lg bg-slate-900 border border-white/10 hover:border-white/40 text-slate-300 hover:text-white flex items-center justify-center ml-2 transition-colors"
             aria-label="Back to Top"
+            title="Back to Top"
           >
             <ArrowUpIcon size={16} />
           </motion.a>

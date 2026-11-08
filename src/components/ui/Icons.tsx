@@ -60,6 +60,24 @@ export const ArrowUpRightIcon: React.FC<IconProps> = ({ className = 'w-4 h-4', s
   </svg>
 );
 
+export const TerminalIcon: React.FC<IconProps> = ({ className = 'w-4 h-4', size = 16 }) => (
+  <svg
+    viewBox="0 0 24 24"
+    width={size}
+    height={size}
+    stroke="currentColor"
+    strokeWidth="2"
+    fill="none"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+    aria-hidden="true"
+  >
+    <polyline points="4 17 10 11 4 5" />
+    <line x1="12" y1="19" x2="20" y2="19" />
+  </svg>
+);
+
 export const ArrowDownIcon: React.FC<IconProps> = ({ className = 'w-4 h-4', size = 16 }) => (
   <svg
     viewBox="0 0 24 24"

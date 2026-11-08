@@ -15,6 +15,8 @@ export interface Project {
   secondaryGithubLabel?: string;
   featured?: boolean;
   accent: 'violet' | 'teal' | 'indigo';
+  metrics?: { label: string; value: string }[];
+  installCmd?: string;
 }
 
 export interface SkillCategory {

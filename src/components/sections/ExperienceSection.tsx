@@ -48,9 +48,6 @@ const TimelineRow: React.FC<{ item: ExperienceItem; index: number }> = ({ item }
           <span className="text-xs font-mono text-cyan-400 font-bold">
             {item.period}
           </span>
-          <span className="px-2.5 py-0.5 rounded-md text-[10px] font-mono bg-cyan-600/15 text-cyan-300 border border-cyan-500/25">
-            Verified
-          </span>
         </div>
 
         <h3 className="font-display text-lg font-bold text-white group-hover:text-cyan-300 transition-colors">

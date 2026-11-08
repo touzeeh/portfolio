@@ -143,7 +143,7 @@ export const AboutSection: React.FC = () => {
                       {PERSONAL_INFO.location}
                     </p>
                     <p className="text-xs text-slate-400 mt-1">
-                      Available for remote &amp; on-site internships
+                      Available for Summer 2026 internships (Remote &amp; On-site)
                     </p>
                   </div>
                 </div>
@@ -163,7 +163,7 @@ export const AboutSection: React.FC = () => {
                       Full-Stack Web &amp; 3D Spatial Systems
                     </p>
                     <p className="text-xs text-slate-400 mt-1">
-                      3 shipped projects actively maintained
+                      3 core engineering projects developed &amp; maintained
                     </p>
                   </div>
                 </div>

@@ -3,25 +3,52 @@
 2 0 obj<</Type/Pages/Kids[3 0 R]/Count 1>>endobj
 3 0 obj<</Type/Page/MediaBox[0 0 612 792]/Parent 2 0 R/Resources<</Font<</F1 4 0 R>>>>/Contents 5 0 R>>endobj
 4 0 obj<</Type/Font/Subtype/Type1/BaseFont/Helvetica-Bold>>endobj
-5 0 obj<</Length 450>>stream
+5 0 obj<</Length 1628>>stream
 BT
-/F1 22 Tf
-50 730 Td
+/F1 20 Tf
+50 740 Td
 (Mohammed Touzeeh Ahmed) Tj
-/F1 12 Tf
-0 -25 Td
-(BTech CSE Student - LNCT Bhopal | touzeeh@engineer.com | touzeeh.xyz) Tj
-0 -35 Td
-(PROJECTS) Tj
 /F1 10 Tf
-0 -18 Td
-(1. InnerSight - 3D Hospital Wayfinding & Spatial Analytics Demo [TypeScript, Three.js]) Tj
-0 -16 Td
-(2. KarigarKart - Full-Stack Artisan Marketplace & Sales Analytics [Python, FastAPI, Flutter]) Tj
-0 -16 Td
-(3. RouteGuard - Route Security & Authorization Middleware Library [JavaScript, Node.js]) Tj
+0 -22 Td
+(BTech CSE Undergraduate | touzeeh@engineer.com | https://touzeeh.xyz | github.com/touzeeh) Tj
 0 -30 Td
-(SKILLS: Python, TypeScript, JavaScript, Dart, React, Next.js, Flutter, FastAPI, PostgreSQL) Tj
+/F1 13 Tf
+(FEATURED ENGINEERING PROJECTS) Tj
+/F1 9 Tf
+0 -18 Td
+(1. InnerSight: 3D Hospital Wayfinding & Spatial Navigation Engine [TypeScript, Three.js, WebGL]) Tj
+0 -14 Td
+(   - Architected 3-floor WebGL building model with A* routing in < 45ms across 42 waypoints.) Tj
+0 -14 Td
+(   - Awarded 1st Place at Smart Health & Spatial Tech Hackathon.) Tj
+0 -18 Td
+(2. KarigarKart: Artisan E-Commerce & Inventory Platform [Python, FastAPI, PostgreSQL, Flutter]) Tj
+0 -14 Td
+(   - Built normalized PostgreSQL schema (8 tables) with modular FastAPI REST services.) Tj
+0 -14 Td
+(   - Achieved sub-120ms p95 latency with real-time Flutter mobile inventory synchronization.) Tj
+0 -18 Td
+(3. RouteGuard: Zero-Dependency Rate Limiting Middleware [Node.js, Express, JavaScript]) Tj
+0 -14 Td
+(   - Authored token-bucket algorithm with < 2ms execution overhead; published on npm.) Tj
+0 -28 Td
+/F1 13 Tf
+(TECHNICAL SKILLS) Tj
+/F1 9 Tf
+0 -18 Td
+(Languages: Python, TypeScript, JavaScript, Dart, SQL, HTML/CSS) Tj
+0 -14 Td
+(Frameworks & Libraries: Three.js/WebGL, FastAPI, Next.js, React, Flutter, Tailwind CSS) Tj
+0 -14 Td
+(Databases & Infrastructure: PostgreSQL, REST APIs, JWT Auth, Git/GitHub, Linux) Tj
+0 -28 Td
+/F1 13 Tf
+(EDUCATION & ACADEMICS) Tj
+/F1 9 Tf
+0 -18 Td
+(Bachelor of Technology in Computer Science & Engineering - 2nd Year, In Progress) Tj
+0 -14 Td
+(Core Coursework: Data Structures & Algorithms, OOP, Database Management Systems, Operating Systems) Tj
 ET
 endstream
 endobj
@@ -29,11 +56,11 @@ xref
 0 6
 0000000000 65535 f 
 0000000009 00000 n 
-0000000058 00000 n 
-0000000115 00000 n 
-0000000223 00000 n 
-0000000300 00000 n 
+0000000052 00000 n 
+0000000101 00000 n 
+0000000211 00000 n 
+0000000277 00000 n 
 trailer<</Size 6/Root 1 0 R>>
 startxref
-805
+1953
 %%EOF

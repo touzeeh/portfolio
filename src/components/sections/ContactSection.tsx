@@ -68,6 +68,7 @@ export const ContactSection: React.FC = () => {
     data.append('message', formData.message);
     data.append('subject', `Inquiry on touzeeh.xyz from ${formData.name}`);
     data.append('from_name', 'Touzeeh Ahmed Portfolio');
+    data.append('botcheck', '');
 
     try {
       const response = await fetch('https://api.web3forms.com/submit', {
@@ -168,6 +169,9 @@ export const ContactSection: React.FC = () => {
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit} noValidate className="space-y-5">
+                {/* Anti-Spam Honeypot */}
+                <input type="checkbox" name="botcheck" className="hidden" style={{ display: 'none' }} tabIndex={-1} autoComplete="off" />
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {/* Name Field */}
                   <div className="space-y-1.5">

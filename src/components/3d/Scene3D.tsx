@@ -12,7 +12,162 @@ interface CosmicUniverseProps {
   isMobile: boolean;
 }
 
-// 1. Gyroscopic Cyber Core (Left Margin)
+// 1. InnerSight 3D Holographic Multi-Floor Architectural Wayfinding Visualizer (Flagship Hero Scene)
+const InnerSightBuilding: React.FC<{ isMobile: boolean; reducedMotion: boolean }> = ({
+  isMobile,
+  reducedMotion,
+}) => {
+  const buildingGroup = useRef<THREE.Group>(null!);
+  const pulseNodeRef = useRef<THREE.Mesh>(null!);
+
+  // A* path coordinates across 3 floors (L1 -> Elevator -> L2 -> Stairs -> L3 Clinic)
+  const pathPoints = useMemo(
+    () => [
+      new THREE.Vector3(-1.4, -1.3, 1.0),  // L1 Entry
+      new THREE.Vector3(-0.6, -1.3, 1.0),  // L1 Corridor Turn
+      new THREE.Vector3(-0.6, -1.3, -0.4), // L1 Elevator Approach
+      new THREE.Vector3(-0.1, -1.3, -0.4), // L1 Elevator Shaft Base
+      new THREE.Vector3(-0.1, 0.0, -0.4),  // L2 Elevator Exit
+      new THREE.Vector3(0.8, 0.0, -0.4),   // L2 Corridor Center
+      new THREE.Vector3(0.8, 0.0, 0.6),    // L2 Ward Transition
+      new THREE.Vector3(1.1, 0.0, 0.6),    // L2 East Stairwell
+      new THREE.Vector3(1.1, 1.3, 0.6),    // L3 Stairwell Exit
+      new THREE.Vector3(0.2, 1.3, 0.6),    // L3 Surgery Corridor
+      new THREE.Vector3(-0.8, 1.3, -0.5),  // L3 Destination Clinic
+    ],
+    []
+  );
+
+  const curve = useMemo(
+    () => new THREE.CatmullRomCurve3(pathPoints, false, 'catmullrom', 0.2),
+    [pathPoints]
+  );
+  const pathGeometry = useMemo(
+    () => new THREE.BufferGeometry().setFromPoints(curve.getPoints(80)),
+    [curve]
+  );
+
+  const pathLine = useMemo(() => {
+    const mat = new THREE.LineBasicMaterial({
+      color: '#22d3ee',
+      transparent: true,
+      opacity: 0.85,
+      blending: THREE.AdditiveBlending,
+    });
+    return new THREE.Line(pathGeometry, mat);
+  }, [pathGeometry]);
+
+  // Static floor waypoints
+  const waypointPositions = useMemo(
+    () => [
+      // Level 1 Nodes
+      [-1.4, -1.3, 1.0], [-0.6, -1.3, 1.0], [-0.6, -1.3, -0.4], [1.2, -1.3, 0.8], [-1.2, -1.3, -0.8],
+      // Level 2 Nodes
+      [-0.1, 0.0, -0.4], [0.8, 0.0, -0.4], [0.8, 0.0, 0.6], [-1.0, 0.0, 0.5], [1.2, 0.0, -0.8],
+      // Level 3 Nodes
+      [1.1, 1.3, 0.6], [0.2, 1.3, 0.6], [-0.8, 1.3, -0.5], [-1.3, 1.3, 0.8], [0.5, 1.3, -0.8],
+    ],
+    []
+  );
+
+  // Floor Plates (L1, L2, L3) wireframe lines
+  const floorGridSegments = useMemo(() => {
+    const points: THREE.Vector3[] = [];
+    const floors = [-1.3, 0.0, 1.3];
+    const width = 3.6;
+    const depth = 2.8;
+    const halfW = width / 2;
+    const halfD = depth / 2;
+
+    floors.forEach((y) => {
+      // Perimeter
+      points.push(new THREE.Vector3(-halfW, y, -halfD), new THREE.Vector3(halfW, y, -halfD));
+      points.push(new THREE.Vector3(halfW, y, -halfD), new THREE.Vector3(halfW, y, halfD));
+      points.push(new THREE.Vector3(halfW, y, halfD), new THREE.Vector3(-halfW, y, halfD));
+      points.push(new THREE.Vector3(-halfW, y, halfD), new THREE.Vector3(-halfW, y, -halfD));
+
+      // Interior Corridors
+      points.push(new THREE.Vector3(-halfW, y, 0), new THREE.Vector3(halfW, y, 0));
+      points.push(new THREE.Vector3(0, y, -halfD), new THREE.Vector3(0, y, halfD));
+    });
+
+    // Vertical Columns (Elevator Shafts & Corner Pillars)
+    const corners = [
+      [-halfW, -halfD], [halfW, -halfD], [halfW, halfD], [-halfW, halfD],
+      [-0.1, -0.4], [1.1, 0.6],
+    ];
+    corners.forEach(([x, z]) => {
+      points.push(new THREE.Vector3(x, -1.3, z), new THREE.Vector3(x, 1.3, z));
+    });
+
+    return new THREE.BufferGeometry().setFromPoints(points);
+  }, []);
+
+  useFrame((state) => {
+    if (reducedMotion) return;
+    const t = state.clock.getElapsedTime();
+
+    // Animated A* Routing pulse packet traveling along the multi-floor building
+    if (pulseNodeRef.current) {
+      const progress = (t * 0.26) % 1;
+      const pos = curve.getPoint(progress);
+      pulseNodeRef.current.position.copy(pos);
+    }
+
+    // Subtle isometric sway
+    if (buildingGroup.current) {
+      buildingGroup.current.rotation.y = -0.65 + Math.sin(t * 0.4) * 0.05;
+      buildingGroup.current.rotation.x = 0.52 + Math.cos(t * 0.3) * 0.025;
+    }
+  });
+
+  const position: [number, number, number] = isMobile ? [0, 0.8, -3.4] : [0, 0.3, -2.4];
+  const scale = isMobile ? 0.65 : 1.05;
+
+  return (
+    <group ref={buildingGroup} position={position} scale={scale} rotation={[0.52, -0.65, 0]}>
+      {/* Architectural Wireframe Blueprint Lines */}
+      <lineSegments geometry={floorGridSegments}>
+        <lineBasicMaterial color="#06b6d4" transparent opacity={0.35} blending={THREE.AdditiveBlending} />
+      </lineSegments>
+
+      {/* Translucent Floor Slabs */}
+      {[-1.3, 0.0, 1.3].map((y, i) => (
+        <mesh key={i} position={[0, y, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[3.6, 2.8]} />
+          <meshBasicMaterial color="#0891b2" transparent opacity={0.06} side={THREE.DoubleSide} depthWrite={false} />
+        </mesh>
+      ))}
+
+      {/* Static Waypoints on the Floors */}
+      {waypointPositions.map((pos, i) => (
+        <mesh key={i} position={pos as [number, number, number]}>
+          <octahedronGeometry args={[0.045, 0]} />
+          <meshBasicMaterial color="#38bdf8" transparent opacity={0.75} />
+        </mesh>
+      ))}
+
+      {/* Destination Clinic Beacon (L3 Target) */}
+      <mesh position={[-0.8, 1.3, -0.5]}>
+        <sphereGeometry args={[0.09, 16, 16]} />
+        <meshBasicMaterial color="#a855f7" />
+        <pointLight color="#c084fc" intensity={1.5} distance={2.5} />
+      </mesh>
+
+      {/* Active Glowing A* Path */}
+      <primitive object={pathLine} />
+
+      {/* Traveling Energy Packet (Real-Time A* Routing Flow) */}
+      <mesh ref={pulseNodeRef}>
+        <sphereGeometry args={[0.075, 16, 16]} />
+        <meshBasicMaterial color="#ffffff" />
+        <pointLight color="#22d3ee" intensity={2} distance={3} />
+      </mesh>
+    </group>
+  );
+};
+
+// 2. Gyroscopic Cyber Core (Left Margin)
 const GyroscopicCore: React.FC<{ isMobile: boolean; reducedMotion: boolean }> = ({ isMobile, reducedMotion }) => {
   const outerRingRef = useRef<THREE.Mesh>(null!);
   const innerRingRef = useRef<THREE.Mesh>(null!);
@@ -36,22 +191,19 @@ const GyroscopicCore: React.FC<{ isMobile: boolean; reducedMotion: boolean }> = 
     }
   });
 
-  const position: [number, number, number] = isMobile ? [-2.6, 2.5, -4] : [-6.2, 1.0, -2.5];
-  const scale = isMobile ? 0.65 : 1;
+  const position: [number, number, number] = isMobile ? [-2.8, 2.5, -4.5] : [-6.4, 0.8, -2.8];
+  const scale = isMobile ? 0.6 : 0.95;
 
   return (
     <group position={position} scale={scale}>
-      {/* Outer Torus */}
       <mesh ref={outerRingRef}>
         <torusGeometry args={[1.7, 0.025, 16, 64]} />
         <meshBasicMaterial color="#06b6d4" wireframe transparent opacity={0.65} />
       </mesh>
-      {/* Inner Torus */}
       <mesh ref={innerRingRef}>
         <torusGeometry args={[1.25, 0.02, 16, 64]} />
         <meshBasicMaterial color="#8b5cf6" wireframe transparent opacity={0.6} />
       </mesh>
-      {/* Central Floating Crystal */}
       <mesh ref={crystalRef}>
         <octahedronGeometry args={[0.65, 0]} />
         <meshStandardMaterial
@@ -62,13 +214,12 @@ const GyroscopicCore: React.FC<{ isMobile: boolean; reducedMotion: boolean }> = 
           metalness={0.9}
         />
       </mesh>
-      {/* Localized Emissive Core Light */}
       <pointLight color="#22d3ee" intensity={1.8} distance={6} />
     </group>
   );
 };
 
-// 2. Celestial Geode & Orbiting Satellites (Right Margin)
+// 3. Celestial Geode & Orbiting Satellites (Right Margin)
 const CelestialGeode: React.FC<{ isMobile: boolean; reducedMotion: boolean }> = ({ isMobile, reducedMotion }) => {
   const geodeRef = useRef<THREE.Group>(null!);
   const outerIcosaRef = useRef<THREE.Mesh>(null!);
@@ -94,17 +245,15 @@ const CelestialGeode: React.FC<{ isMobile: boolean; reducedMotion: boolean }> = 
     }
   });
 
-  const position: [number, number, number] = isMobile ? [2.6, -2.8, -4] : [6.2, -1.2, -3];
-  const scale = isMobile ? 0.65 : 1;
+  const position: [number, number, number] = isMobile ? [2.8, -2.8, -4.5] : [6.4, -1.2, -3.2];
+  const scale = isMobile ? 0.6 : 0.95;
 
   return (
     <group ref={geodeRef} position={position} scale={scale}>
-      {/* Outer Wireframe Icosahedron */}
       <mesh ref={outerIcosaRef}>
         <icosahedronGeometry args={[1.65, 1]} />
         <meshBasicMaterial color="#a855f7" wireframe transparent opacity={0.65} />
       </mesh>
-      {/* Pulsing Luminous Core */}
       <mesh ref={coreRef}>
         <dodecahedronGeometry args={[0.7, 0]} />
         <meshStandardMaterial
@@ -115,7 +264,6 @@ const CelestialGeode: React.FC<{ isMobile: boolean; reducedMotion: boolean }> = 
           metalness={0.85}
         />
       </mesh>
-      {/* Orbiting Satellite Prisms */}
       <group ref={satellitesRef}>
         <mesh position={[2.2, 0.4, 0]}>
           <octahedronGeometry args={[0.2, 0]} />
@@ -126,62 +274,12 @@ const CelestialGeode: React.FC<{ isMobile: boolean; reducedMotion: boolean }> = 
           <meshBasicMaterial color="#e879f9" wireframe />
         </mesh>
       </group>
-      {/* Localized Emissive Core Light */}
       <pointLight color="#c084fc" intensity={1.8} distance={6} />
     </group>
   );
 };
 
-// 3. Deep Space Constellation Relics Distributed Vertically for Multi-Section Depth
-const DeepConstellations: React.FC<{ reducedMotion: boolean }> = ({ reducedMotion }) => {
-  const groupRef = useRef<THREE.Group>(null!);
-
-  const relics = useMemo(
-    () => [
-      { pos: [-4.8, 5.5, -9], rotSpeed: [0.2, 0.3, 0.1], scale: 0.85, type: 'octa', color: '#06b6d4' },
-      { pos: [5.2, 6.5, -11], rotSpeed: [-0.15, 0.25, 0.2], scale: 0.9, type: 'icosa', color: '#8b5cf6' },
-      { pos: [-5.5, -5.5, -8], rotSpeed: [0.3, -0.2, 0.15], scale: 0.75, type: 'tetra', color: '#38bdf8' },
-      { pos: [5.6, -7.5, -10], rotSpeed: [-0.2, -0.3, 0.1], scale: 0.85, type: 'octa', color: '#c084fc' },
-      { pos: [-4.2, -15.0, -12], rotSpeed: [0.22, 0.18, -0.15], scale: 0.95, type: 'icosa', color: '#22d3ee' },
-      { pos: [4.6, -18.5, -11], rotSpeed: [-0.25, 0.2, 0.3], scale: 0.9, type: 'octa', color: '#a855f7' },
-      { pos: [-5.0, -25.0, -10], rotSpeed: [0.18, 0.24, -0.2], scale: 0.85, type: 'tetra', color: '#38bdf8' },
-      { pos: [4.8, -28.0, -12], rotSpeed: [-0.2, -0.22, 0.18], scale: 0.95, type: 'icosa', color: '#c084fc' },
-    ],
-    []
-  );
-
-  useFrame((state) => {
-    if (reducedMotion || !groupRef.current) return;
-    const t = state.clock.getElapsedTime();
-    groupRef.current.children.forEach((child, idx) => {
-      const r = relics[idx];
-      if (r) {
-        child.rotation.x = t * r.rotSpeed[0];
-        child.rotation.y = t * r.rotSpeed[1];
-        child.rotation.z = t * r.rotSpeed[2];
-      }
-    });
-  });
-
-  return (
-    <group ref={groupRef}>
-      {relics.map((r, i) => (
-        <mesh key={i} position={r.pos as [number, number, number]} scale={r.scale}>
-          {r.type === 'octa' ? (
-            <octahedronGeometry args={[0.9, 0]} />
-          ) : r.type === 'icosa' ? (
-            <icosahedronGeometry args={[0.9, 0]} />
-          ) : (
-            <tetrahedronGeometry args={[0.95, 0]} />
-          )}
-          <meshBasicMaterial color={r.color} wireframe transparent opacity={0.45} />
-        </mesh>
-      ))}
-    </group>
-  );
-};
-
-// 4. Main Cosmic Universe Controller
+// 4. Main Cosmic Universe Controller with InnerSight Hologram
 const CosmicUniverse: React.FC<CosmicUniverseProps> = ({
   particleCount,
   reducedMotion,
@@ -195,7 +293,6 @@ const CosmicUniverse: React.FC<CosmicUniverseProps> = ({
   const scrollOffset = useRef(0);
   const { pointer } = useThree();
 
-  // Scroll position synchronization
   useEffect(() => {
     const handleScroll = () => {
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
@@ -212,12 +309,12 @@ const CosmicUniverse: React.FC<CosmicUniverseProps> = ({
     const col = new Float32Array(particleCount * 3);
 
     const palette = [
-      new THREE.Color('#06b6d4'), // Cyan
-      new THREE.Color('#38bdf8'), // Sky Blue
-      new THREE.Color('#8b5cf6'), // Violet
-      new THREE.Color('#a855f7'), // Purple
-      new THREE.Color('#ffffff'), // Starlight White
-      new THREE.Color('#94a3b8'), // Slate Stardust
+      new THREE.Color('#06b6d4'),
+      new THREE.Color('#38bdf8'),
+      new THREE.Color('#8b5cf6'),
+      new THREE.Color('#a855f7'),
+      new THREE.Color('#ffffff'),
+      new THREE.Color('#94a3b8'),
     ];
 
     for (let i = 0; i < particleCount; i++) {
@@ -240,15 +337,15 @@ const CosmicUniverse: React.FC<CosmicUniverseProps> = ({
   }, [particleCount]);
 
   // Foreground Luminous Energy Beacons
-  const beaconCount = isMobile ? 22 : 46;
+  const beaconCount = isMobile ? 18 : 36;
   const [beaconPositions, beaconColors] = useMemo(() => {
     const pos = new Float32Array(beaconCount * 3);
     const col = new Float32Array(beaconCount * 3);
 
     const palette = [
-      new THREE.Color('#22d3ee'), // Bright Cyan
-      new THREE.Color('#c084fc'), // Bright Violet
-      new THREE.Color('#ffffff'), // Pure Core
+      new THREE.Color('#22d3ee'),
+      new THREE.Color('#c084fc'),
+      new THREE.Color('#ffffff'),
     ];
 
     for (let i = 0; i < beaconCount; i++) {
@@ -279,10 +376,8 @@ const CosmicUniverse: React.FC<CosmicUniverseProps> = ({
 
     for (let i = 0; i <= divisions; i++) {
       const coord = -half + i * step;
-      // Along X
       points.push(new THREE.Vector3(-half, -6, coord));
       points.push(new THREE.Vector3(half, -6, coord));
-      // Along Z
       points.push(new THREE.Vector3(coord, -6, -half));
       points.push(new THREE.Vector3(coord, -6, half));
     }
@@ -310,7 +405,7 @@ const CosmicUniverse: React.FC<CosmicUniverseProps> = ({
       );
     }
 
-    // Scroll Travel: universe glides through space as user reads the portfolio
+    // Scroll Travel: camera descends through the floors into cosmic depth
     if (containerRef.current) {
       const targetTravelY = scrollOffset.current * 16;
       containerRef.current.position.y = THREE.MathUtils.lerp(
@@ -335,10 +430,12 @@ const CosmicUniverse: React.FC<CosmicUniverseProps> = ({
 
   return (
     <group ref={containerRef}>
-      {/* 3D Geometric Margin Relics */}
+      {/* Flagship Hero Visual: InnerSight Multi-Floor 3D Building with Animated A* Routing */}
+      <InnerSightBuilding isMobile={isMobile} reducedMotion={reducedMotion} />
+
+      {/* Margin Relics */}
       <GyroscopicCore isMobile={isMobile} reducedMotion={reducedMotion} />
       <CelestialGeode isMobile={isMobile} reducedMotion={reducedMotion} />
-      <DeepConstellations reducedMotion={reducedMotion} />
 
       {/* Deep Cyber Horizon Grid */}
       <lineSegments
@@ -350,7 +447,7 @@ const CosmicUniverse: React.FC<CosmicUniverseProps> = ({
         <lineBasicMaterial
           color="#06b6d4"
           transparent
-          opacity={0.25}
+          opacity={0.22}
           blending={THREE.AdditiveBlending}
         />
       </lineSegments>
@@ -442,7 +539,7 @@ export const Scene3D: React.FC<Scene3DProps> = ({ isMobile = false }) => {
   if (!webGlSupported) return null;
 
   // Responsive particle density
-  const particleCount = isTouchMobile ? 280 : 720;
+  const particleCount = isTouchMobile ? 260 : 680;
 
   return (
     <div
@@ -451,7 +548,7 @@ export const Scene3D: React.FC<Scene3DProps> = ({ isMobile = false }) => {
     >
       <Canvas
         camera={{ position: [0, 0, 8], fov: isTouchMobile ? 54 : 46 }}
-        dpr={isTouchMobile ? [1, 1.25] : [1, 1.5]} // Performance budget: capped at 1.5
+        dpr={isTouchMobile ? [1, 1.25] : [1, 1.5]}
         frameloop={isHidden ? 'never' : 'always'}
         gl={{
           antialias: !isTouchMobile,
