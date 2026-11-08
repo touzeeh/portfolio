@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { WINS } from '@/data/portfolioData';
 import type { WinItem } from '@/types';
-import { TrophyIcon, ArrowUpRightIcon, EyeIcon, SparklesIcon } from '@/components/ui/Icons';
+import { TrophyIcon, EyeIcon, SparklesIcon } from '@/components/ui/Icons';
 import { TiltCard } from '@/components/ui/TiltCard';
 import {
   scrollRevealVariants,
@@ -121,34 +121,18 @@ export const WinsSection: React.FC = () => {
               </div>
 
               {/* Action Buttons */}
-              <div className="pt-4 border-t border-white/[0.08] mt-4 flex items-center justify-between gap-2">
+              <div className="pt-4 border-t border-white/[0.08] mt-4 flex items-center justify-start">
                 <motion.button
                   type="button"
                   onClick={() => setSelectedWin(win)}
                   whileHover={shouldReduceMotion ? undefined : { scale: 1.04, y: -1 }}
                   whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
                   transition={{ duration: 0.2, ease: SHARED_EASE }}
-                  className="btn-secondary text-xs py-2 px-3 flex items-center gap-1.5 hover:border-amber-400/40 text-amber-300 group/btn"
+                  className="btn-secondary text-xs py-2 px-3.5 flex items-center gap-1.5 hover:border-amber-400/40 text-amber-300 group/btn"
                 >
                   <span>View Proof</span>
                   <EyeIcon className="w-3.5 h-3.5 group-hover/btn:scale-110 transition-transform" />
                 </motion.button>
-
-                {win.proofUrl && (
-                  <motion.a
-                    href={win.proofUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    whileHover={shouldReduceMotion ? undefined : { scale: 1.04, y: -1 }}
-                    whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
-                    transition={{ duration: 0.2, ease: SHARED_EASE }}
-                    className="text-xs font-medium text-slate-300 hover:text-white inline-flex items-center gap-1 transition-colors"
-                    aria-label={`View code for ${win.title}`}
-                  >
-                    <span>Repository</span>
-                    <ArrowUpRightIcon className="w-3 h-3" />
-                  </motion.a>
-                )}
               </div>
             </TiltCard>
           </motion.div>
@@ -237,21 +221,6 @@ export const WinsSection: React.FC = () => {
                       </span>
                     ))}
                   </div>
-
-                  {selectedWin.proofUrl && (
-                    <motion.a
-                      href={selectedWin.proofUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      whileHover={shouldReduceMotion ? undefined : { scale: 1.04, y: -1 }}
-                      whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
-                      transition={{ duration: 0.2, ease: SHARED_EASE }}
-                      className="btn-primary text-xs py-2 px-3.5 inline-flex items-center gap-1.5"
-                    >
-                      <span>Verify on GitHub</span>
-                      <ArrowUpRightIcon className="w-3.5 h-3.5" />
-                    </motion.a>
-                  )}
                 </div>
               </div>
             </motion.div>
