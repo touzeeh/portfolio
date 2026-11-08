@@ -24,13 +24,12 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL('https://touzeeh.xyz'),
   title: `${PERSONAL_INFO.fullName} • ${PERSONAL_INFO.title}`,
-  description: `${PERSONAL_INFO.headline} 2nd-year BTech CSE student at LNCT Bhopal specializing in full-stack web platforms and interactive 3D spatial experiences.`,
+  description: `${PERSONAL_INFO.headline} 2nd-year BTech CSE student specializing in full-stack web platforms and interactive 3D spatial experiences.`,
   keywords: [
     'Mohammed Touzeeh Ahmed',
     'Touzeeh Ahmed',
     'Touzeeh',
     'BTech CSE',
-    'LNCT Bhopal',
     'Full-Stack Developer',
     'Three.js',
     'Next.js',
@@ -82,10 +81,6 @@ export default function RootLayout({
     name: PERSONAL_INFO.fullName,
     alternateName: PERSONAL_INFO.shortName,
     jobTitle: 'Full-Stack Developer & Student',
-    alumniOf: {
-      '@type': 'CollegeOrUniversity',
-      name: PERSONAL_INFO.institution,
-    },
     url: 'https://touzeeh.xyz',
     sameAs: [PERSONAL_INFO.github, PERSONAL_INFO.linkedin],
     description: PERSONAL_INFO.headline,

@@ -78,17 +78,17 @@ export const AboutSection: React.FC = () => {
                   {PERSONAL_INFO.bio}
                 </p>
                 <p className="text-sm text-slate-300">
-                  Currently studying at LNCT Bhopal, balancing core computer science coursework (DSA, OOP, DBMS, OS) with hands-on full-stack development, 3D WebGL implementations, and microservices in Python and TypeScript.
+                  Balancing core computer science coursework (DSA, OOP, DBMS, OS) with hands-on full-stack development, 3D WebGL implementations, and microservices in Python and TypeScript.
                 </p>
               </div>
             </div>
 
             <div className="pt-6 border-t border-white/[0.08] mt-6 flex items-center justify-between">
               <div className="text-xs text-slate-300 font-mono">
-                Class of <span className="text-white font-semibold">{PERSONAL_INFO.graduatingYear}</span>
+                Academic Stage: <span className="text-white font-semibold">2nd-Year Undergrad</span>
               </div>
               <span className="text-xs font-mono text-cyan-400">
-                LNCT Bhopal • CSE
+                BTech CSE
               </span>
             </div>
           </TiltCard>
@@ -120,10 +120,10 @@ export const AboutSection: React.FC = () => {
                       {PERSONAL_INFO.degree}
                     </h4>
                     <p className="text-sm text-slate-300 mt-0.5">
-                      {PERSONAL_INFO.institution}
+                      Undergraduate Engineering Degree
                     </p>
                     <p className="text-xs text-slate-400 mt-1 font-mono">
-                      {PERSONAL_INFO.year} • 2025–2029
+                      {PERSONAL_INFO.year} • In Progress
                     </p>
                   </div>
                 </div>

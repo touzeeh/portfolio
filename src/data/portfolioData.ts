@@ -6,8 +6,8 @@ export const PERSONAL_INFO = {
   shortName: 'Touzeeh',
   title: 'BTech CSE Student & Full-Stack Developer',
   headline: 'BTech CSE student building full-stack platforms and 3D web experiences.',
-  subheadline: '2nd-year BTech CSE student at LNCT Bhopal (graduating 2029). Focused on full-stack web engineering with Next.js/FastAPI and interactive 3D WebGL interfaces.',
-  bio: '2nd-year CSE student at LNCT Bhopal. I build full-stack web applications with Next.js & FastAPI and 3D web interfaces with Three.js. Seeking a summer internship in full-stack engineering.',
+  subheadline: '2nd-year BTech CSE student focused on full-stack web engineering with Next.js/FastAPI and interactive 3D WebGL interfaces.',
+  bio: '2nd-year CSE student building full-stack web applications with Next.js & FastAPI and 3D web interfaces with Three.js. Seeking a summer internship in full-stack engineering.',
   
   website: 'https://touzeeh.xyz',
   email: 'touzeeh@engineer.com',
@@ -18,9 +18,9 @@ export const PERSONAL_INFO = {
   resumeUrl: '/resume.pdf',
   avatarPlaceholder: '/avatar-placeholder.png',
   
-  institution: 'Lakshmi Narain College of Technology (LNCT)',
+  institution: '',
   location: 'Bhopal, Madhya Pradesh, India',
-  graduatingYear: '2029',
+  graduatingYear: '',
   degree: 'Bachelor of Technology in Computer Science & Engineering',
   year: '2nd Year',
   status: 'Open to summer internships & full-stack roles',
@@ -123,10 +123,10 @@ export const PROJECTS: Project[] = [
 export const EXPERIENCES: ExperienceItem[] = [
   {
     id: 'edu-1',
-    period: '2025 – 2029 (Expected)',
+    period: '2nd Year (Ongoing)',
     title: 'BTech in Computer Science & Engineering',
-    organization: 'Lakshmi Narain College of Technology (LNCT)',
-    location: 'Bhopal, India',
+    organization: 'Undergraduate Engineering Program',
+    location: 'India',
     type: 'education',
     description: 'Currently in 2nd year. Core coursework covers Data Structures & Algorithms, Object-Oriented Programming, Database Management Systems, and Operating Systems.',
     tags: ['DSA', 'OOP', 'DBMS', 'Operating Systems'],
