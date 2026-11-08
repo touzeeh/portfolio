@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState, useSyncExternalStore } from 'react';
 import { motion, useMotionValue, useSpring, useReducedMotion } from 'framer-motion';
-import { useTheme } from '@/components/ui/ThemeProvider';
 
 function subscribeFinePointer(callback: () => void) {
   if (typeof window === 'undefined') return () => {};
@@ -26,9 +25,6 @@ export const CustomCursor: React.FC = () => {
     getFinePointerSnapshot,
     getFinePointerServerSnapshot
   );
-
-  const { theme } = useTheme();
-  const isDark = theme === 'dark';
 
   const [isVisible, setIsVisible] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -118,20 +114,19 @@ export const CustomCursor: React.FC = () => {
           width: isTextInput ? 4 : isHovered ? 48 : isClicking ? 24 : 34,
           height: isTextInput ? 24 : isHovered ? 48 : isClicking ? 24 : 34,
           borderRadius: isTextInput ? '2px' : '9999px',
-          borderColor: isDark
-            ? isHovered
-              ? 'rgba(34, 211, 238, 0.9)'
-              : 'rgba(34, 211, 238, 0.4)'
-            : isHovered
-            ? 'rgba(14, 116, 144, 0.9)'
-            : 'rgba(15, 23, 42, 0.3)',
-          backgroundColor: isDark
-            ? isHovered
-              ? 'rgba(6, 182, 212, 0.12)'
-              : 'transparent'
-            : isHovered
-            ? 'rgba(14, 116, 144, 0.08)'
+          borderColor: isHovered
+            ? 'rgba(34, 211, 238, 0.95)'
+            : isClicking
+            ? 'rgba(167, 139, 250, 1)'
+            : 'rgba(34, 211, 238, 0.45)',
+          backgroundColor: isHovered
+            ? 'rgba(6, 182, 212, 0.12)'
+            : isClicking
+            ? 'rgba(167, 139, 250, 0.2)'
             : 'transparent',
+          boxShadow: isHovered
+            ? '0 0 16px rgba(34, 211, 238, 0.4)'
+            : 'none',
           scale: isClicking ? 0.9 : 1,
         }}
         transition={{
@@ -152,13 +147,11 @@ export const CustomCursor: React.FC = () => {
           animate={{
             width: isHovered ? 6 : isClicking ? 4 : 5,
             height: isHovered ? 6 : isClicking ? 4 : 5,
-            backgroundColor: isDark
-              ? isHovered
-                ? '#ffffff'
-                : '#22d3ee'
-              : isHovered
-              ? '#0b1220'
-              : '#0e7490',
+            backgroundColor: isHovered
+              ? '#ffffff'
+              : isClicking
+              ? '#a78bfa'
+              : '#22d3ee',
           }}
           transition={{ duration: 0.12 }}
         />

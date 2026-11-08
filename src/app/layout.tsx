@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from 'next';
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { SITE_DATA } from '@/data/site';
-import { ThemeProvider } from '@/components/ui/ThemeProvider';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -17,10 +16,8 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: '(prefers-color-scheme: dark)', color: '#070A14' },
-    { media: '(prefers-color-scheme: light)', color: '#F7F6F2' },
-  ],
+  themeColor: '#070A14',
+  colorScheme: 'dark',
 };
 
 export const metadata: Metadata = {
@@ -65,24 +62,8 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${jetbrainsMono.variable} scroll-smooth`}>
+    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable} dark scroll-smooth`}>
       <head>
-        {/* Synchronous inline script to prevent theme flash */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function() {
-              try {
-                var params = new URLSearchParams(window.location.search);
-                var qTheme = params.get('theme');
-                var saved = localStorage.getItem('theme');
-                var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                var theme = (qTheme === 'light' || qTheme === 'dark') ? qTheme : (saved ? saved : (prefersDark ? 'dark' : 'light'));
-                document.documentElement.setAttribute('data-theme', theme);
-                document.documentElement.style.colorScheme = theme;
-              } catch(e) {}
-            })();`,
-          }}
-        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -96,9 +77,7 @@ export default function RootLayout({
         >
           Skip to main content
         </a>
-        <ThemeProvider>
-          {children}
-        </ThemeProvider>
+        {children}
       </body>
     </html>
   );

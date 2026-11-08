@@ -2,16 +2,14 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useReducedMotion, AnimatePresence } from 'framer-motion';
-import { useTheme } from '@/components/ui/ThemeProvider';
 import { SITE_DATA } from '@/data/site';
-import { SunIcon, MoonIcon, ArrowUpRightIcon, MenuIcon, XIcon } from '@/components/ui/Icons';
+import { ArrowUpRightIcon, MenuIcon, XIcon } from '@/components/ui/Icons';
 import { SHARED_EASE } from '@/lib/animations';
 
 export const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { theme, toggleTheme } = useTheme();
   const shouldReduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll();
   const mobileMenuRef = useRef<HTMLDivElement>(null);
@@ -32,7 +30,6 @@ export const Navbar: React.FC = () => {
         const el = document.getElementById(item.id);
         if (el) {
           const rect = el.getBoundingClientRect();
-          // Precise top threshold check
           if (rect.top <= 200 && rect.bottom >= 100) {
             current = item.id;
             break;
@@ -89,7 +86,7 @@ export const Navbar: React.FC = () => {
       />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between">
-        {/* Wordmark Left: Calm, precise, no neon */}
+        {/* Wordmark Left */}
         <a
           href="#hero"
           onClick={(e) => {
@@ -138,24 +135,8 @@ export const Navbar: React.FC = () => {
           })}
         </nav>
 
-        {/* Right: Theme Toggle + Outline Contact Button */}
+        {/* Right: Compact Outline Contact CTA */}
         <div className="flex items-center gap-2.5">
-          {/* Theme Toggle (Sun/Moon, 44px min touch target, aria-label) */}
-          <button
-            type="button"
-            onClick={toggleTheme}
-            className="w-11 h-11 rounded-[10px] bg-[var(--surface-2)] border border-[var(--border)] text-[var(--text)] hover:border-[var(--accent)] flex items-center justify-center transition-colors focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
-            aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-            title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-          >
-            {theme === 'dark' ? (
-              <SunIcon className="w-4 h-4 text-[var(--award)]" />
-            ) : (
-              <MoonIcon className="w-4 h-4 text-[var(--accent-2)]" />
-            )}
-          </button>
-
-          {/* Outline Contact Button (Compact, hero owns the only solid primary CTA) */}
           <a
             href="#contact"
             onClick={(e) => {
@@ -213,35 +194,17 @@ export const Navbar: React.FC = () => {
               ))}
             </div>
 
-            <div className="pt-3 border-t border-[var(--border)] flex items-center justify-between gap-3">
+            <div className="pt-3 border-t border-[var(--border)] flex items-center gap-3">
               <a
                 href="#contact"
                 onClick={(e) => {
                   e.preventDefault();
                   handleNavClick('contact');
                 }}
-                className="btn-secondary flex-1 text-center justify-center text-xs"
+                className="btn-primary flex-1 text-center justify-center text-xs"
               >
                 <span>Contact</span>
               </a>
-              <button
-                type="button"
-                onClick={toggleTheme}
-                className="btn-secondary min-h-[44px] px-4 text-xs flex items-center gap-2"
-                aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-              >
-                {theme === 'dark' ? (
-                  <>
-                    <SunIcon className="w-4 h-4 text-[var(--award)]" />
-                    <span>Light Mode</span>
-                  </>
-                ) : (
-                  <>
-                    <MoonIcon className="w-4 h-4 text-[var(--accent-2)]" />
-                    <span>Dark Mode</span>
-                  </>
-                )}
-              </button>
             </div>
           </motion.div>
         )}
