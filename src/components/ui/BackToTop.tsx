@@ -32,13 +32,13 @@ export const BackToTop: React.FC = () => {
         <motion.button
           type="button"
           onClick={scrollToTop}
-          initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
+          initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 15 }}
-          transition={{ duration: 0.3, ease: SHARED_EASE }}
-          whileHover={shouldReduceMotion ? undefined : { scale: 1.12, y: -3 }}
+          exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 12 }}
+          transition={{ duration: 0.25, ease: SHARED_EASE }}
+          whileHover={shouldReduceMotion ? undefined : { scale: 1.08, y: -2 }}
           whileTap={shouldReduceMotion ? undefined : { scale: 0.94 }}
-          className="fixed bottom-6 right-6 z-40 w-11 h-11 rounded-xl bg-slate-900/95 border border-white/20 text-slate-300 hover:text-white hover:border-cyan-400/60 shadow-2xl shadow-cyan-500/20 backdrop-blur-xl flex items-center justify-center cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 group"
+          className="fixed bottom-6 right-6 z-40 w-11 h-11 rounded-[10px] bg-[var(--surface)] border border-[var(--border)] text-[var(--text-muted)] hover:text-[var(--text)] hover:border-[var(--accent)] shadow-lg backdrop-blur-md flex items-center justify-center cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] group"
           aria-label="Back to Top"
         >
           <ArrowUpIcon size={18} className="group-hover:-translate-y-0.5 transition-transform" />

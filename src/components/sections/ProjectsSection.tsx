@@ -2,180 +2,178 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { motion, useReducedMotion } from 'framer-motion';
-import { PROJECTS } from '@/data/portfolioData';
-import { TiltCard } from '@/components/ui/TiltCard';
-import { TrophyIcon, CopyIcon, CheckIcon, TerminalIcon } from '@/components/ui/Icons';
+import { motion } from 'framer-motion';
+import { SITE_DATA } from '@/data/site';
+import {
+  ExternalLinkIcon,
+  GithubIcon,
+  FileTextIcon,
+  TerminalIcon,
+  CheckIcon,
+  CopyIcon,
+} from '@/components/ui/Icons';
 import {
   scrollRevealVariants,
   staggerGridVariants,
   staggerItemVariants,
   VIEWPORT_CONFIG,
-  SHARED_EASE,
 } from '@/lib/animations';
 
 export const ProjectsSection: React.FC = () => {
-  const shouldReduceMotion = useReducedMotion();
-  const [copiedCmd, setCopiedCmd] = useState(false);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
 
-  const featuredProject = PROJECTS.find((p) => p.featured) || PROJECTS[0];
-  const supportingProjects = PROJECTS.filter((p) => !p.featured);
-
-  const imageVariants = {
-    initial: { scale: 1 },
-    hover: {
-      scale: shouldReduceMotion ? 1 : 1.04,
-      transition: { duration: 0.5, ease: SHARED_EASE },
-    },
+  const handleCopy = (id: string, text: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 2000);
   };
 
-  const handleCopyInstall = async (cmd: string) => {
-    try {
-      await navigator.clipboard.writeText(cmd);
-      setCopiedCmd(true);
-      setTimeout(() => setCopiedCmd(false), 2000);
-    } catch {
-      // Fallback
-    }
-  };
+  const featuredProject = SITE_DATA.projects.find((p) => p.featured) || SITE_DATA.projects[0];
+  const supportingProjects = SITE_DATA.projects.filter((p) => p.id !== featuredProject.id);
 
   return (
-    <section id="projects" className="py-24 px-4 sm:px-6 max-w-6xl mx-auto space-y-10">
-      {/* Section Header Scroll Reveal */}
+    <section id="projects" className="section-padding max-w-6xl mx-auto px-4 sm:px-6">
+      {/* Section Header with Numbered Eyebrow */}
       <motion.div
         initial="hidden"
         whileInView="visible"
         viewport={VIEWPORT_CONFIG}
         variants={scrollRevealVariants}
-        className="space-y-2"
+        className="mb-12 space-y-2"
       >
-        <span className="text-xs font-mono uppercase tracking-widest text-cyan-400 font-semibold drop-shadow-sm">
-          Engineering Showcase
+        <span className="eyebrow-label">
+          01 / Projects
         </span>
-        <h2 className="font-display text-section-fluid text-white tracking-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)]">
-          Selected Projects &amp; Systems
+        <h2 className="font-display text-section-fluid text-[var(--text)] tracking-tight">
+          Selected Engineering Work
         </h2>
-        <p className="text-slate-300 text-base max-w-2xl drop-shadow-[0_1px_6px_rgba(0,0,0,0.7)]">
-          Production-grade applications engineered with TypeScript, Python, Three.js, and FastAPI. Grounded in algorithmic benchmarks and relational schemas.
+        <p className="text-[var(--text-muted)] text-base sm:text-lg max-w-2xl leading-relaxed">
+          Interactive 3D web interfaces in Three.js and backend service architectures in Python and TypeScript.
         </p>
       </motion.div>
 
-      {/* 1. Flagship Featured Project: InnerSight (Hero Architectural Card) */}
+      {/* 1. Large Featured Card: InnerSight */}
       <motion.div
         initial="hidden"
         whileInView="visible"
         viewport={VIEWPORT_CONFIG}
         variants={scrollRevealVariants}
+        className="mb-8"
       >
-        <TiltCard
-          glareColor="rgba(6, 182, 212, 0.25)"
-          className="glass-card overflow-hidden border border-cyan-500/30 hover:border-cyan-400/60 hover:shadow-[0_20px_50px_-10px_rgba(6,182,212,0.3)] transition-all rounded-[24px] group"
-        >
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 p-6 sm:p-8">
-            {/* Left: Interactive Media Preview */}
-            <div className="lg:col-span-6 flex flex-col justify-between">
-              <div className="relative aspect-[16/10] w-full rounded-xl overflow-hidden bg-slate-950 border border-white/10 group-hover:border-cyan-400/50 transition-colors">
-                {featuredProject.image && (
-                  <motion.div
-                    variants={imageVariants}
-                    whileHover="hover"
-                    className="relative w-full h-full"
-                  >
-                    <Image
-                      src={featuredProject.image}
-                      alt={`${featuredProject.title} architectural wayfinding engine preview`}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      sizes="(max-width: 1024px) 100vw, 50vw"
-                      priority
-                    />
-                  </motion.div>
-                )}
-
-                {/* Corner Tech Brackets */}
-                <div className="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-cyan-400 z-10 pointer-events-none group-hover:scale-110 transition-transform" />
-                <div className="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-cyan-400 z-10 pointer-events-none group-hover:scale-110 transition-transform" />
-                <div className="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-cyan-400 z-10 pointer-events-none group-hover:scale-110 transition-transform" />
-                <div className="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-cyan-400 z-10 pointer-events-none group-hover:scale-110 transition-transform" />
-
-                {/* Hackathon 1st Place Pill Overlay */}
-                <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5 px-3 py-1 rounded-md bg-slate-950/90 backdrop-blur-md border border-amber-400/60 text-xs font-mono font-bold text-amber-300 shadow-lg">
-                  <TrophyIcon className="w-3.5 h-3.5 text-amber-400" />
-                  <span>1st Place Winner • Spatial Health</span>
-                </div>
+        <div className="site-card p-6 sm:p-8 lg:p-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            {/* Media Slot: 16:10 preview with 1px border + radius */}
+            <div className="lg:col-span-7">
+              <div className="relative aspect-[16/10] w-full rounded-[14px] overflow-hidden bg-[var(--surface-2)] border border-[var(--border)] group">
+                <Image
+                  src={featuredProject.media.src}
+                  alt={featuredProject.media.alt}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                  sizes="(max-width: 1024px) 100vw, 60vw"
+                  priority
+                />
               </div>
-
-              {/* Verified Benchmarks Grid */}
-              {featuredProject.metrics && (
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-5">
-                  {featuredProject.metrics.map((m) => (
-                    <div
-                      key={m.label}
-                      className="p-2.5 rounded-xl bg-slate-950/70 border border-white/10 text-center"
-                    >
-                      <span className="text-xs font-mono text-cyan-400 font-bold block">
-                        {m.value}
-                      </span>
-                      <span className="text-[11px] text-slate-300 font-medium block mt-0.5">
-                        {m.label}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              )}
             </div>
 
-            {/* Right: Technical Architecture & Problem Breakdown */}
-            <div className="lg:col-span-6 flex flex-col justify-between space-y-4">
-              <div>
-                <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-cyan-500/10 border border-cyan-400/30 text-cyan-300 text-xs font-mono font-semibold mb-2">
-                  Featured Project • Flagship 3D System
+            {/* Project Details */}
+            <div className="lg:col-span-5 flex flex-col justify-between h-full space-y-5">
+              <div className="space-y-4">
+                <div className="space-y-1">
+                  <span className="eyebrow-label text-[var(--accent)]">
+                    Featured Project
+                  </span>
+                  <h3 className="font-display text-2xl sm:text-3xl font-bold text-[var(--text)]">
+                    {featuredProject.title}
+                  </h3>
+                  <p className="text-sm text-[var(--text-muted)] font-medium">
+                    {featuredProject.tagline}
+                  </p>
                 </div>
-                <h3 className="font-display text-2xl sm:text-3xl font-bold text-white group-hover:text-cyan-300 transition-colors">
-                  {featuredProject.title}
-                </h3>
-                <p className="text-sm font-mono text-cyan-400/90 font-medium mt-1">
-                  {featuredProject.tagline}
-                </p>
+
+                {/* Problem / Approach / Result in 3 Short Rows */}
+                <div className="space-y-3 pt-2 text-sm leading-snug">
+                  <div>
+                    <span className="eyebrow-label block mb-0.5">Problem</span>
+                    <p className="text-[var(--text-muted)]">{featuredProject.problem}</p>
+                  </div>
+                  <div>
+                    <span className="eyebrow-label block mb-0.5">Approach</span>
+                    <p className="text-[var(--text)]">{featuredProject.approach}</p>
+                  </div>
+                  <div>
+                    <span className="eyebrow-label block mb-0.5">Result</span>
+                    <p className="text-[var(--text)] font-medium">{featuredProject.result}</p>
+                  </div>
+                </div>
+
+                {/* Measured Metrics with Footnotes */}
+                <div className="space-y-2 pt-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {featuredProject.metrics.map((m) => (
+                      <div
+                        key={m.label}
+                        className="p-2.5 rounded-[10px] bg-[var(--surface-2)] border border-[var(--border)]"
+                      >
+                        <div className="flex items-baseline justify-between">
+                          <span className="font-mono text-sm font-bold text-[var(--accent)]">{m.value}</span>
+                          <span className="font-sans text-xs text-[var(--text-muted)]">{m.label}</span>
+                        </div>
+                        <p className="font-mono text-[11px] text-[var(--text-muted)] mt-1 leading-tight">
+                          ↳ {m.howMeasured}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Plain Chips (sans 13-14px, max 5) */}
+                <div className="flex flex-wrap gap-2 pt-1">
+                  {featuredProject.chips.map((chip) => (
+                    <span key={chip} className="tech-chip">
+                      {chip}
+                    </span>
+                  ))}
+                </div>
               </div>
 
-              <div className="space-y-3.5 text-slate-200 text-sm sm:text-base leading-relaxed">
-                <div>
-                  <span className="text-xs font-mono text-cyan-300 uppercase font-bold tracking-wider block mb-1">
-                    Problem &amp; Motivation
-                  </span>
-                  <p className="text-slate-300">{featuredProject.problem}</p>
-                </div>
-
-                <div>
-                  <span className="text-xs font-mono text-cyan-300 uppercase font-bold tracking-wider block mb-1">
-                    Algorithmic Architecture
-                  </span>
-                  <p className="text-slate-300">{featuredProject.whatIBuilt}</p>
-                </div>
-
-                <div>
-                  <span className="text-xs font-mono text-cyan-300 uppercase font-bold tracking-wider block mb-1">
-                    Measured Result
-                  </span>
-                  <p className="text-white font-medium">{featuredProject.result}</p>
-                </div>
-              </div>
-
-              {/* Tech Stack Chips */}
-              <div className="pt-2 border-t border-white/10 flex flex-wrap gap-2">
-                {featuredProject.stack.map((tech) => (
-                  <span
-                    key={tech}
-                    className="px-3 py-1 rounded-lg bg-slate-900 border border-white/15 text-xs font-mono font-medium text-slate-200 hover:border-cyan-400/50 transition-colors"
+              {/* Actions: Live Demo / Code / Case Study (Render ONLY those that exist) */}
+              <div className="pt-4 border-t border-[var(--border)] mt-auto flex flex-wrap items-center gap-3">
+                {featuredProject.links.liveDemoUrl && (
+                  <a
+                    href={featuredProject.links.liveDemoUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn-primary text-xs"
                   >
-                    {tech}
-                  </span>
-                ))}
+                    <span>Live demo</span>
+                    <ExternalLinkIcon className="w-3.5 h-3.5" />
+                  </a>
+                )}
+                {featuredProject.links.codeUrl && (
+                  <a
+                    href={featuredProject.links.codeUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn-secondary text-xs"
+                  >
+                    <GithubIcon size={14} />
+                    <span>Code</span>
+                  </a>
+                )}
+                {featuredProject.links.caseStudyUrl && (
+                  <a
+                    href={featuredProject.links.caseStudyUrl}
+                    className="btn-secondary text-xs"
+                  >
+                    <FileTextIcon className="w-3.5 h-3.5" />
+                    <span>Case study</span>
+                  </a>
+                )}
               </div>
             </div>
           </div>
-        </TiltCard>
+        </div>
       </motion.div>
 
       {/* 2. Supporting Projects Grid (KarigarKart & RouteGuard) */}
@@ -184,77 +182,72 @@ export const ProjectsSection: React.FC = () => {
         whileInView="visible"
         viewport={VIEWPORT_CONFIG}
         variants={staggerGridVariants}
-        className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-7"
+        className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 items-stretch"
       >
         {supportingProjects.map((project) => (
-          <motion.div key={project.id} variants={staggerItemVariants} className="h-full">
-            <TiltCard
-              glareColor={project.accent === 'violet' ? 'rgba(139, 92, 246, 0.22)' : 'rgba(56, 189, 248, 0.22)'}
-              className="glass-card flex flex-col justify-between h-full p-6 border border-white/10 hover:border-white/30 transition-all rounded-[22px] group"
-            >
+          <motion.div key={project.id} variants={staggerItemVariants} className="flex flex-col h-full">
+            <div className="site-card p-6 sm:p-7 flex flex-col justify-between h-full">
               <div className="space-y-4">
-                {/* Thumbnail Preview */}
-                <div className="relative aspect-[16/9] w-full rounded-xl overflow-hidden bg-slate-950 border border-white/10">
-                  {project.image && (
-                    <motion.div variants={imageVariants} whileHover="hover" className="relative w-full h-full">
-                      <Image
-                        src={project.image}
-                        alt={`${project.title} UI preview`}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-500"
-                        sizes="(max-width: 768px) 100vw, 50vw"
-                      />
-                    </motion.div>
+                {/* Media Slot: 16:10 preview with 1px border + radius */}
+                <div className="relative aspect-[16/10] w-full rounded-[12px] overflow-hidden bg-[var(--surface-2)] border border-[var(--border)] group">
+                  <Image
+                    src={project.media.src}
+                    alt={project.media.alt}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                  />
+                  {project.isDemoData && (
+                    <span className="absolute top-2.5 right-2.5 px-2 py-0.5 rounded font-mono text-[11px] bg-[var(--surface)]/90 border border-[var(--border)] text-[var(--text-muted)] font-medium">
+                      demo data
+                    </span>
                   )}
-                  {/* Corner brackets */}
-                  <div className="absolute top-2 left-2 w-3.5 h-3.5 border-t-2 border-l-2 border-white/40 pointer-events-none" />
-                  <div className="absolute top-2 right-2 w-3.5 h-3.5 border-t-2 border-r-2 border-white/40 pointer-events-none" />
                 </div>
 
                 {/* Title & Tagline */}
                 <div>
-                  <h3 className="font-display text-xl font-bold text-white group-hover:text-cyan-300 transition-colors">
+                  <h3 className="font-display text-xl font-bold text-[var(--text)]">
                     {project.title}
                   </h3>
-                  <p className="text-xs font-mono text-cyan-400/90 font-medium mt-0.5">
+                  <p className="text-xs text-[var(--text-muted)] font-medium mt-0.5">
                     {project.tagline}
                   </p>
                 </div>
 
-                {/* Problem & Solution */}
-                <div className="space-y-3 text-sm text-slate-200 leading-snug">
-                  <p>
-                    <span className="text-xs font-mono text-cyan-300 uppercase font-bold tracking-wider block mb-0.5">
-                      Problem:
-                    </span>
-                    <span className="text-slate-300">{project.problem}</span>
-                  </p>
-                  <p>
-                    <span className="text-xs font-mono text-cyan-300 uppercase font-bold tracking-wider block mb-0.5">
-                      Solution:
-                    </span>
-                    <span className="text-slate-300">{project.whatIBuilt}</span>
-                  </p>
+                {/* Problem / Approach / Result in 3 Short Rows */}
+                <div className="space-y-2.5 text-sm leading-snug">
+                  <div>
+                    <span className="eyebrow-label block mb-0.5">Problem</span>
+                    <p className="text-[var(--text-muted)]">{project.problem}</p>
+                  </div>
+                  <div>
+                    <span className="eyebrow-label block mb-0.5">Approach</span>
+                    <p className="text-[var(--text)]">{project.approach}</p>
+                  </div>
+                  <div>
+                    <span className="eyebrow-label block mb-0.5">Result</span>
+                    <p className="text-[var(--text)] font-medium">{project.result}</p>
+                  </div>
                 </div>
 
-                {/* RouteGuard: Terminal Install Command with 1-Click Copy */}
+                {/* Install Command (RouteGuard) with 1-click copy */}
                 {project.installCmd && (
-                  <div className="p-2.5 rounded-xl bg-slate-950 border border-white/15 flex items-center justify-between gap-2">
+                  <div className="p-2.5 rounded-[10px] bg-[var(--surface-2)] border border-[var(--border)] flex items-center justify-between gap-2">
                     <div className="flex items-center gap-2 overflow-hidden">
-                      <TerminalIcon className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
-                      <code className="text-xs font-mono text-slate-200 truncate select-all">
+                      <TerminalIcon className="w-3.5 h-3.5 text-[var(--accent)] shrink-0" />
+                      <code className="text-xs font-mono text-[var(--text)] truncate select-all">
                         {project.installCmd}
                       </code>
                     </div>
                     <button
                       type="button"
-                      onClick={() => handleCopyInstall(project.installCmd!)}
-                      className="p-1.5 rounded-lg bg-slate-900 border border-white/10 hover:border-cyan-400/50 text-slate-300 hover:text-white transition shrink-0"
-                      aria-label="Copy install command"
-                      title="Copy install command"
+                      onClick={() => handleCopy(project.id, project.installCmd!)}
+                      className="p-1.5 rounded-[8px] bg-[var(--surface)] border border-[var(--border)] hover:border-[var(--accent)] text-[var(--text-muted)] hover:text-[var(--text)] transition-colors shrink-0 min-h-[32px] min-w-[32px] flex items-center justify-center"
+                      aria-label="Copy clone command"
+                      title="Copy clone command"
                     >
-                      {copiedCmd ? (
-                        <CheckIcon className="w-3.5 h-3.5 text-emerald-400" />
+                      {copiedId === project.id ? (
+                        <CheckIcon className="w-3.5 h-3.5 text-emerald-500" />
                       ) : (
                         <CopyIcon className="w-3.5 h-3.5" />
                       )}
@@ -262,34 +255,71 @@ export const ProjectsSection: React.FC = () => {
                   </div>
                 )}
 
-                {/* Metrics Badges */}
+                {/* Measured Metrics with Footnotes */}
                 {project.metrics && (
-                  <div className="flex flex-wrap gap-2 pt-1">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
                     {project.metrics.map((m) => (
                       <div
                         key={m.label}
-                        className="px-2.5 py-1 rounded-lg bg-slate-950/80 border border-white/10 text-xs font-mono"
+                        className="p-2 rounded-[10px] bg-[var(--surface-2)] border border-[var(--border)]"
                       >
-                        <span className="text-cyan-400 font-semibold">{m.value}</span>{' '}
-                        <span className="text-slate-400">({m.label})</span>
+                        <div className="flex items-baseline justify-between">
+                          <span className="font-mono text-xs font-bold text-[var(--accent)]">{m.value}</span>
+                          <span className="font-sans text-[11px] text-[var(--text-muted)]">{m.label}</span>
+                        </div>
+                        <p className="font-mono text-[10px] text-[var(--text-muted)] mt-1 leading-tight">
+                          ↳ {m.howMeasured}
+                        </p>
                       </div>
                     ))}
                   </div>
                 )}
+
+                {/* Chips (sans 13-14px, max 5) */}
+                <div className="flex flex-wrap gap-2 pt-2">
+                  {project.chips.map((chip) => (
+                    <span key={chip} className="tech-chip text-xs">
+                      {chip}
+                    </span>
+                  ))}
+                </div>
               </div>
 
-              {/* Tech Chips */}
-              <div className="flex flex-wrap gap-1.5 pt-4 border-t border-white/10 mt-4">
-                {project.stack.map((tech) => (
-                  <span
-                    key={tech}
-                    className="px-2.5 py-1 rounded-md bg-slate-900 border border-white/10 text-xs font-mono text-slate-300"
+              {/* Actions pinned to bottom with mt-auto */}
+              <div className="pt-4 border-t border-[var(--border)] mt-auto flex flex-wrap items-center gap-2.5">
+                {project.links.liveDemoUrl && (
+                  <a
+                    href={project.links.liveDemoUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn-primary text-xs"
                   >
-                    {tech}
-                  </span>
-                ))}
+                    <span>Live demo</span>
+                    <ExternalLinkIcon className="w-3.5 h-3.5" />
+                  </a>
+                )}
+                {project.links.codeUrl && (
+                  <a
+                    href={project.links.codeUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn-secondary text-xs"
+                  >
+                    <GithubIcon size={14} />
+                    <span>Code</span>
+                  </a>
+                )}
+                {project.links.caseStudyUrl && (
+                  <a
+                    href={project.links.caseStudyUrl}
+                    className="btn-secondary text-xs"
+                  >
+                    <FileTextIcon className="w-3.5 h-3.5" />
+                    <span>Case study</span>
+                  </a>
+                )}
               </div>
-            </TiltCard>
+            </div>
           </motion.div>
         ))}
       </motion.div>

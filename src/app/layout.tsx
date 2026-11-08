@@ -1,13 +1,8 @@
-import type { Metadata } from 'next';
-import { Space_Grotesk, Inter, JetBrains_Mono } from 'next/font/google';
+import type { Metadata, Viewport } from 'next';
+import { Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
-import { PERSONAL_INFO } from '@/data/portfolioData';
-
-const spaceGrotesk = Space_Grotesk({
-  subsets: ['latin'],
-  variable: '--font-display',
-  display: 'swap',
-});
+import { SITE_DATA } from '@/data/site';
+import { ThemeProvider } from '@/components/ui/ThemeProvider';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -21,48 +16,31 @@ const jetbrainsMono = JetBrains_Mono({
   display: 'swap',
 });
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: dark)', color: '#070A14' },
+    { media: '(prefers-color-scheme: light)', color: '#F7F6F2' },
+  ],
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL('https://touzeeh.xyz'),
-  title: `${PERSONAL_INFO.fullName} • ${PERSONAL_INFO.title}`,
-  description: `${PERSONAL_INFO.headline} 2nd-year BTech CSE student specializing in full-stack web platforms and interactive 3D spatial experiences.`,
-  keywords: [
-    'Mohammed Touzeeh Ahmed',
-    'Touzeeh Ahmed',
-    'Touzeeh',
-    'BTech CSE',
-    'Full-Stack Developer',
-    'Three.js',
-    'Next.js',
-    'React',
-    'FastAPI',
-    'Flutter',
-    'InnerSight',
-    'KarigarKart',
-    'RouteGuard',
-  ],
-  authors: [{ name: PERSONAL_INFO.fullName, url: PERSONAL_INFO.github }],
-  creator: PERSONAL_INFO.fullName,
+  title: `${SITE_DATA.personal.fullName} • ${SITE_DATA.personal.title}`,
+  description: `${SITE_DATA.personal.headline} ${SITE_DATA.personal.supportingLine}`,
+  authors: [{ name: SITE_DATA.personal.fullName, url: SITE_DATA.personal.github }],
+  creator: SITE_DATA.personal.fullName,
   openGraph: {
     type: 'website',
     locale: 'en_US',
     url: 'https://touzeeh.xyz',
-    title: `${PERSONAL_INFO.fullName} • Portfolio`,
-    description: PERSONAL_INFO.headline,
-    siteName: `${PERSONAL_INFO.fullName} Portfolio`,
-    images: [
-      {
-        url: '/og-image.png',
-        width: 1200,
-        height: 630,
-        alt: `${PERSONAL_INFO.fullName} Portfolio Preview`,
-      },
-    ],
+    title: `${SITE_DATA.personal.fullName} • Portfolio`,
+    description: SITE_DATA.personal.headline,
+    siteName: `${SITE_DATA.personal.fullName} Portfolio`,
   },
   twitter: {
     card: 'summary_large_image',
-    title: `${PERSONAL_INFO.fullName} • Portfolio`,
-    description: PERSONAL_INFO.headline,
-    images: ['/og-image.png'],
+    title: `${SITE_DATA.personal.fullName} • Portfolio`,
+    description: SITE_DATA.personal.headline,
   },
   robots: {
     index: true,
@@ -78,31 +56,47 @@ export default function RootLayout({
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Person',
-    name: PERSONAL_INFO.fullName,
-    alternateName: PERSONAL_INFO.shortName,
-    jobTitle: 'Full-Stack Developer & Student',
+    name: SITE_DATA.personal.fullName,
+    alternateName: SITE_DATA.personal.shortName,
+    jobTitle: SITE_DATA.personal.title,
     url: 'https://touzeeh.xyz',
-    sameAs: [PERSONAL_INFO.github, PERSONAL_INFO.linkedin],
-    description: PERSONAL_INFO.headline,
+    sameAs: [SITE_DATA.personal.github, SITE_DATA.personal.linkedin],
+    description: SITE_DATA.personal.headline,
   };
 
   return (
-    <html lang="en" className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable} scroll-smooth dark`}>
+    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${jetbrainsMono.variable} scroll-smooth`}>
       <head>
+        {/* Synchronous inline script to prevent theme flash */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function() {
+              try {
+                var saved = localStorage.getItem('theme');
+                var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                var theme = saved ? saved : (prefersDark ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+                document.documentElement.style.colorScheme = theme;
+              } catch(e) {}
+            })();`,
+          }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="bg-[#030712] text-slate-100 antialiased selection:bg-violet-600/30 selection:text-violet-200">
+      <body className="antialiased selection:bg-cyan-500/20 selection:text-cyan-300">
         {/* Skip to Content for Accessibility */}
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-violet-600 focus:text-white focus:rounded-xl focus:shadow-xl focus:outline-none"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2.5 focus:bg-[var(--surface)] focus:text-[var(--text)] focus:border focus:border-[var(--accent)] focus:rounded-lg focus:shadow-xl focus:outline-none text-sm font-semibold"
         >
           Skip to main content
         </a>
-        {children}
+        <ThemeProvider>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -9,13 +9,14 @@ import { ProjectsSection } from '@/components/sections/ProjectsSection';
 import { SkillsSection } from '@/components/sections/SkillsSection';
 import { WinsSection } from '@/components/sections/WinsSection';
 import { AboutSection } from '@/components/sections/AboutSection';
-import { ExperienceSection } from '@/components/sections/ExperienceSection';
 import { ContactSection } from '@/components/sections/ContactSection';
 import { Footer } from '@/components/sections/Footer';
 import { BackToTop } from '@/components/ui/BackToTop';
 import { CustomCursor } from '@/components/ui/CustomCursor';
+import { WayfindingRouteLine } from '@/components/ui/WayfindingRouteLine';
+import { IsometricDivider } from '@/components/ui/IsometricDivider';
 
-// Dynamic import with ssr: false for Three.js Canvas (No preloader spinner)
+// Dynamic import with ssr: false for Three.js Canvas
 const Scene3D = dynamic(
   () => import('@/components/3d/Scene3D').then((m) => m.Scene3D),
   {
@@ -28,31 +29,38 @@ function PortfolioContent() {
   const { isMobile } = useScrollProgress();
 
   return (
-    <div className="relative min-h-screen cosmic-backdrop text-slate-100 overflow-x-hidden">
-      {/* (3D) Single low-opacity ambient layer */}
+    <div className="relative min-h-screen blueprint-background text-[var(--text)] overflow-x-hidden selection:bg-[var(--accent)]/20 selection:text-[var(--accent)]">
+      {/* 3D Scene: Hero InnerSight 3-Floor Building with Animated A* Route */}
       <Scene3D isMobile={isMobile} />
 
-      {/* Sticky Blurred Navbar with active-section highlight */}
+      {/* Signature Floor Plan Wayfinding Route Line along Left Edge */}
+      <WayfindingRouteLine />
+
+      {/* Sticky Header with Theme Toggle & Contact */}
       <Navbar />
 
-      {/* Main Recruiter-First Scroll Content */}
-      <main id="main-content" className="relative z-10 pb-20">
+      {/* Main Content */}
+      <main id="main-content" className="relative z-10 pb-16">
         <HeroSection />
+        <IsometricDivider />
         <ProjectsSection />
+        <IsometricDivider />
         <SkillsSection />
+        <IsometricDivider />
         <WinsSection />
+        <IsometricDivider />
         <AboutSection />
-        <ExperienceSection />
+        <IsometricDivider />
         <ContactSection />
       </main>
 
-      {/* Footer */}
+      {/* Minimal Footer */}
       <Footer />
 
-      {/* (7) Floating Back-To-Top button appearing after 600px scroll */}
+      {/* Back to Top */}
       <BackToTop />
 
-      {/* Custom Interactive Cyber Cursor */}
+      {/* Custom Desktop Precision Cursor */}
       <CustomCursor />
     </div>
   );

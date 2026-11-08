@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useSyncExternalStore } from 'react';
 import { motion, useMotionValue, useSpring, useReducedMotion } from 'framer-motion';
+import { useTheme } from '@/components/ui/ThemeProvider';
 
 function subscribeFinePointer(callback: () => void) {
   if (typeof window === 'undefined') return () => {};
@@ -26,6 +27,9 @@ export const CustomCursor: React.FC = () => {
     getFinePointerServerSnapshot
   );
 
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+
   const [isVisible, setIsVisible] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isClicking, setIsClicking] = useState(false);
@@ -36,10 +40,10 @@ export const CustomCursor: React.FC = () => {
   const rawX = useMotionValue(-100);
   const rawY = useMotionValue(-100);
 
-  // Smooth spring physics for outer reticle ring
+  // Smooth spring physics for outer ring
   const springConfig = shouldReduceMotion
     ? { damping: 50, stiffness: 1000, mass: 0.1 }
-    : { damping: 26, stiffness: 380, mass: 0.45 };
+    : { damping: 28, stiffness: 420, mass: 0.35 };
 
   const ringX = useSpring(rawX, springConfig);
   const ringY = useSpring(rawY, springConfig);
@@ -63,7 +67,7 @@ export const CustomCursor: React.FC = () => {
       if (!target) return;
 
       const interactive = target.closest(
-        'a, button, input, textarea, select, [role="button"], .glass-card, .btn-primary, .btn-secondary, [data-cursor-hover]'
+        'a, button, input, textarea, select, [role="button"], .site-card, .btn-primary, .btn-secondary, [data-cursor-hover]'
       );
       const text = target.closest('input[type="text"], input[type="email"], textarea');
 
@@ -94,7 +98,7 @@ export const CustomCursor: React.FC = () => {
     };
   }, [rawX, rawY, isFinePointer]);
 
-  if (!isFinePointer) return null;
+  if (!isFinePointer || shouldReduceMotion) return null;
 
   return (
     <div
@@ -103,7 +107,7 @@ export const CustomCursor: React.FC = () => {
       }`}
       aria-hidden="true"
     >
-      {/* Outer Spring Precision Reticle / Cyber Ring */}
+      {/* Outer Spring Precision Reticle Ring */}
       <motion.div
         className="fixed top-0 left-0 pointer-events-none flex items-center justify-center -translate-x-1/2 -translate-y-1/2 rounded-full will-change-transform"
         style={{
@@ -111,42 +115,31 @@ export const CustomCursor: React.FC = () => {
           y: ringY,
         }}
         animate={{
-          width: isTextInput ? 6 : isHovered ? 52 : isClicking ? 26 : 38,
-          height: isTextInput ? 28 : isHovered ? 52 : isClicking ? 26 : 38,
-          borderRadius: isTextInput ? '4px' : '9999px',
-          borderColor: isHovered
-            ? 'rgba(34, 211, 238, 0.95)'
-            : isClicking
-            ? 'rgba(168, 85, 247, 1)'
-            : 'rgba(34, 211, 238, 0.5)',
-          backgroundColor: isHovered
-            ? 'rgba(6, 182, 212, 0.14)'
-            : isClicking
-            ? 'rgba(168, 85, 247, 0.25)'
-            : 'rgba(6, 182, 212, 0.03)',
-          boxShadow: isHovered
-            ? '0 0 24px rgba(6, 182, 212, 0.65), inset 0 0 12px rgba(6, 182, 212, 0.3)'
-            : isClicking
-            ? '0 0 20px rgba(168, 85, 247, 0.8)'
-            : '0 0 14px rgba(139, 92, 246, 0.3)',
-          scale: isClicking ? 0.85 : 1,
+          width: isTextInput ? 4 : isHovered ? 48 : isClicking ? 24 : 34,
+          height: isTextInput ? 24 : isHovered ? 48 : isClicking ? 24 : 34,
+          borderRadius: isTextInput ? '2px' : '9999px',
+          borderColor: isDark
+            ? isHovered
+              ? 'rgba(34, 211, 238, 0.9)'
+              : 'rgba(34, 211, 238, 0.4)'
+            : isHovered
+            ? 'rgba(14, 116, 144, 0.9)'
+            : 'rgba(15, 23, 42, 0.3)',
+          backgroundColor: isDark
+            ? isHovered
+              ? 'rgba(6, 182, 212, 0.12)'
+              : 'transparent'
+            : isHovered
+            ? 'rgba(14, 116, 144, 0.08)'
+            : 'transparent',
+          scale: isClicking ? 0.9 : 1,
         }}
         transition={{
           type: 'spring',
-          damping: 25,
-          stiffness: 400,
+          damping: 28,
+          stiffness: 420,
         }}
-      >
-        {/* Subtle Cyber Crosshairs on Hover */}
-        {isHovered && !isTextInput && !shouldReduceMotion && (
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div className="w-1.5 h-[1px] bg-cyan-300 absolute -left-1" />
-            <div className="w-1.5 h-[1px] bg-cyan-300 absolute -right-1" />
-            <div className="h-1.5 w-[1px] bg-cyan-300 absolute -top-1" />
-            <div className="h-1.5 w-[1px] bg-cyan-300 absolute -bottom-1" />
-          </div>
-        )}
-      </motion.div>
+      />
 
       {/* Inner Immediate Core Dot */}
       {!isTextInput && (
@@ -157,18 +150,17 @@ export const CustomCursor: React.FC = () => {
             y: dotY,
           }}
           animate={{
-            width: isHovered ? 8 : isClicking ? 5 : 7,
-            height: isHovered ? 8 : isClicking ? 5 : 7,
-            backgroundColor: isHovered
-              ? '#ffffff'
-              : isClicking
-              ? '#c084fc'
-              : '#22d3ee',
-            boxShadow: isHovered
-              ? '0 0 10px #ffffff, 0 0 20px #22d3ee'
-              : '0 0 8px #22d3ee',
+            width: isHovered ? 6 : isClicking ? 4 : 5,
+            height: isHovered ? 6 : isClicking ? 4 : 5,
+            backgroundColor: isDark
+              ? isHovered
+                ? '#ffffff'
+                : '#22d3ee'
+              : isHovered
+              ? '#0b1220'
+              : '#0e7490',
           }}
-          transition={{ duration: 0.15 }}
+          transition={{ duration: 0.12 }}
         />
       )}
     </div>

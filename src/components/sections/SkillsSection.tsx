@@ -1,91 +1,93 @@
 'use client';
 
-import React from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
-import { SKILL_CATEGORIES } from '@/data/portfolioData';
-import { TiltCard } from '@/components/ui/TiltCard';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { SITE_DATA } from '@/data/site';
 import {
   scrollRevealVariants,
   staggerGridVariants,
   staggerItemVariants,
   VIEWPORT_CONFIG,
-  SHARED_EASE,
 } from '@/lib/animations';
 
 export const SkillsSection: React.FC = () => {
-  const shouldReduceMotion = useReducedMotion();
+  const [activeSkill, setActiveSkill] = useState<{ name: string; project?: string } | null>(null);
 
   return (
-    <section id="skills" className="py-24 px-4 sm:px-6 max-w-6xl mx-auto">
-      {/* Section Header Scroll Reveal */}
+    <section id="skills" className="section-padding max-w-6xl mx-auto px-4 sm:px-6">
+      {/* Section Header */}
       <motion.div
         initial="hidden"
         whileInView="visible"
         viewport={VIEWPORT_CONFIG}
         variants={scrollRevealVariants}
-        className="mb-14 space-y-2"
+        className="mb-12 space-y-2"
       >
-        <span className="text-xs font-mono uppercase tracking-widest text-cyan-400 font-semibold drop-shadow-sm">
-          Technical Stack
+        <span className="eyebrow-label">
+          02 / Skills
         </span>
-        <h2 className="font-display text-section-fluid text-white tracking-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)]">
-          Skills &amp; Capabilities
+        <h2 className="font-display text-section-fluid text-[var(--text)] tracking-tight">
+          Technical Capabilities
         </h2>
-        <p className="text-slate-300 text-base max-w-xl drop-shadow-[0_1px_6px_rgba(0,0,0,0.7)]">
-          Core technical competencies across frontend, backend systems, databases, and spatial web graphics.
-        </p>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <p className="text-[var(--text-muted)] text-base sm:text-lg max-w-xl leading-relaxed">
+            Deduplicated toolset applied across spatial frontend rendering, relational databases, and REST APIs.
+          </p>
+
+          {/* Interactive Project Context Pill: Appears when hovering or focusing a skill */}
+          <div className="min-h-[32px] flex items-center">
+            {activeSkill?.project ? (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--surface-2)] border border-[var(--accent)] font-mono text-xs text-[var(--accent)] transition-all">
+                <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]" />
+                <span>{activeSkill.name} → Applied in {activeSkill.project}</span>
+              </span>
+            ) : (
+              <span className="font-mono text-xs text-[var(--text-muted)] opacity-60">
+                Hover or focus any technology to see its project context
+              </span>
+            )}
+          </div>
+        </div>
       </motion.div>
 
-      {/* 3 Focused Cards Grid with 70ms stagger */}
+      {/* Skills Grid: Grouped into 3 logical categories */}
       <motion.div
         initial="hidden"
         whileInView="visible"
         viewport={VIEWPORT_CONFIG}
         variants={staggerGridVariants}
-        className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-7"
+        className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-7 items-stretch"
       >
-        {SKILL_CATEGORIES.map((category) => (
-          <motion.div
-            key={category.name}
-            variants={staggerItemVariants}
-            className="h-full"
-          >
-            <TiltCard
-              glareColor={`${category.accentColor}30`}
-              className="glass-card p-6 sm:p-7 flex flex-col justify-between h-full border border-white/10 hover:border-cyan-400/40 hover:shadow-[0_16px_36px_-8px_rgba(6,182,212,0.18)] transition-all rounded-[20px]"
-            >
-              <div className="space-y-4">
-                {/* Category Header */}
-                <div className="flex items-center gap-3">
-                  <span
-                    className="w-3.5 h-3.5 rounded-full shrink-0 shadow-[0_0_10px_currentColor]"
-                    style={{ backgroundColor: category.accentColor, color: category.accentColor }}
-                  />
-                  <h3 className="font-display text-lg font-bold text-white">
-                    {category.name}
-                  </h3>
-                </div>
-
-                <p className="text-sm text-slate-300 leading-relaxed">
+        {SITE_DATA.skills.map((category) => (
+          <motion.div key={category.title} variants={staggerItemVariants} className="flex flex-col h-full">
+            <div className="site-card p-6 sm:p-7 flex flex-col justify-between h-full space-y-5">
+              <div className="space-y-3">
+                <h3 className="font-display text-lg font-bold text-[var(--text)]">
+                  {category.title}
+                </h3>
+                <p className="text-xs text-[var(--text-muted)] leading-relaxed">
                   {category.description}
                 </p>
-
-                {/* Prominent, readable skill chips with interactive hover */}
-                <div className="flex flex-wrap gap-2 pt-3">
-                  {category.items.map((skill) => (
-                    <motion.span
-                      key={skill}
-                      whileHover={shouldReduceMotion ? undefined : { y: -3, scale: 1.05 }}
-                      whileTap={shouldReduceMotion ? undefined : { scale: 0.96 }}
-                      transition={{ duration: 0.2, ease: SHARED_EASE }}
-                      className="px-3.5 py-2 rounded-lg text-sm font-mono font-medium bg-slate-900/90 border border-white/10 text-slate-200 hover:border-cyan-400/60 hover:text-white hover:shadow-[0_0_12px_rgba(6,182,212,0.25)] transition-all cursor-default shadow-sm"
-                    >
-                      {skill}
-                    </motion.span>
-                  ))}
-                </div>
               </div>
-            </TiltCard>
+
+              {/* Plain Chips (Sans 13-14px). Project shows on hover/focus, not inside text */}
+              <div className="flex flex-wrap gap-2 pt-2 border-t border-[var(--border)] mt-auto">
+                {category.skills.map((item) => (
+                  <button
+                    key={item.name}
+                    type="button"
+                    onMouseEnter={() => setActiveSkill({ name: item.name, project: item.relatedProject })}
+                    onMouseLeave={() => setActiveSkill(null)}
+                    onFocus={() => setActiveSkill({ name: item.name, project: item.relatedProject })}
+                    onBlur={() => setActiveSkill(null)}
+                    className="tech-chip text-left cursor-default focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+                    aria-label={`${item.name}${item.relatedProject ? ` (Used in ${item.relatedProject})` : ''}`}
+                  >
+                    <span>{item.name}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
           </motion.div>
         ))}
       </motion.div>

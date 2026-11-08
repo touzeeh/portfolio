@@ -1,18 +1,45 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { motion, useScroll, useReducedMotion } from 'framer-motion';
-import { ArrowUpRightIcon } from '@/components/ui/Icons';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, useScroll, useReducedMotion, AnimatePresence } from 'framer-motion';
+import { useTheme } from '@/components/ui/ThemeProvider';
+import { SITE_DATA } from '@/data/site';
+import { SunIcon, MoonIcon, ArrowUpRightIcon, MenuIcon, XIcon } from '@/components/ui/Icons';
 import { SHARED_EASE } from '@/lib/animations';
 
 export const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState('');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
   const shouldReduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll();
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
 
+  // Scroll-spy with IntersectionObserver / window scroll check
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
+
+      // NO active nav item in the hero section (< 280px)
+      if (window.scrollY < 280) {
+        setActiveSection('');
+        return;
+      }
+
+      let current = '';
+      for (const item of SITE_DATA.nav) {
+        const el = document.getElementById(item.id);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          // Precise top threshold check
+          if (rect.top <= 200 && rect.bottom >= 100) {
+            current = item.id;
+            break;
+          }
+        }
+      }
+      setActiveSection(current);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -20,9 +47,24 @@ export const Navbar: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleConnectClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    const target = document.getElementById('contact');
+  // Trap focus when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+      const focusable = mobileMenuRef.current?.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled])'
+      );
+      if (focusable && focusable.length > 0) {
+        focusable[0].focus();
+      }
+    } else {
+      document.body.style.overflow = '';
+    }
+  }, [mobileMenuOpen]);
+
+  const handleNavClick = (id: string) => {
+    setMobileMenuOpen(false);
+    const target = document.getElementById(id);
     if (target) {
       target.scrollIntoView({ behavior: shouldReduceMotion ? 'auto' : 'smooth' });
     }
@@ -30,36 +72,180 @@ export const Navbar: React.FC = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 pointer-events-none ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 ${
         scrolled
-          ? 'bg-[#030712]/90 backdrop-blur-xl border-b border-white/10 py-3 sm:py-3.5 shadow-lg shadow-black/40'
+          ? 'bg-[var(--surface)]/95 backdrop-blur-md border-b border-[var(--border)] py-3 shadow-sm'
           : 'bg-transparent py-4 sm:py-5'
       }`}
     >
-      {/* Top Laser Scroll Progress Bar */}
+      {/* Top Wayfinding Line Progress */}
       <motion.div
         style={{
           scaleX: shouldReduceMotion ? 0 : scrollYProgress,
           transformOrigin: 'left',
         }}
-        className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-cyan-400 via-violet-400 to-cyan-300 shadow-[0_0_8px_rgba(6,182,212,0.9)] pointer-events-none z-50"
+        className="absolute top-0 left-0 right-0 h-[2px] bg-[var(--accent)] pointer-events-none z-50"
         aria-hidden="true"
       />
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-end">
-        {/* Right Action: Keep Connect Only */}
-        <motion.a
-          href="#contact"
-          onClick={handleConnectClick}
-          whileHover={shouldReduceMotion ? undefined : { scale: 1.05, y: -1 }}
-          whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
-          transition={{ duration: 0.2, ease: SHARED_EASE }}
-          className="btn-primary pointer-events-auto text-xs py-2 px-4 sm:px-5 group shadow-lg hover:shadow-cyan-500/20"
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between">
+        {/* Wordmark Left: Calm, precise, no neon */}
+        <a
+          href="#hero"
+          onClick={(e) => {
+            e.preventDefault();
+            handleNavClick('hero');
+          }}
+          className="font-display font-semibold text-base sm:text-lg tracking-tight text-[var(--text)] hover:text-[var(--accent)] transition-colors flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-[var(--accent)] rounded"
+          aria-label={`${SITE_DATA.personal.fullName} Home`}
         >
-          <span>Connect</span>
-          <ArrowUpRightIcon className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-        </motion.a>
+          <span>{SITE_DATA.personal.shortName}</span>
+          <span className="text-[var(--accent)] font-mono text-sm">.</span>
+        </a>
+
+        {/* Center Pill Nav (Desktop): Scroll-spy, NO active item in hero */}
+        <nav
+          aria-label="Main section navigation"
+          className="hidden md:flex items-center gap-1 p-1 rounded-full bg-[var(--surface-2)] border border-[var(--border)]"
+        >
+          {SITE_DATA.nav.map((item) => {
+            const isActive = activeSection === item.id;
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => handleNavClick(item.id)}
+                className={`relative px-3.5 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                  isActive
+                    ? 'text-[var(--text)] font-semibold'
+                    : 'text-[var(--text-muted)] hover:text-[var(--text)]'
+                }`}
+                aria-current={isActive ? 'true' : undefined}
+              >
+                {isActive && (
+                  <motion.div
+                    layoutId="activePill"
+                    transition={{ type: 'spring', damping: 26, stiffness: 380 }}
+                    className="absolute inset-0 rounded-full bg-[var(--surface)] border border-[var(--border)] shadow-sm"
+                  />
+                )}
+                <span className="relative z-10 font-mono text-[11px] text-[var(--accent)] mr-1.5 opacity-80">
+                  {item.number}
+                </span>
+                <span className="relative z-10">{item.label}</span>
+              </button>
+            );
+          })}
+        </nav>
+
+        {/* Right: Theme Toggle + Outline Contact Button */}
+        <div className="flex items-center gap-2.5">
+          {/* Theme Toggle (Sun/Moon, 44px min touch target, aria-label) */}
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="w-11 h-11 rounded-[10px] bg-[var(--surface-2)] border border-[var(--border)] text-[var(--text)] hover:border-[var(--accent)] flex items-center justify-center transition-colors focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+            aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          >
+            {theme === 'dark' ? (
+              <SunIcon className="w-4 h-4 text-[var(--award)]" />
+            ) : (
+              <MoonIcon className="w-4 h-4 text-[var(--accent-2)]" />
+            )}
+          </button>
+
+          {/* Outline Contact Button (Compact, hero owns the only solid primary CTA) */}
+          <a
+            href="#contact"
+            onClick={(e) => {
+              e.preventDefault();
+              handleNavClick('contact');
+            }}
+            className="hidden sm:inline-flex items-center gap-1.5 min-h-[44px] px-4 rounded-[10px] bg-transparent border border-[var(--border)] text-[var(--text)] hover:border-[var(--accent)] hover:text-[var(--accent)] text-xs font-semibold transition-all focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+          >
+            <span>Contact</span>
+            <ArrowUpRightIcon className="w-3.5 h-3.5" />
+          </a>
+
+          {/* Mobile Menu Hamburger */}
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden w-11 h-11 rounded-[10px] bg-[var(--surface-2)] border border-[var(--border)] text-[var(--text)] flex items-center justify-center focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+            aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={mobileMenuOpen}
+          >
+            {mobileMenuOpen ? <XIcon className="w-5 h-5" /> : <MenuIcon className="w-5 h-5" />}
+          </button>
+        </div>
       </div>
+
+      {/* Mobile Drawer Sheet Menu with Focus Trap */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            ref={mobileMenuRef}
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.2, ease: SHARED_EASE }}
+            className="md:hidden border-b border-[var(--border)] bg-[var(--surface)] px-6 py-6 shadow-xl flex flex-col gap-3"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Mobile Navigation"
+          >
+            <div className="flex flex-col gap-1.5">
+              {SITE_DATA.nav.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => handleNavClick(item.id)}
+                  className={`flex items-center justify-between min-h-[44px] px-4 rounded-[10px] text-sm font-medium transition-colors ${
+                    activeSection === item.id
+                      ? 'bg-[var(--surface-2)] text-[var(--accent)] font-semibold border border-[var(--border)]'
+                      : 'text-[var(--text)] hover:bg-[var(--surface-2)]'
+                  }`}
+                >
+                  <span>{item.label}</span>
+                  <span className="font-mono text-xs text-[var(--text-muted)]">{item.number}</span>
+                </button>
+              ))}
+            </div>
+
+            <div className="pt-3 border-t border-[var(--border)] flex items-center justify-between gap-3">
+              <a
+                href="#contact"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNavClick('contact');
+                }}
+                className="btn-secondary flex-1 text-center justify-center text-xs"
+              >
+                <span>Contact</span>
+              </a>
+              <button
+                type="button"
+                onClick={toggleTheme}
+                className="btn-secondary min-h-[44px] px-4 text-xs flex items-center gap-2"
+                aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+              >
+                {theme === 'dark' ? (
+                  <>
+                    <SunIcon className="w-4 h-4 text-[var(--award)]" />
+                    <span>Light Mode</span>
+                  </>
+                ) : (
+                  <>
+                    <MoonIcon className="w-4 h-4 text-[var(--accent-2)]" />
+                    <span>Dark Mode</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 };

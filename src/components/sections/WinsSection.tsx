@@ -2,11 +2,9 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { WINS } from '@/data/portfolioData';
-import type { WinItem } from '@/types';
-import { TrophyIcon, EyeIcon, SparklesIcon } from '@/components/ui/Icons';
-import { TiltCard } from '@/components/ui/TiltCard';
+import { motion, AnimatePresence } from 'framer-motion';
+import { SITE_DATA, type HackathonAward } from '@/data/site';
+import { TrophyIcon, EyeIcon, ExternalLinkIcon, XIcon } from '@/components/ui/Icons';
 import {
   scrollRevealVariants,
   staggerGridVariants,
@@ -16,210 +14,180 @@ import {
 } from '@/lib/animations';
 
 export const WinsSection: React.FC = () => {
-  const [selectedWin, setSelectedWin] = useState<WinItem | null>(null);
-  const shouldReduceMotion = useReducedMotion();
+  const [selectedAward, setSelectedAward] = useState<HackathonAward | null>(null);
 
   return (
-    <section id="wins" className="py-24 px-4 sm:px-6 max-w-6xl mx-auto">
-      {/* Section Header Scroll Reveal */}
+    <section id="hackathons" className="section-padding max-w-6xl mx-auto px-4 sm:px-6">
+      {/* Section Header with Numbered Eyebrow */}
       <motion.div
         initial="hidden"
         whileInView="visible"
         viewport={VIEWPORT_CONFIG}
         variants={scrollRevealVariants}
-        className="mb-14 space-y-2"
+        className="mb-12 space-y-2"
       >
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-300 text-xs font-mono font-medium mb-1">
-          <TrophyIcon className="w-3.5 h-3.5 text-amber-400" />
-          <span>Competitions</span>
-        </div>
-        <h2 className="font-display text-section-fluid text-white tracking-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)]">
-          Hackathons
+        <span className="eyebrow-label">
+          03 / Hackathons
+        </span>
+        <h2 className="font-display text-section-fluid text-[var(--text)] tracking-tight">
+          Competition Results & Awards
         </h2>
-        <p className="text-slate-300 text-base max-w-2xl drop-shadow-[0_1px_6px_rgba(0,0,0,0.7)]">
-          Collegiate and regional technical buildathon challenges with working project deliverables.
+        <p className="text-[var(--text-muted)] text-base sm:text-lg max-w-2xl leading-relaxed">
+          Official competitive hackathon placements with verifiable project submissions.
         </p>
       </motion.div>
 
-      {/* 2 Authentic Hackathon Cards Grid with 70ms stagger */}
+      {/* 2-Card Equal-Height Grid */}
       <motion.div
         initial="hidden"
         whileInView="visible"
         viewport={VIEWPORT_CONFIG}
         variants={staggerGridVariants}
-        className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-7"
+        className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 items-stretch"
       >
-        {WINS.map((win) => (
-          <motion.div
-            key={win.id}
-            variants={staggerItemVariants}
-            className="h-full flex flex-col"
-          >
-            <TiltCard
-              glareColor="rgba(245, 158, 11, 0.22)"
-              className="glass-card flex flex-col justify-between h-full p-6 border border-white/10 hover:border-amber-400/40 hover:shadow-[0_16px_36px_-8px_rgba(245,158,11,0.2)] transition-all rounded-[20px] group flex-1"
-            >
+        {SITE_DATA.hackathons.map((award) => (
+          <motion.div key={award.id} variants={staggerItemVariants} className="flex flex-col h-full">
+            <div className="site-card p-6 sm:p-7 flex flex-col justify-between h-full space-y-5">
               <div className="space-y-4">
-                {/* Image Frame with Viewfinder Tech Boundaries */}
-                <div
-                  className="relative aspect-[16/10] w-full rounded-xl overflow-hidden bg-slate-950 border border-amber-500/30 group-hover:border-amber-400/70 transition-colors shadow-lg cursor-pointer"
-                  onClick={() => setSelectedWin(win)}
-                >
-                  {/* Viewfinder Corner Brackets */}
-                  <div className="absolute top-2 left-2 w-3.5 h-3.5 border-t-2 border-l-2 border-amber-400 z-10 pointer-events-none group-hover:scale-110 transition-transform" />
-                  <div className="absolute top-2 right-2 w-3.5 h-3.5 border-t-2 border-r-2 border-amber-400 z-10 pointer-events-none group-hover:scale-110 transition-transform" />
-                  <div className="absolute bottom-2 left-2 w-3.5 h-3.5 border-b-2 border-l-2 border-amber-400 z-10 pointer-events-none group-hover:scale-110 transition-transform" />
-                  <div className="absolute bottom-2 right-2 w-3.5 h-3.5 border-b-2 border-r-2 border-amber-400 z-10 pointer-events-none group-hover:scale-110 transition-transform" />
-
-                  {/* Image Display */}
+                {/* Real Certificate Photo Slot: 1px border + radius */}
+                <div className="relative aspect-[16/10] w-full rounded-[12px] overflow-hidden bg-[var(--surface-2)] border border-[var(--border)] group">
                   <Image
-                    src={win.image}
-                    alt={`${win.title} certificate display`}
+                    src={award.evidenceImage}
+                    alt={`${award.officialEventName} award certificate`}
                     fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
                     sizes="(max-width: 768px) 100vw, 50vw"
                   />
-
-                  {/* Top Rank Badge */}
-                  <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-950/85 backdrop-blur-md border border-amber-400/50 text-[11px] font-mono font-bold text-amber-300 shadow-md">
-                    <SparklesIcon className="w-3 h-3 text-amber-400" />
-                    <span>{win.rank}</span>
+                  {/* Top Placement Chip */}
+                  <div className="absolute top-3 left-3 flex items-center gap-1.5 px-3 py-1 rounded-[8px] bg-[var(--surface)]/95 border border-[var(--border)] font-mono text-xs font-semibold text-[var(--award)] shadow-sm">
+                    <TrophyIcon className="w-3.5 h-3.5 text-[var(--award)]" />
+                    <span>{award.placement}</span>
                   </div>
                 </div>
 
-                {/* Metadata */}
+                {/* Event Name & Metadata */}
                 <div>
-                  <div className="flex items-center justify-between text-xs font-mono text-amber-400/90 mb-1">
-                    <span>{win.competition}</span>
-                    <span className="text-slate-400">{win.date}</span>
+                  <div className="flex items-center justify-between text-xs font-mono text-[var(--text-muted)] mb-1">
+                    <span>{award.organizer}</span>
+                    <span>{award.year}</span>
                   </div>
-                  <h3 className="font-display text-lg font-bold text-white group-hover:text-amber-300 transition-colors">
-                    {win.title}
+                  <h3 className="font-display text-xl font-bold text-[var(--text)]">
+                    {award.officialEventName}
                   </h3>
-                  <p className="text-xs font-mono text-slate-400 mt-0.5">
-                    Category: <span className="text-slate-300">{win.category}</span>
+                  <p className="text-xs text-[var(--accent)] font-mono mt-0.5">
+                    Track: {award.category}
                   </p>
                 </div>
 
-                <p className="text-sm text-slate-300 leading-relaxed">
-                  {win.description}
+                {/* 2 Lines on What I Built */}
+                <p className="text-sm text-[var(--text)] leading-relaxed">
+                  {award.whatIBuilt}
                 </p>
 
-                {/* Tags */}
+                {/* Plain Chips */}
                 <div className="flex flex-wrap gap-1.5 pt-1">
-                  {win.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-2 py-0.5 rounded-md text-[11px] font-mono bg-slate-900 border border-white/10 text-slate-300"
-                    >
+                  {award.tags.map((tag) => (
+                    <span key={tag} className="tech-chip text-xs">
                       {tag}
                     </span>
                   ))}
                 </div>
               </div>
 
-              {/* Action Buttons: Unified baseline with mt-auto */}
-              <div className="pt-4 border-t border-white/[0.08] mt-6 flex items-center justify-start">
-                <motion.button
+              {/* Action: Evidence Link / Proof View pinned to bottom */}
+              <div className="pt-4 border-t border-[var(--border)] mt-auto flex items-center justify-between">
+                <button
                   type="button"
-                  onClick={() => setSelectedWin(win)}
-                  whileHover={shouldReduceMotion ? undefined : { scale: 1.04, y: -1 }}
-                  whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
-                  transition={{ duration: 0.2, ease: SHARED_EASE }}
-                  className="btn-secondary text-xs py-2 px-3.5 flex items-center gap-1.5 hover:border-amber-400/40 text-amber-300 group/btn"
+                  onClick={() => setSelectedAward(award)}
+                  className="btn-secondary text-xs flex items-center gap-1.5"
                 >
-                  <span>View Proof</span>
-                  <EyeIcon className="w-3.5 h-3.5 group-hover/btn:scale-110 transition-transform" />
-                </motion.button>
+                  <EyeIcon className="w-3.5 h-3.5 text-[var(--award)]" />
+                  <span>Inspect Certificate</span>
+                </button>
+
+                {award.evidenceUrl && (
+                  <a
+                    href={award.evidenceUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn-ghost text-xs flex items-center gap-1"
+                    aria-label={`View submission for ${award.officialEventName}`}
+                  >
+                    <span>Submission</span>
+                    <ExternalLinkIcon className="w-3.5 h-3.5" />
+                  </a>
+                )}
               </div>
-            </TiltCard>
+            </div>
           </motion.div>
         ))}
       </motion.div>
 
-      {/* Lightbox Modal for Full Proof View */}
+      {/* Lightbox Modal for Certificate / Award Proof */}
       <AnimatePresence>
-        {selectedWin && (
+        {selectedAward && (
           <motion.div
-            initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0 }}
+            initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0 }}
-            transition={{ duration: 0.25, ease: SHARED_EASE }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-xl"
-            onClick={() => setSelectedWin(null)}
-            role="dialog"
-            aria-modal="true"
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+            onClick={() => setSelectedAward(null)}
           >
             <motion.div
-              initial={shouldReduceMotion ? { scale: 1, opacity: 1 } : { scale: 0.94, opacity: 0, y: 15 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={shouldReduceMotion ? { scale: 1, opacity: 0 } : { scale: 0.94, opacity: 0, y: 15 }}
-              transition={{ duration: 0.3, ease: SHARED_EASE }}
-              className="relative w-full max-w-2xl bg-slate-900 border-2 border-amber-400/50 rounded-2xl overflow-hidden shadow-2xl shadow-amber-500/20"
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              transition={{ duration: 0.2, ease: SHARED_EASE }}
+              className="relative max-w-3xl w-full bg-[var(--surface)] border border-[var(--border)] rounded-[16px] overflow-hidden p-6 sm:p-8 space-y-4 shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Viewfinder Frame Accents */}
-              <div className="absolute top-3 left-3 w-4 h-4 border-t-2 border-l-2 border-amber-400 z-10" />
-              <div className="absolute top-3 right-3 w-4 h-4 border-t-2 border-r-2 border-amber-400 z-10" />
-              <div className="absolute bottom-3 left-3 w-4 h-4 border-b-2 border-l-2 border-amber-400 z-10" />
-              <div className="absolute bottom-3 right-3 w-4 h-4 border-b-2 border-r-2 border-amber-400 z-10" />
-
-              {/* Modal Image */}
-              <div className="relative aspect-[16/10] w-full bg-slate-950 border-b border-white/10">
-                <Image
-                  src={selectedWin.image}
-                  alt={`${selectedWin.title} full view`}
-                  fill
-                  className="object-contain p-4"
-                />
+              <div className="flex items-start justify-between">
+                <div>
+                  <span className="eyebrow-label text-[var(--award)]">
+                    Official Award Record
+                  </span>
+                  <h3 className="font-display text-xl font-bold text-[var(--text)] mt-1">
+                    {selectedAward.officialEventName}
+                  </h3>
+                  <p className="text-xs text-[var(--text-muted)] font-mono">
+                    {selectedAward.organizer} • {selectedAward.year}
+                  </p>
+                </div>
                 <button
                   type="button"
-                  onClick={() => setSelectedWin(null)}
-                  className="absolute top-4 right-4 p-2 rounded-full bg-slate-900/90 text-slate-300 hover:text-white border border-white/20 transition z-20"
+                  onClick={() => setSelectedAward(null)}
+                  className="p-2 rounded-[8px] hover:bg-[var(--surface-2)] text-[var(--text-muted)] hover:text-[var(--text)] transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                   aria-label="Close modal"
                 >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
+                  <XIcon className="w-5 h-5" />
                 </button>
               </div>
 
-              {/* Modal Body */}
-              <div className="p-6 space-y-4">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-amber-500/20 border border-amber-400/40 text-amber-300 text-xs font-mono font-bold">
-                    <TrophyIcon className="w-3.5 h-3.5 text-amber-400" />
-                    {selectedWin.rank}
-                  </span>
-                  <span className="text-xs font-mono text-slate-400">
-                    {selectedWin.date} • {selectedWin.competition}
-                  </span>
-                </div>
+              {/* Certificate Image Frame */}
+              <div className="relative aspect-[16/10] w-full rounded-[12px] overflow-hidden border border-[var(--border)] bg-[var(--surface-2)]">
+                <Image
+                  src={selectedAward.evidenceImage}
+                  alt={selectedAward.officialEventName}
+                  fill
+                  className="object-contain"
+                />
+              </div>
 
-                <div>
-                  <h3 className="font-display text-xl font-bold text-white">
-                    {selectedWin.title}
-                  </h3>
-                  <p className="text-xs font-mono text-amber-400/80 mt-1">
-                    Category: {selectedWin.category}
-                  </p>
-                  <p className="text-sm text-slate-300 leading-relaxed mt-3">
-                    {selectedWin.description}
-                  </p>
-                </div>
-
-                <div className="pt-4 border-t border-white/[0.08] flex items-center justify-between">
-                  <div className="flex flex-wrap gap-1.5">
-                    {selectedWin.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="px-2 py-0.5 rounded bg-slate-800 text-[10px] font-mono text-slate-300"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
+              <div className="flex items-center justify-between pt-2">
+                <p className="text-xs text-[var(--text-muted)]">
+                  Awarded for <span className="text-[var(--text)] font-semibold">{selectedAward.projectTitle}</span>
+                </p>
+                {selectedAward.evidenceUrl && (
+                  <a
+                    href={selectedAward.evidenceUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn-primary text-xs"
+                  >
+                    <span>View Repository & Submission</span>
+                    <ExternalLinkIcon className="w-3.5 h-3.5" />
+                  </a>
+                )}
               </div>
             </motion.div>
           </motion.div>
