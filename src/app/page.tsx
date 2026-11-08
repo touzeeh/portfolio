@@ -13,6 +13,7 @@ import { ExperienceSection } from '@/components/sections/ExperienceSection';
 import { ContactSection } from '@/components/sections/ContactSection';
 import { Footer } from '@/components/sections/Footer';
 import { BackToTop } from '@/components/ui/BackToTop';
+import { CustomCursor } from '@/components/ui/CustomCursor';
 
 // Dynamic import with ssr: false for Three.js Canvas (No preloader spinner)
 const Scene3D = dynamic(
@@ -50,6 +51,9 @@ function PortfolioContent() {
 
       {/* (7) Floating Back-To-Top button appearing after 600px scroll */}
       <BackToTop />
+
+      {/* Custom Interactive Cyber Cursor */}
+      <CustomCursor />
     </div>
   );
 }

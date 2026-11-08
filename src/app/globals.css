@@ -32,6 +32,13 @@
     font-weight: 700;
   }
 
+  /* Desktop Custom Cursor Override */
+  @media (pointer: fine) {
+    *, *::before, *::after {
+      cursor: none !important;
+    }
+  }
+
   /* Fluid typography */
   h1, .text-hero-fluid {
     font-size: clamp(2.25rem, 5.5vw + 0.5rem, 4.25rem);
