@@ -1,49 +1,109 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
-const DEFAULT_VOLUME = 0.85; // A little bit higher than normal (normal ~0.5)
+const TARGET_VOLUME = 0.85; // High volume as requested
 
 export const AudioPlayer: React.FC = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    // Initialize audio element with GTA IV theme music
-    const audio = new Audio('/gta_iv_theme.mp3');
-    audio.loop = true;
-    audio.volume = DEFAULT_VOLUME;
-    audioRef.current = audio;
+    const audio = audioRef.current;
+    if (!audio) return;
 
-    const startAudio = () => {
-      audio.play().catch(() => {});
+    audio.volume = TARGET_VOLUME;
+    audio.loop = true;
+
+    let hasStarted = false;
+
+    // Helper to resume AudioContext (browser audio subsystem unlock)
+    const unlockAudioContext = () => {
+      try {
+        const AudioCtx =
+          window.AudioContext ||
+          (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+        if (AudioCtx) {
+          const ctx = new AudioCtx();
+          if (ctx.state === 'suspended') {
+            ctx.resume();
+          }
+        }
+      } catch {
+        // Safe fallback
+      }
     };
 
-    // Attempt autoplay immediately
-    audio.play().catch(() => {
-      // Browser blocked unmuted autoplay policy.
-      // Listen for the first user interaction anywhere on the window to start automatically!
-      const onUserGesture = () => {
-        startAudio();
-        window.removeEventListener('click', onUserGesture);
-        window.removeEventListener('pointerdown', onUserGesture);
-        window.removeEventListener('keydown', onUserGesture);
-        window.removeEventListener('scroll', onUserGesture);
-        window.removeEventListener('touchstart', onUserGesture);
-      };
+    const tryPlay = () => {
+      if (hasStarted || !audio) return;
 
-      window.addEventListener('click', onUserGesture, { once: true });
-      window.addEventListener('pointerdown', onUserGesture, { once: true });
-      window.addEventListener('keydown', onUserGesture, { once: true });
-      window.addEventListener('scroll', onUserGesture, { once: true });
-      window.addEventListener('touchstart', onUserGesture, { once: true });
+      unlockAudioContext();
+      audio.volume = TARGET_VOLUME;
+      audio.muted = false;
+
+      const playPromise = audio.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            hasStarted = true;
+            removeUserInteractionListeners();
+          })
+          .catch(() => {
+            // Browser autoplay policy blocked this attempt.
+            // Keep listeners attached so the next click/tap will play!
+          });
+      }
+    };
+
+    // 1. Try immediate autoplay on page load
+    tryPlay();
+
+    // 2. User interaction events recognized by Chrome/Edge/Safari transient activation rules
+    // Note: Do NOT include 'scroll' or 'mousemove' because browsers reject them as user gestures!
+    const interactionEvents = ['pointerdown', 'mousedown', 'click', 'keydown', 'touchstart', 'touchend'];
+
+    const onUserInteraction = () => {
+      tryPlay();
+    };
+
+    interactionEvents.forEach((evt) => {
+      window.addEventListener(evt, onUserInteraction, { capture: true, passive: true });
+      document.addEventListener(evt, onUserInteraction, { capture: true, passive: true });
     });
 
+    const removeUserInteractionListeners = () => {
+      interactionEvents.forEach((evt) => {
+        window.removeEventListener(evt, onUserInteraction, { capture: true });
+        document.removeEventListener(evt, onUserInteraction, { capture: true });
+      });
+    };
+
+    // If audio loops or pauses unexpectedly, ensure it resumes
+    const handleEnded = () => {
+      if (audio) {
+        audio.currentTime = 0;
+        audio.play().catch(() => {});
+      }
+    };
+    audio.addEventListener('ended', handleEnded);
+
     return () => {
-      audio.pause();
-      audio.src = '';
+      removeUserInteractionListeners();
+      if (audio) {
+        audio.removeEventListener('ended', handleEnded);
+        audio.pause();
+      }
     };
   }, []);
 
-  // Zero visual output - plays purely in the background without any options or controls
-  return null;
+  return (
+    <audio
+      ref={audioRef}
+      src="/gta_iv_theme.mp3"
+      loop
+      preload="auto"
+      playsInline
+      style={{ display: 'none' }}
+      aria-hidden="true"
+    />
+  );
 };

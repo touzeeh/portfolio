@@ -32,9 +32,18 @@ export const CustomCursor: React.FC = () => {
     let hasAddedClass = false;
 
     const handleMouseMove = (e: MouseEvent) => {
-      rawX.set(e.clientX);
-      rawY.set(e.clientY);
-      if (!isVisible) setIsVisible(true);
+      if (!isVisible) {
+        rawX.set(e.clientX);
+        rawY.set(e.clientY);
+        dotX.set(e.clientX);
+        dotY.set(e.clientY);
+        ringX.set(e.clientX);
+        ringY.set(e.clientY);
+        setIsVisible(true);
+      } else {
+        rawX.set(e.clientX);
+        rawY.set(e.clientY);
+      }
 
       if (!hasAddedClass) {
         document.documentElement.classList.add('custom-cursor-active');
@@ -81,7 +90,7 @@ export const CustomCursor: React.FC = () => {
       document.removeEventListener('mouseenter', handleMouseEnter);
       document.documentElement.classList.remove('custom-cursor-active');
     };
-  }, [rawX, rawY, isVisible]);
+  }, [rawX, rawY, isVisible, dotX, dotY, ringX, ringY]);
 
   // Clean up completed ripples after animation
   useEffect(() => {
@@ -104,25 +113,25 @@ export const CustomCursor: React.FC = () => {
         className="fixed top-0 left-0 pointer-events-none flex items-center justify-center -translate-x-1/2 -translate-y-1/2 rounded-full will-change-transform z-10"
         style={{ x: ringX, y: ringY }}
         animate={{
-          width: isTextInput ? 4 : isHovered ? 52 : isClicking ? 28 : 38,
-          height: isTextInput ? 26 : isHovered ? 52 : isClicking ? 28 : 38,
-          borderRadius: isTextInput ? '2px' : '9999px',
+          width: isTextInput ? 6 : isHovered ? 56 : isClicking ? 30 : 42,
+          height: isTextInput ? 28 : isHovered ? 56 : isClicking ? 30 : 42,
+          borderRadius: isTextInput ? '3px' : '9999px',
           borderColor: isHovered
             ? '#22d3ee'
             : isClicking
             ? '#a78bfa'
-            : 'rgba(34, 211, 238, 0.65)',
+            : 'rgba(34, 211, 238, 0.75)',
           backgroundColor: isHovered
-            ? 'rgba(34, 211, 238, 0.14)'
+            ? 'rgba(34, 211, 238, 0.16)'
             : isClicking
             ? 'rgba(167, 139, 250, 0.25)'
-            : 'rgba(34, 211, 238, 0.04)',
+            : 'rgba(34, 211, 238, 0.05)',
           boxShadow: isHovered
-            ? '0 0 20px rgba(34, 211, 238, 0.5), inset 0 0 10px rgba(34, 211, 238, 0.25)'
+            ? '0 0 24px rgba(34, 211, 238, 0.6), inset 0 0 12px rgba(34, 211, 238, 0.3)'
             : isClicking
-            ? '0 0 16px rgba(167, 139, 250, 0.6)'
-            : '0 0 10px rgba(34, 211, 238, 0.3)',
-          borderWidth: isTextInput ? '0px' : '1.5px',
+            ? '0 0 18px rgba(167, 139, 250, 0.6)'
+            : '0 0 12px rgba(34, 211, 238, 0.35)',
+          borderWidth: isTextInput ? '0px' : '2px',
           scale: isClicking ? 0.9 : 1,
         }}
         transition={{
@@ -138,19 +147,19 @@ export const CustomCursor: React.FC = () => {
         style={{ x: dotX, y: dotY }}
       >
         {isTextInput ? (
-          <div className="w-[3px] h-6 bg-cyan-400 rounded-sm shadow-[0_0_12px_#22d3ee] animate-pulse" />
+          <div className="w-[3.5px] h-6 bg-cyan-400 rounded-sm shadow-[0_0_14px_#22d3ee] animate-pulse" />
         ) : (
           <motion.div
             animate={{
-              width: isHovered ? 16 : isClicking ? 9 : 13,
-              height: isHovered ? 16 : isClicking ? 9 : 13,
+              width: isHovered ? 18 : isClicking ? 10 : 14,
+              height: isHovered ? 18 : isClicking ? 10 : 14,
               scale: isClicking ? 0.85 : 1,
             }}
             transition={{ type: 'spring', damping: 25, stiffness: 450 }}
-            className="rounded-full bg-[#22d3ee] border-2 border-black/90 shadow-[0_0_12px_#22d3ee,0_0_24px_rgba(34,211,238,0.8),0_2px_4px_rgba(0,0,0,0.9)] flex items-center justify-center"
+            className="rounded-full bg-[#22d3ee] border-2 border-[#070A14] shadow-[0_0_14px_#22d3ee,0_0_28px_rgba(34,211,238,0.9),0_2px_4px_rgba(0,0,0,0.9)] flex items-center justify-center cursor-none"
           >
             {/* White-hot center highlight */}
-            <span className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_6px_#ffffff]" />
+            <span className="w-2 h-2 rounded-full bg-white shadow-[0_0_8px_#ffffff]" />
           </motion.div>
         )}
       </motion.div>
