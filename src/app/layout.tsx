@@ -77,11 +77,11 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${jetbrainsMono.variable} dark scroll-smooth`}>
+    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${jetbrainsMono.variable} dark scroll-smooth`} data-theme="dark">
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('theme');var m=window.matchMedia('(prefers-color-scheme: light)').matches;var light=t==='light'||(!t&&m);var d=document.documentElement;if(light){d.classList.add('light');d.classList.remove('dark');d.setAttribute('data-theme','light');}else{d.classList.add('dark');d.classList.remove('light');d.setAttribute('data-theme','dark');}}catch(e){}})();`,
+            __html: `(function(){try{localStorage.removeItem('theme');var d=document.documentElement;d.classList.remove('light');d.classList.add('dark');d.setAttribute('data-theme','dark');}catch(e){}})();`,
           }}
         />
         <script

@@ -1,24 +1,12 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useSyncExternalStore } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useReducedMotion, AnimatePresence } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import { SITE_DATA } from '@/data/site';
 import { ArrowUpRightIcon, MenuIcon, XIcon } from '@/components/ui/Icons';
 import { SHARED_EASE } from '@/lib/animations';
 import { ANIMATION_FLAGS } from '@/config/animations';
-
-const subscribeTheme = (callback: () => void) => {
-  if (typeof MutationObserver === 'undefined') return () => {};
-  const observer = new MutationObserver(callback);
-  observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class', 'data-theme'] });
-  return () => observer.disconnect();
-};
-const getThemeSnapshot = (): 'dark' | 'light' => {
-  if (typeof document === 'undefined') return 'dark';
-  return document.documentElement.classList.contains('light') ? 'light' : 'dark';
-};
-const getServerThemeSnapshot = () => 'dark' as const;
 
 const MusicDock = dynamic(
   () => import('@/components/ui/Music').then((m) => m.MusicDock),
@@ -34,29 +22,72 @@ export const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const theme = useSyncExternalStore(subscribeTheme, getThemeSnapshot, getServerThemeSnapshot);
   const shouldReduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll();
   const mobileMenuRef = useRef<HTMLDivElement>(null);
 
-  const toggleTheme = () => {
-    const next = theme === 'dark' ? 'light' : 'dark';
-    if (next === 'light') {
-      document.documentElement.classList.add('light');
-      document.documentElement.classList.remove('dark');
-      document.documentElement.setAttribute('data-theme', 'light');
+  const lensRef = useRef<{ destroy?: () => void; setTint?: (tint: string) => void } | null>(null);
+  const isMountedRef = useRef(true);
+
+  // Apply liquidGL glass effect to ONE element only: the navbar pill
+  useEffect(() => {
+    isMountedRef.current = true;
+
+    const initLiquidGL = async () => {
+      const pillElement = document.getElementById('navbar-pill');
+      if (!pillElement) return;
+
       try {
-        localStorage.setItem('theme', 'light');
-      } catch {}
-    } else {
-      document.documentElement.classList.add('dark');
-      document.documentElement.classList.remove('light');
-      document.documentElement.setAttribute('data-theme', 'dark');
+        const liquidGLModule = await import('liquid-gl');
+        const liquidGL = liquidGLModule.default;
+        if (!isMountedRef.current || !liquidGL) return;
+
+        const isLight = document.documentElement.classList.contains('light');
+
+        const instance = liquidGL({
+          target: '#navbar-pill-lens',
+          content: false,
+          snapshot: 'body',
+          engine: 'auto', // WebGPU -> WebGL2 -> WebGL1 -> CSS fallback
+          refraction: 0.015,
+          bevelDepth: 0.08,
+          bevelWidth: 0.12,
+          frost: 1.5,
+          shadow: false,
+          specular: true,
+          reveal: 'none',
+          tint: isLight ? 'rgba(255, 255, 255, 0.3)' : 'rgba(14, 20, 36, 0.35)',
+        });
+        if (!isMountedRef.current) {
+          instance?.destroy?.();
+        } else {
+          lensRef.current = instance;
+        }
+      } catch (err) {
+        // Fall back to normal CSS backdrop-filter glass if WebGL fails
+        console.warn('liquidGL fallback to CSS glass:', err);
+      }
+    };
+
+    initLiquidGL();
+
+    const themeObserver = new MutationObserver(() => {
+      if (lensRef.current?.setTint) {
+        const isLight = document.documentElement.classList.contains('light');
+        lensRef.current.setTint(isLight ? 'rgba(255, 255, 255, 0.45)' : 'rgba(14, 20, 36, 0.45)');
+      }
+    });
+    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['class', 'data-theme'] });
+
+    return () => {
+      isMountedRef.current = false;
+      themeObserver.disconnect();
       try {
-        localStorage.setItem('theme', 'dark');
+        lensRef.current?.destroy?.();
+        lensRef.current = null;
       } catch {}
-    }
-  };
+    };
+  }, []);
 
   // Scroll-spy with IntersectionObserver & distance-to-focal-point
   useEffect(() => {
@@ -182,89 +213,53 @@ export const Navbar: React.FC = () => {
           <MusicDock />
         </div>
 
-        {/* Center Column: Center Pill Nav (Desktop) */}
+        {/* Center Column: Center Pill Nav (Desktop) with liquidGL Glass Effect */}
         <nav
+          id="navbar-pill"
           aria-label="Main section navigation"
-          className="hidden md:flex items-center justify-center gap-1 p-1 rounded-full bg-[var(--surface-2)]/90 backdrop-blur-md border border-[var(--border)] shadow-lg shadow-black/20"
+          className="hidden md:flex items-center justify-center gap-1 p-1 rounded-full bg-[var(--surface-2)]/80 backdrop-blur-md border border-[var(--border)] shadow-lg shadow-black/20 relative"
         >
-          {SITE_DATA.nav.map((item) => {
-            const isActive = activeSection === item.id;
-            return (
-              <motion.button
-                key={item.id}
-                type="button"
-                onClick={() => handleNavClick(item.id)}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ duration: 0.18, ease: SHARED_EASE }}
-                className={`relative px-3.5 py-1.5 rounded-full text-xs font-medium transition-all ${
-                  isActive
-                    ? 'text-[var(--text)] font-semibold'
-                    : 'text-[var(--text-muted)] hover:text-[var(--text)]'
-                }`}
-                aria-current={isActive ? 'true' : undefined}
-              >
-                {isActive && (
-                  <motion.div
-                    layoutId="activePill"
-                    transition={{ type: 'spring', damping: 26, stiffness: 380 }}
-                    className="absolute inset-0 rounded-full bg-[var(--surface)] border border-[var(--border)] shadow-sm"
-                  />
-                )}
-                <span className="relative z-10">{item.label}</span>
-              </motion.button>
-            );
-          })}
+          {/* Glass Lens Element for liquidGL */}
+          <div
+            id="navbar-pill-lens"
+            aria-hidden="true"
+            className="absolute inset-0 rounded-full pointer-events-none -z-10"
+          />
+
+          <div id="navbar-pill-content" className="flex items-center justify-center gap-1 relative z-10">
+            {SITE_DATA.nav.map((item) => {
+              const isActive = activeSection === item.id;
+              return (
+                <motion.button
+                  key={item.id}
+                  type="button"
+                  onClick={() => handleNavClick(item.id)}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ duration: 0.18, ease: SHARED_EASE }}
+                  className={`relative px-3.5 py-1.5 rounded-full text-xs font-medium transition-all ${
+                    isActive
+                      ? 'text-[var(--text)] font-semibold'
+                      : 'text-[var(--text-muted)] hover:text-[var(--text)]'
+                  }`}
+                  aria-current={isActive ? 'true' : undefined}
+                >
+                  {isActive && (
+                    <motion.div
+                      layoutId="activePill"
+                      transition={{ type: 'spring', damping: 26, stiffness: 380 }}
+                      className="absolute inset-0 rounded-full bg-[var(--surface)] border border-[var(--border)] shadow-sm"
+                    />
+                  )}
+                  <span className="relative z-10">{item.label}</span>
+                </motion.button>
+              );
+            })}
+          </div>
         </nav>
 
-        {/* Right Column: Theme Toggle, Contact CTA & Mobile Hamburger */}
+        {/* Right Column: Contact CTA & Mobile Hamburger */}
         <div className="flex items-center justify-end gap-2.5">
-          {/* Theme Toggle Button (Item B.7) */}
-          <motion.button
-            type="button"
-            onClick={toggleTheme}
-            whileHover={{ scale: 1.08 }}
-            whileTap={{ scale: 0.92 }}
-            transition={{ duration: 0.18, ease: SHARED_EASE }}
-            className="w-10 h-10 rounded-[10px] bg-[var(--surface-2)]/80 hover:bg-[var(--surface-2)] border border-[var(--border)] hover:border-[var(--accent)] text-[var(--text)] flex items-center justify-center transition-colors focus-visible:ring-2 focus-visible:ring-[var(--accent)] cursor-pointer"
-            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
-            title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
-          >
-            <AnimatePresence mode="wait" initial={false}>
-              {theme === 'dark' ? (
-                <motion.svg
-                  key="sun"
-                  initial={{ rotate: -90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: 90, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                  className="w-4 h-4 text-amber-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                </motion.svg>
-              ) : (
-                <motion.svg
-                  key="moon"
-                  initial={{ rotate: 90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: -90, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                  className="w-4 h-4 text-sky-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                </motion.svg>
-              )}
-            </AnimatePresence>
-          </motion.button>
-
           {/* Contact CTA */}
           <motion.a
             href="#contact"
@@ -335,15 +330,7 @@ export const Navbar: React.FC = () => {
                 );
               })}
 
-              <div className="pt-4 mt-2 border-t border-[var(--border)] flex items-center justify-between gap-3">
-                <button
-                  type="button"
-                  onClick={toggleTheme}
-                  className="flex-1 py-3 px-4 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] text-xs font-semibold text-[var(--text)] flex items-center justify-center gap-2"
-                >
-                  <span>{theme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode'}</span>
-                </button>
-
+              <div className="pt-4 mt-2 border-t border-[var(--border)]">
                 <motion.a
                   href="#contact"
                   onClick={(e) => {
@@ -351,10 +338,10 @@ export const Navbar: React.FC = () => {
                     handleNavClick('contact');
                   }}
                   whileTap={{ scale: 0.96 }}
-                  className="flex-1 btn-primary py-3 px-4 text-center text-xs font-semibold rounded-xl flex items-center justify-center gap-1.5"
+                  className="w-full btn-primary py-3.5 px-4 text-center text-sm font-semibold rounded-xl flex items-center justify-center gap-2 shadow-lg"
                 >
-                  <span>Contact</span>
-                  <ArrowUpRightIcon className="w-3.5 h-3.5" />
+                  <span>Contact Touzeeh</span>
+                  <ArrowUpRightIcon className="w-4 h-4" />
                 </motion.a>
               </div>
             </div>
