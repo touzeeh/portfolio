@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useEffect, useSyncExternalStore } from 'react';
-import { motion, useReducedMotion, AnimatePresence, useSpring } from 'framer-motion';
+import React, { useEffect, useSyncExternalStore } from 'react';
+import { motion, useReducedMotion, useSpring } from 'framer-motion';
 import { PERSONAL_INFO } from '@/data/portfolioData';
 import {
   GithubIcon,
@@ -35,7 +35,6 @@ const getFirstVisitSnapshot = () => {
 
 export const HeroSection: React.FC = () => {
   const shouldReduceMotion = useReducedMotion();
-  const [scrollIndicatorVisible, setScrollIndicatorVisible] = useState(true);
   const isFinePointer = useSyncExternalStore(subscribePointerFine, getPointerFineSnapshot, getServerFalse);
   const isFirstVisit = useSyncExternalStore(subscribeNoop, getFirstVisitSnapshot, getServerFalse);
 
@@ -49,14 +48,6 @@ export const HeroSection: React.FC = () => {
         sessionStorage.setItem('portfolio_intro_seen', 'true');
       } catch {}
     }
-
-    const handleScroll = () => {
-      if (window.scrollY > 40) {
-        setScrollIndicatorVisible(false);
-      }
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
   }, [isFirstVisit]);
 
   const handlePointerMove = (e: React.PointerEvent) => {
@@ -243,29 +234,6 @@ export const HeroSection: React.FC = () => {
           <span>1st Place Winner &bull; Smart Health Hackathon 2025 (InnerSight 3D) &rarr;</span>
         </motion.a>
       </motion.div>
-
-      {/* Subtle Animated Scroll Cue at bottom-center */}
-      <AnimatePresence>
-        {scrollIndicatorVisible && (
-          <motion.div
-            initial={{ opacity: 0, y: -6 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 6 }}
-            transition={{ duration: 0.3 }}
-            className="absolute bottom-5 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 pointer-events-none text-[var(--text-muted)] select-none"
-            aria-hidden="true"
-          >
-            <span className="font-mono text-[9px] tracking-widest uppercase opacity-60">Scroll</span>
-            <div className="w-4 h-7 rounded-full border border-[var(--border)] flex items-start justify-center p-1">
-              <motion.div
-                animate={{ y: [0, 8, 0] }}
-                transition={{ repeat: Infinity, duration: 1.6, ease: 'easeInOut' }}
-                className="w-1 h-1 rounded-full bg-[var(--accent)]"
-              />
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </section>
   );
 };

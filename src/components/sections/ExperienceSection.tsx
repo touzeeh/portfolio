@@ -23,7 +23,7 @@ const TimelineRow: React.FC<{ item: ExperienceItem; index: number }> = ({ item }
           scale: isInView ? 1.25 : 1,
           borderColor: isInView ? '#22d3ee' : 'rgba(255, 255, 255, 0.2)',
           backgroundColor: isInView ? '#083344' : '#030712',
-          boxShadow: isInView ? '0 0 16px rgba(6, 182, 212, 0.95)' : 'none',
+          boxShadow: isInView ? '0 0 10px rgba(34, 211, 238, 0.4)' : 'none',
         }}
         transition={{ duration: 0.3, ease: SHARED_EASE }}
         className="absolute -left-[6px] sm:-left-[7px] top-3 w-4 h-4 rounded-full border-2 border-white/20 bg-slate-950 z-10 flex items-center justify-center"
@@ -36,28 +36,28 @@ const TimelineRow: React.FC<{ item: ExperienceItem; index: number }> = ({ item }
 
       {/* Content Card with cursor spotlight and sensitive hover */}
       <TiltCard
-        glareColor="rgba(6, 182, 212, 0.2)"
+        glareColor="rgba(255, 255, 255, 0.04)"
         className={`glass-card p-5 sm:p-6 border transition-all rounded-[20px] ${
           isInView
-            ? 'border-cyan-500/40 shadow-[0_12px_32px_-8px_rgba(6,182,212,0.18)]'
-            : 'border-white/10'
-        } hover:border-cyan-400/50 hover:shadow-[0_16px_36px_-8px_rgba(6,182,212,0.25)]`}
+            ? 'border-[var(--accent)]/30'
+            : 'border-[var(--border)]'
+        } hover:border-[var(--accent)]/50 hover:shadow-xl`}
       >
         <div className="flex flex-wrap items-center justify-between gap-2 mb-1.5">
-          <span className="text-xs font-mono text-cyan-400 font-bold">
+          <span className="text-xs font-mono text-[var(--accent)] font-bold">
             {item.period}
           </span>
         </div>
 
-        <h3 className="font-display text-lg font-bold text-white group-hover:text-cyan-300 transition-colors">
+        <h3 className="font-display text-lg font-bold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">
           {item.title}
         </h3>
 
-        <div className="text-xs font-mono text-slate-300 mb-2">
-          {item.organization} • <span className="text-slate-400">{item.location}</span>
+        <div className="text-xs font-mono text-[var(--text-muted)] mb-2">
+          {item.organization} • <span>{item.location}</span>
         </div>
 
-        <p className="text-sm text-slate-300 leading-relaxed mb-3">
+        <p className="text-sm text-[var(--text-muted)] leading-relaxed mb-3">
           {item.description}
         </p>
 
@@ -68,7 +68,7 @@ const TimelineRow: React.FC<{ item: ExperienceItem; index: number }> = ({ item }
                 key={tag}
                 whileHover={{ y: -3, scale: 1.08 }}
                 transition={{ duration: 0.18, ease: SHARED_EASE }}
-                className="px-2 py-0.5 rounded-md text-[11px] font-mono bg-slate-900 border border-white/10 hover:border-cyan-400/60 hover:text-white hover:shadow-[0_0_10px_rgba(6,182,212,0.3)] transition-all cursor-default"
+                className="px-2 py-0.5 rounded-md text-[11px] font-mono bg-[var(--surface-2)] border border-[var(--border)] hover:border-[var(--accent)]/60 text-[var(--text-muted)] hover:text-[var(--text)] transition-all cursor-default"
               >
                 {tag}
               </motion.span>
@@ -99,13 +99,13 @@ export const ExperienceSection: React.FC = () => {
         variants={scrollRevealVariants}
         className="mb-14 space-y-2"
       >
-        <span className="text-xs font-mono uppercase tracking-widest text-cyan-400 font-semibold drop-shadow-sm">
+        <span className="text-xs font-mono uppercase tracking-widest text-[var(--accent)] font-semibold drop-shadow-sm">
           Milestones
         </span>
-        <h2 className="font-display text-section-fluid text-white tracking-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)]">
+        <h2 className="font-display text-section-fluid text-[var(--text)] tracking-tight">
           Timeline
         </h2>
-        <p className="text-slate-300 text-base max-w-xl drop-shadow-[0_1px_6px_rgba(0,0,0,0.7)]">
+        <p className="text-[var(--text-muted)] text-base max-w-xl">
           Academic progression, competitive hackathons, and open-source contributions.
         </p>
       </motion.div>

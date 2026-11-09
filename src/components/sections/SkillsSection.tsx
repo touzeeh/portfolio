@@ -24,13 +24,13 @@ export const SkillsSection: React.FC = () => {
         variants={scrollRevealVariants}
         className="mb-14 space-y-2"
       >
-        <span className="text-xs font-mono uppercase tracking-widest text-cyan-400 font-semibold drop-shadow-sm">
+        <span className="text-xs font-mono uppercase tracking-widest text-[var(--accent)] font-semibold drop-shadow-sm">
           Technical Stack
         </span>
-        <h2 className="font-display text-section-fluid text-white tracking-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)]">
+        <h2 className="font-display text-section-fluid text-[var(--text)] tracking-tight">
           Skills &amp; Capabilities
         </h2>
-        <p className="text-slate-300 text-base max-w-xl drop-shadow-[0_1px_6px_rgba(0,0,0,0.7)]">
+        <p className="text-[var(--text-muted)] text-base max-w-xl">
           Core technical competencies across frontend, backend systems, databases, and spatial web graphics.
         </p>
       </motion.div>
@@ -50,8 +50,8 @@ export const SkillsSection: React.FC = () => {
             className="h-full"
           >
             <TiltCard
-              glareColor={`${category.accentColor}30`}
-              className="glass-card p-6 sm:p-7 flex flex-col justify-between h-full border border-white/10 hover:border-cyan-400/40 hover:shadow-[0_16px_36px_-8px_rgba(6,182,212,0.18)] transition-all rounded-[20px]"
+              glareColor="rgba(255, 255, 255, 0.04)"
+              className="glass-card p-6 sm:p-7 flex flex-col justify-between h-full border border-[var(--border)] hover:border-[var(--accent)]/40 hover:shadow-xl transition-all rounded-[20px]"
             >
               <div className="space-y-4">
                 {/* Category Header with pulsing status aura */}
@@ -66,12 +66,12 @@ export const SkillsSection: React.FC = () => {
                       style={{ backgroundColor: category.accentColor, color: category.accentColor }}
                     />
                   </div>
-                  <h3 className="font-display text-lg font-bold text-white group-hover:text-cyan-300 transition-colors">
+                  <h3 className="font-display text-lg font-bold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">
                     {category.name}
                   </h3>
                 </div>
 
-                <p className="text-sm text-slate-300 leading-relaxed">
+                <p className="text-sm text-[var(--text-muted)] leading-relaxed">
                   {category.description}
                 </p>
 
@@ -83,7 +83,7 @@ export const SkillsSection: React.FC = () => {
                       whileHover={{ y: -4, scale: 1.08 }}
                       whileTap={{ scale: 0.95 }}
                       transition={{ duration: 0.18, ease: SHARED_EASE }}
-                      className="px-3.5 py-2 rounded-lg text-sm font-mono font-medium bg-slate-900/90 border border-white/10 text-slate-200 hover:border-cyan-400/70 hover:text-white hover:shadow-[0_0_16px_rgba(6,182,212,0.35)] transition-all cursor-default shadow-sm select-none"
+                      className="px-3.5 py-2 rounded-lg text-sm font-mono font-medium bg-[var(--surface-2)] border border-[var(--border)] text-[var(--text)] hover:border-[var(--accent)] transition-all cursor-default shadow-sm select-none"
                     >
                       {skill}
                     </motion.span>

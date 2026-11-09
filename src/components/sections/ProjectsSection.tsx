@@ -49,13 +49,13 @@ export const ProjectsSection: React.FC = () => {
         variants={scrollRevealVariants}
         className="space-y-2"
       >
-        <span className="text-xs font-mono uppercase tracking-widest text-cyan-400 font-semibold drop-shadow-sm">
+        <span className="text-xs font-mono uppercase tracking-widest text-[var(--accent)] font-semibold drop-shadow-sm">
           Engineering Showcase
         </span>
-        <h2 className="font-display text-section-fluid text-white tracking-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)]">
+        <h2 className="font-display text-section-fluid text-[var(--text)] tracking-tight">
           Selected Projects &amp; Systems
         </h2>
-        <p className="text-slate-300 text-base max-w-2xl drop-shadow-[0_1px_6px_rgba(0,0,0,0.7)]">
+        <p className="text-[var(--text-muted)] text-base max-w-2xl">
           Production-grade applications engineered with TypeScript, Python, Three.js, and FastAPI. Grounded in algorithmic benchmarks and relational schemas.
         </p>
       </motion.div>
@@ -99,12 +99,6 @@ export const ProjectsSection: React.FC = () => {
                   </motion.div>
                 )}
 
-                {/* Corner Tech Brackets */}
-                <div className="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-cyan-400 z-10 pointer-events-none group-hover:scale-110 transition-transform" />
-                <div className="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-cyan-400 z-10 pointer-events-none group-hover:scale-110 transition-transform" />
-                <div className="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-cyan-400 z-10 pointer-events-none group-hover:scale-110 transition-transform" />
-                <div className="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-cyan-400 z-10 pointer-events-none group-hover:scale-110 transition-transform" />
-
                 {/* Hackathon 1st Place Pill Overlay */}
                 <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5 px-3 py-1 rounded-md bg-slate-950/90 backdrop-blur-md border border-amber-400/60 text-xs font-mono font-bold text-amber-300 shadow-lg">
                   <TrophyIcon className="w-3.5 h-3.5 text-amber-400" />
@@ -120,7 +114,7 @@ export const ProjectsSection: React.FC = () => {
                       key={m.label}
                       whileHover={{ y: -4, scale: 1.04 }}
                       transition={{ duration: 0.2, ease: SHARED_EASE }}
-                      className="p-2.5 rounded-xl bg-slate-950/80 border border-white/10 hover:border-cyan-400/50 hover:shadow-[0_0_15px_rgba(6,182,212,0.2)] text-center transition-colors cursor-default"
+                      className="p-2.5 rounded-xl bg-slate-950/80 border border-white/10 hover:border-cyan-400/40 text-center transition-colors cursor-default"
                     >
                       <span className="text-xs font-mono text-cyan-400 font-bold block">
                         {m.value}
@@ -137,48 +131,48 @@ export const ProjectsSection: React.FC = () => {
             {/* Right: Technical Architecture & Problem Breakdown */}
             <div className="lg:col-span-6 flex flex-col justify-between space-y-4">
               <div>
-                <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-cyan-500/10 border border-cyan-400/30 text-cyan-300 text-xs font-mono font-semibold mb-2">
+                <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-[var(--accent)]/10 border border-[var(--accent)]/30 text-[var(--accent)] text-xs font-mono font-semibold mb-2">
                   Featured Project • Flagship 3D System
                 </div>
-                <h3 className="font-display text-2xl sm:text-3xl font-bold text-white group-hover:text-cyan-300 transition-colors">
+                <h3 className="font-display text-2xl sm:text-3xl font-bold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">
                   {featuredProject.title}
                 </h3>
-                <p className="text-sm font-mono text-cyan-400/90 font-medium mt-1">
+                <p className="text-sm font-mono text-[var(--accent)] font-medium mt-1">
                   {featuredProject.tagline}
                 </p>
               </div>
 
-              <div className="space-y-3.5 text-slate-200 text-sm sm:text-base leading-relaxed">
+              <div className="space-y-3.5 text-[var(--text)] text-sm sm:text-base leading-relaxed">
                 <div>
-                  <span className="text-xs font-mono text-cyan-300 uppercase font-bold tracking-wider block mb-1">
+                  <span className="text-xs font-mono text-[var(--accent)] uppercase font-bold tracking-wider block mb-1">
                     Problem &amp; Motivation
                   </span>
-                  <p className="text-slate-300">{featuredProject.problem}</p>
+                  <p className="text-[var(--text-muted)]">{featuredProject.problem}</p>
                 </div>
 
                 <div>
-                  <span className="text-xs font-mono text-cyan-300 uppercase font-bold tracking-wider block mb-1">
+                  <span className="text-xs font-mono text-[var(--accent)] uppercase font-bold tracking-wider block mb-1">
                     Algorithmic Architecture
                   </span>
-                  <p className="text-slate-300">{featuredProject.whatIBuilt}</p>
+                  <p className="text-[var(--text-muted)]">{featuredProject.whatIBuilt}</p>
                 </div>
 
                 <div>
-                  <span className="text-xs font-mono text-cyan-300 uppercase font-bold tracking-wider block mb-1">
+                  <span className="text-xs font-mono text-[var(--accent)] uppercase font-bold tracking-wider block mb-1">
                     Measured Result
                   </span>
-                  <p className="text-white font-medium">{featuredProject.result}</p>
+                  <p className="text-[var(--text)] font-medium">{featuredProject.result}</p>
                 </div>
               </div>
 
               {/* Tech Stack Chips with spring hover */}
-              <div className="pt-2 border-t border-white/10 flex flex-wrap gap-2">
+              <div className="pt-2 border-t border-[var(--border)] flex flex-wrap gap-2">
                 {featuredProject.stack.map((tech) => (
                   <motion.span
                     key={tech}
                     whileHover={{ y: -3, scale: 1.08 }}
                     transition={{ duration: 0.18, ease: SHARED_EASE }}
-                    className="px-3 py-1 rounded-lg bg-slate-900 border border-white/15 text-xs font-mono font-medium text-slate-200 hover:border-cyan-400/60 hover:text-white hover:shadow-[0_0_12px_rgba(6,182,212,0.25)] transition-all cursor-default"
+                    className="px-3 py-1 rounded-lg bg-[var(--surface-2)] border border-[var(--border)] text-xs font-mono font-medium text-[var(--text)] hover:border-[var(--accent)] transition-all cursor-default"
                   >
                     {tech}
                   </motion.span>
@@ -217,43 +211,40 @@ export const ProjectsSection: React.FC = () => {
                       />
                     </motion.div>
                   )}
-                  {/* Corner brackets */}
-                  <div className="absolute top-2 left-2 w-3.5 h-3.5 border-t-2 border-l-2 border-white/40 pointer-events-none group-hover:scale-110 transition-transform" />
-                  <div className="absolute top-2 right-2 w-3.5 h-3.5 border-t-2 border-r-2 border-white/40 pointer-events-none group-hover:scale-110 transition-transform" />
                 </div>
 
                 {/* Title & Tagline */}
                 <div>
-                  <h3 className="font-display text-xl font-bold text-white group-hover:text-cyan-300 transition-colors">
+                  <h3 className="font-display text-xl font-bold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">
                     {project.title}
                   </h3>
-                  <p className="text-xs font-mono text-cyan-400/90 font-medium mt-0.5">
+                  <p className="text-xs font-mono text-[var(--accent)] font-medium mt-0.5">
                     {project.tagline}
                   </p>
                 </div>
 
                 {/* Problem & Solution */}
-                <div className="space-y-3 text-sm text-slate-200 leading-snug">
+                <div className="space-y-3 text-sm text-[var(--text)] leading-snug">
                   <p>
-                    <span className="text-xs font-mono text-cyan-300 uppercase font-bold tracking-wider block mb-0.5">
+                    <span className="text-xs font-mono text-[var(--accent)] uppercase font-bold tracking-wider block mb-0.5">
                       Problem:
                     </span>
-                    <span className="text-slate-300">{project.problem}</span>
+                    <span className="text-[var(--text-muted)]">{project.problem}</span>
                   </p>
                   <p>
-                    <span className="text-xs font-mono text-cyan-300 uppercase font-bold tracking-wider block mb-0.5">
+                    <span className="text-xs font-mono text-[var(--accent)] uppercase font-bold tracking-wider block mb-0.5">
                       Solution:
                     </span>
-                    <span className="text-slate-300">{project.whatIBuilt}</span>
+                    <span className="text-[var(--text-muted)]">{project.whatIBuilt}</span>
                   </p>
                 </div>
 
                 {/* RouteGuard: Terminal Install Command with 1-Click Copy */}
                 {project.installCmd && (
-                  <div className="p-2.5 rounded-xl bg-slate-950 border border-white/15 flex items-center justify-between gap-2 shadow-inner">
+                  <div className="p-2.5 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] flex items-center justify-between gap-2 shadow-inner">
                     <div className="flex items-center gap-2 overflow-hidden">
-                      <TerminalIcon className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
-                      <code className="text-xs font-mono text-slate-200 truncate select-all">
+                      <TerminalIcon className="w-3.5 h-3.5 text-[var(--accent)] shrink-0" />
+                      <code className="text-xs font-mono text-[var(--text)] truncate select-all">
                         {project.installCmd}
                       </code>
                     </div>
@@ -263,7 +254,7 @@ export const ProjectsSection: React.FC = () => {
                       whileHover={{ scale: 1.12 }}
                       whileTap={{ scale: 0.9 }}
                       transition={{ duration: 0.15 }}
-                      className="p-1.5 rounded-lg bg-slate-900 border border-white/10 hover:border-cyan-400/50 text-slate-300 hover:text-white transition shrink-0 hover:shadow-[0_0_10px_rgba(6,182,212,0.3)]"
+                      className="p-1.5 rounded-lg bg-[var(--surface)] border border-[var(--border)] text-[var(--text-muted)] hover:text-[var(--text)] hover:border-[var(--accent)] transition shrink-0"
                       aria-label="Copy install command"
                       title="Copy install command"
                     >
@@ -284,10 +275,10 @@ export const ProjectsSection: React.FC = () => {
                         key={m.label}
                         whileHover={{ y: -3, scale: 1.05 }}
                         transition={{ duration: 0.18, ease: SHARED_EASE }}
-                        className="px-2.5 py-1 rounded-lg bg-slate-950/80 border border-white/10 hover:border-cyan-400/50 text-xs font-mono transition-colors cursor-default hover:shadow-[0_0_10px_rgba(6,182,212,0.2)]"
+                        className="px-2.5 py-1 rounded-lg bg-[var(--surface-2)] border border-[var(--border)] text-xs font-mono transition-colors cursor-default"
                       >
-                        <span className="text-cyan-400 font-semibold">{m.value}</span>{' '}
-                        <span className="text-slate-400">({m.label})</span>
+                        <span className="text-[var(--accent)] font-semibold">{m.value}</span>{' '}
+                        <span className="text-[var(--text-muted)]">({m.label})</span>
                       </motion.div>
                     ))}
                   </div>
@@ -295,13 +286,13 @@ export const ProjectsSection: React.FC = () => {
               </div>
 
               {/* Tech Chips */}
-              <div className="flex flex-wrap gap-1.5 pt-4 border-t border-white/10 mt-4">
+              <div className="flex flex-wrap gap-1.5 pt-4 border-t border-[var(--border)] mt-4">
                 {project.stack.map((tech) => (
                   <motion.span
                     key={tech}
                     whileHover={{ y: -2, scale: 1.06 }}
                     transition={{ duration: 0.15, ease: SHARED_EASE }}
-                    className="px-2.5 py-1 rounded-md bg-slate-900 border border-white/10 hover:border-cyan-400/50 hover:text-white text-xs font-mono text-slate-300 transition-colors cursor-default"
+                    className="px-2.5 py-1 rounded-md bg-[var(--surface-2)] border border-[var(--border)] hover:border-[var(--accent)] text-xs font-mono text-[var(--text-muted)] hover:text-[var(--text)] transition-colors cursor-default"
                   >
                     {tech}
                   </motion.span>

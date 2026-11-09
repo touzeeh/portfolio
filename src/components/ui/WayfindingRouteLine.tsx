@@ -1,14 +1,17 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useSyncExternalStore } from 'react';
 import { motion, useScroll, useSpring, useTransform, useReducedMotion } from 'framer-motion';
 import { SITE_DATA } from '@/data/site';
 import { ANIMATION_FLAGS } from '@/config/animations';
+
+const emptySubscribe = () => () => {};
 
 const TRACK_HEIGHT = 260;
 
 export const WayfindingRouteLine: React.FC = () => {
   const [activeSection, setActiveSection] = useState<string>('');
+  const mounted = useSyncExternalStore(emptySubscribe, () => true, () => false);
   const shouldReduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll();
 
@@ -120,7 +123,7 @@ export const WayfindingRouteLine: React.FC = () => {
           )}
 
           {/* Traveling Glowing Agent Dot at Head of Active Path */}
-          {ANIMATION_FLAGS.wayfindingRoute && !shouldReduceMotion && (
+          {mounted && ANIMATION_FLAGS.wayfindingRoute && !shouldReduceMotion && (
             <motion.circle
               cx="12"
               style={{ cy: agentY }}

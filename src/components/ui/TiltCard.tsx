@@ -25,7 +25,7 @@ export const TiltCard: React.FC<CardProps> = ({
   children,
   className = '',
   borderRadius = 'lg',
-  glareColor = 'rgba(6, 182, 212, 0.16)',
+  glareColor = 'rgba(255, 255, 255, 0.04)',
 }) => {
   const shouldReduceMotion = useReducedMotion();
   const cardRef = useRef<HTMLDivElement>(null);
@@ -81,7 +81,7 @@ export const TiltCard: React.FC<CardProps> = ({
         <div
           className="pointer-events-none absolute -inset-[1px] rounded-[inherit] transition-opacity duration-300 z-0 opacity-0 group-hover/card:opacity-100"
           style={{
-            background: `radial-gradient(280px circle at var(--card-mouse-x, 50%) var(--card-mouse-y, 50%), rgba(34, 211, 238, 0.4), transparent 70%)`,
+            background: `radial-gradient(280px circle at var(--card-mouse-x, 50%) var(--card-mouse-y, 50%), rgba(34, 211, 238, 0.22), transparent 70%)`,
             mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
             WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
             maskComposite: 'exclude',

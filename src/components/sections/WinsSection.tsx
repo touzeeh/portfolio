@@ -83,10 +83,10 @@ export const WinsSection: React.FC = () => {
           <TrophyIcon className="w-3.5 h-3.5 text-amber-400" />
           <span>Competitions</span>
         </div>
-        <h2 className="font-display text-section-fluid text-white tracking-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)]">
+        <h2 className="font-display text-section-fluid text-[var(--text)] tracking-tight">
           Hackathons
         </h2>
-        <p className="text-slate-300 text-base max-w-2xl drop-shadow-[0_1px_6px_rgba(0,0,0,0.7)]">
+        <p className="text-[var(--text-muted)] text-base max-w-2xl">
           Collegiate and regional technical buildathon challenges with working project deliverables.
         </p>
       </motion.div>
@@ -107,20 +107,14 @@ export const WinsSection: React.FC = () => {
           >
             <TiltCard
               glareColor="rgba(245, 158, 11, 0.22)"
-              className="glass-card flex flex-col justify-between h-full p-6 border border-white/10 hover:border-amber-400/40 hover:shadow-[0_16px_36px_-8px_rgba(245,158,11,0.2)] transition-all rounded-[20px] group flex-1"
+              className="glass-card flex flex-col justify-between h-full p-6 border border-white/10 hover:border-amber-400/40 hover:shadow-xl transition-all rounded-[20px] group flex-1"
             >
               <div className="space-y-4">
-                {/* Image Frame with Viewfinder Tech Boundaries */}
+                {/* Image Frame with Clean Hairline */}
                 <div
-                  className="relative aspect-[16/10] w-full rounded-xl overflow-hidden bg-slate-950 border border-amber-500/30 group-hover:border-amber-400/70 transition-colors shadow-lg cursor-pointer"
+                  className="relative aspect-[16/10] w-full rounded-xl overflow-hidden bg-slate-950 border border-white/10 group-hover:border-amber-400/50 transition-colors shadow-lg cursor-pointer"
                   onClick={(e) => handleOpen(win, e)}
                 >
-                  {/* Viewfinder Corner Brackets */}
-                  <div className="absolute top-2 left-2 w-3.5 h-3.5 border-t-2 border-l-2 border-amber-400 z-10 pointer-events-none group-hover:scale-110 transition-transform" />
-                  <div className="absolute top-2 right-2 w-3.5 h-3.5 border-t-2 border-r-2 border-amber-400 z-10 pointer-events-none group-hover:scale-110 transition-transform" />
-                  <div className="absolute bottom-2 left-2 w-3.5 h-3.5 border-b-2 border-l-2 border-amber-400 z-10 pointer-events-none group-hover:scale-110 transition-transform" />
-                  <div className="absolute bottom-2 right-2 w-3.5 h-3.5 border-b-2 border-r-2 border-amber-400 z-10 pointer-events-none group-hover:scale-110 transition-transform" />
-
                   {/* Image Display */}
                   <Image
                     src={win.image}
@@ -141,17 +135,17 @@ export const WinsSection: React.FC = () => {
                 <div>
                   <div className="flex items-center justify-between text-xs font-mono text-amber-400/90 mb-1">
                     <span>{win.competition}</span>
-                    <span className="text-slate-400">{win.date}</span>
+                    <span className="text-[var(--text-muted)]">{win.date}</span>
                   </div>
-                  <h3 className="font-display text-lg font-bold text-white group-hover:text-amber-300 transition-colors">
+                  <h3 className="font-display text-lg font-bold text-[var(--text)] group-hover:text-amber-300 transition-colors">
                     {win.title}
                   </h3>
-                  <p className="text-xs font-mono text-slate-400 mt-0.5">
-                    Category: <span className="text-slate-300">{win.category}</span>
+                  <p className="text-xs font-mono text-[var(--text-muted)] mt-0.5">
+                    Category: <span className="text-[var(--text)]">{win.category}</span>
                   </p>
                 </div>
 
-                <p className="text-sm text-slate-300 leading-relaxed">
+                <p className="text-sm text-[var(--text-muted)] leading-relaxed">
                   {win.description}
                 </p>
 
@@ -162,7 +156,7 @@ export const WinsSection: React.FC = () => {
                       key={tag}
                       whileHover={{ y: -2, scale: 1.05 }}
                       transition={{ duration: 0.15, ease: SHARED_EASE }}
-                      className="px-2 py-0.5 rounded-md text-[11px] font-mono bg-slate-900 border border-white/10 hover:border-amber-400/40 text-slate-300 transition-colors cursor-default"
+                      className="px-2 py-0.5 rounded-md text-[11px] font-mono bg-[var(--surface-2)] border border-[var(--border)] hover:border-amber-400/40 text-[var(--text-muted)] transition-colors cursor-default"
                     >
                       {tag}
                     </motion.span>
@@ -178,7 +172,7 @@ export const WinsSection: React.FC = () => {
                   whileHover={{ scale: 1.08, y: -2 }}
                   whileTap={{ scale: 0.94 }}
                   transition={{ duration: 0.2, ease: SHARED_EASE }}
-                  className="btn-secondary text-xs py-2 px-3.5 flex items-center gap-1.5 hover:border-amber-400/50 hover:text-amber-200 text-amber-300 group/btn shadow-sm hover:shadow-[0_0_16px_rgba(245,158,11,0.3)] cursor-pointer"
+                  className="btn-secondary text-xs py-2 px-3.5 flex items-center gap-1.5 hover:border-amber-400/50 hover:text-amber-200 text-amber-300 group/btn shadow-sm cursor-pointer"
                 >
                   <span>View Proof</span>
                   <EyeIcon className="w-3.5 h-3.5 group-hover/btn:scale-125 group-hover/btn:rotate-6 transition-transform duration-200" />
@@ -210,23 +204,17 @@ export const WinsSection: React.FC = () => {
                   animate={{ scale: 1, opacity: 1, y: 0 }}
                   exit={shouldReduceMotion ? { scale: 1, opacity: 0 } : { scale: 0.94, opacity: 0, y: 15 }}
                   transition={{ duration: 0.3, ease: SHARED_EASE }}
-                  className="relative w-full max-w-2xl max-h-[calc(100dvh-24px)] sm:max-h-[calc(100dvh-32px)] flex flex-col bg-slate-900 border-2 border-amber-400/50 rounded-2xl overflow-hidden shadow-2xl shadow-amber-500/20"
+                  className="relative w-full max-w-2xl max-h-[calc(100dvh-24px)] sm:max-h-[calc(100dvh-32px)] flex flex-col bg-[var(--surface)] border border-[var(--border)] rounded-2xl overflow-hidden shadow-2xl shadow-black/60"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  {/* Viewfinder Frame Accents */}
-                  <div className="absolute top-3 left-3 w-4 h-4 border-t-2 border-l-2 border-amber-400 z-30 pointer-events-none" />
-                  <div className="absolute top-3 right-3 w-4 h-4 border-t-2 border-r-2 border-amber-400 z-30 pointer-events-none" />
-                  <div className="absolute bottom-3 left-3 w-4 h-4 border-b-2 border-l-2 border-amber-400 z-30 pointer-events-none" />
-                  <div className="absolute bottom-3 right-3 w-4 h-4 border-b-2 border-r-2 border-amber-400 z-30 pointer-events-none" />
-
-                  {/* Always-Visible Fixed Close (X) Button */}
+                  {/* Always-Visible Fixed Close (X) Button (Touch target >= 44px) */}
                   <motion.button
                     type="button"
                     onClick={handleClose}
                     whileHover={{ scale: 1.15, rotate: 90 }}
                     whileTap={{ scale: 0.9 }}
                     transition={{ duration: 0.2 }}
-                    className="absolute top-3 right-3 sm:top-3.5 sm:right-3.5 p-2 rounded-full bg-slate-950/90 text-slate-300 hover:text-white border border-white/20 hover:border-amber-400/60 transition-colors z-40 shadow-xl cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+                    className="absolute top-3 right-3 sm:top-3.5 sm:right-3.5 w-11 h-11 rounded-full bg-[var(--surface-2)]/90 text-[var(--text-muted)] hover:text-[var(--text)] border border-[var(--border)] hover:border-amber-400/60 transition-colors z-40 shadow-xl cursor-pointer flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
                     aria-label="Close modal"
                   >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -237,7 +225,7 @@ export const WinsSection: React.FC = () => {
                   {/* Scrollable Inner Content Area */}
                   <div className="overflow-y-auto overscroll-contain min-h-0 flex-1 flex flex-col">
                     {/* Modal Banner Image Area: Clamped height so info section is visible without scrolling on 1366x768 */}
-                    <div className="relative w-full h-[28vh] max-h-[220px] sm:max-h-[260px] min-h-[150px] bg-slate-950 border-b border-white/10 shrink-0">
+                    <div className="relative w-full h-[28vh] max-h-[220px] sm:max-h-[260px] min-h-[150px] bg-[var(--surface-2)] border-b border-[var(--border)] shrink-0">
                       <Image
                         src={selectedWin.image}
                         alt={`${selectedWin.title} full view`}
@@ -268,29 +256,29 @@ export const WinsSection: React.FC = () => {
                             aria-hidden="true"
                           />
                         </span>
-                        <span className="text-xs font-mono text-slate-400">
+                        <span className="text-xs font-mono text-[var(--text-muted)]">
                           {selectedWin.date} • {selectedWin.competition}
                         </span>
                       </div>
 
                       <div>
-                        <h3 id="modal-win-title" className="font-display text-xl font-bold text-white">
+                        <h3 id="modal-win-title" className="font-display text-xl font-bold text-[var(--text)]">
                           {selectedWin.title}
                         </h3>
                         <p className="text-xs font-mono text-amber-400/80 mt-1">
                           Category: {selectedWin.category}
                         </p>
-                        <p className="text-sm text-slate-300 leading-relaxed mt-3">
+                        <p className="text-sm text-[var(--text-muted)] leading-relaxed mt-3">
                           {selectedWin.description}
                         </p>
                       </div>
 
-                      <div className="pt-4 border-t border-white/[0.08] flex flex-wrap items-center justify-between gap-3">
+                      <div className="pt-4 border-t border-[var(--border)] flex flex-wrap items-center justify-between gap-3">
                         <div className="flex flex-wrap gap-1.5">
                           {selectedWin.tags.map((tag) => (
                             <span
                               key={tag}
-                              className="px-2 py-0.5 rounded bg-slate-800 text-[10px] font-mono text-slate-300"
+                              className="px-2 py-0.5 rounded bg-[var(--surface-2)] text-[10px] font-mono text-[var(--text-muted)]"
                             >
                               {tag}
                             </span>

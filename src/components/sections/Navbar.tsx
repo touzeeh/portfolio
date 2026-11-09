@@ -208,12 +208,9 @@ export const Navbar: React.FC = () => {
                   <motion.div
                     layoutId="activePill"
                     transition={{ type: 'spring', damping: 26, stiffness: 380 }}
-                    className="absolute inset-0 rounded-full bg-[var(--surface)] border border-[var(--accent)]/40 shadow-[0_0_12px_rgba(34,211,238,0.2)]"
+                    className="absolute inset-0 rounded-full bg-[var(--surface)] border border-[var(--border)] shadow-sm"
                   />
                 )}
-                <span className="relative z-10 font-mono text-[11px] text-[var(--accent)] mr-1.5 opacity-90">
-                  {item.number}
-                </span>
                 <span className="relative z-10">{item.label}</span>
               </motion.button>
             );
@@ -326,12 +323,11 @@ export const Navbar: React.FC = () => {
                     whileTap={{ scale: 0.97 }}
                     className={`flex items-center justify-between w-full p-3.5 rounded-xl text-left text-sm font-medium transition-colors ${
                       isActive
-                        ? 'bg-[var(--surface-2)] text-[var(--accent)] border border-[var(--accent)]/30 font-semibold'
+                        ? 'bg-[var(--surface-2)] text-[var(--accent)] border border-[var(--border)] font-semibold'
                         : 'text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-[var(--surface-2)]/50'
                     }`}
                   >
-                    <span className="font-mono text-xs text-[var(--accent)] opacity-80">{item.number}</span>
-                    <span className="flex-1 ml-3">{item.label}</span>
+                    <span className="flex-1 text-sm">{item.label}</span>
                     {isActive && (
                       <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]" />
                     )}

@@ -218,7 +218,7 @@ export const MusicDock: React.FC = () => {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -6 }}
                 transition={{ duration: 0.25 }}
-                className="absolute left-full ml-2.5 top-1/2 -translate-y-1/2 font-sans font-medium text-xs text-[var(--accent)] whitespace-nowrap pointer-events-none drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]"
+                className="hidden sm:block absolute left-full ml-2.5 top-1/2 -translate-y-1/2 font-sans font-medium text-xs text-[var(--accent)] whitespace-nowrap pointer-events-none drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]"
               >
                 tap anywhere to play ♪
               </motion.div>

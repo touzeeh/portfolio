@@ -114,13 +114,13 @@ export const ContactSection: React.FC = () => {
         variants={scrollRevealVariants}
         className="mb-14 space-y-2"
       >
-        <span className="text-xs font-mono uppercase tracking-widest text-cyan-400 font-semibold drop-shadow-sm">
+        <span className="text-xs font-mono uppercase tracking-widest text-[var(--accent)] font-semibold drop-shadow-sm">
           Get in Touch
         </span>
-        <h2 className="font-display text-section-fluid text-white tracking-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)]">
+        <h2 className="font-display text-section-fluid text-[var(--text)] tracking-tight">
           Let's Connect
         </h2>
-        <p className="text-slate-300 text-base max-w-xl drop-shadow-[0_1px_6px_rgba(0,0,0,0.7)]">
+        <p className="text-[var(--text-muted)] text-base max-w-xl">
           Whether you have an internship opportunity, an engineering project, or want to connect, send a message below.
         </p>
       </motion.div>
@@ -135,8 +135,8 @@ export const ContactSection: React.FC = () => {
         {/* Contact Form Card (spans 7 cols) */}
         <motion.div variants={staggerItemVariants} className="lg:col-span-7 h-full">
           <TiltCard
-            glareColor="rgba(6, 182, 212, 0.2)"
-            className="glass-card p-6 sm:p-8 border border-white/10 hover:border-cyan-400/40 hover:shadow-[0_16px_36px_-8px_rgba(6,182,212,0.2)] transition-all rounded-[20px] h-full"
+            glareColor="rgba(255, 255, 255, 0.04)"
+            className="glass-card p-6 sm:p-8 border border-[var(--border)] hover:border-[var(--accent)]/40 hover:shadow-xl transition-all rounded-[20px] h-full"
           >
             {status === 'success' ? (
               <motion.div
@@ -148,11 +148,11 @@ export const ContactSection: React.FC = () => {
                 <div className="w-14 h-14 rounded-full bg-emerald-500/20 border-2 border-emerald-500/50 text-emerald-400 flex items-center justify-center mx-auto shadow-[0_0_20px_rgba(16,185,129,0.3)]">
                   <CheckIcon className="w-7 h-7" />
                 </div>
-                <h3 className="font-display text-2xl font-bold text-white">
+                <h3 className="font-display text-2xl font-bold text-[var(--text)]">
                   Message Transmitted
                 </h3>
-                <p className="text-sm text-slate-200 max-w-sm mx-auto leading-relaxed">
-                  Thank you! Your message has been sent directly to <span className="text-white font-medium">{PERSONAL_INFO.email}</span>.
+                <p className="text-sm text-[var(--text-muted)] max-w-sm mx-auto leading-relaxed">
+                  Thank you! Your message has been sent directly to <span className="text-[var(--text)] font-semibold">{PERSONAL_INFO.email}</span>.
                 </p>
                 <motion.button
                   type="button"
@@ -175,8 +175,8 @@ export const ContactSection: React.FC = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {/* Name Field */}
                   <div className="space-y-1.5">
-                    <label htmlFor="name" className="text-sm font-medium text-slate-200">
-                      Your Name <span className="text-cyan-400">*</span>
+                    <label htmlFor="name" className="text-sm font-medium text-[var(--text)]">
+                      Your Name <span className="text-[var(--accent)]">*</span>
                     </label>
                     <input
                       type="text"
@@ -187,11 +187,11 @@ export const ContactSection: React.FC = () => {
                       onBlur={() => handleBlur('name')}
                       required
                       placeholder="e.g. Alex Smith"
-                      className={`w-full px-4 py-2.5 rounded-xl bg-slate-950/90 border ${
+                      className={`w-full px-4 py-2.5 rounded-xl bg-[var(--surface-2)] border ${
                         touched.name && errors.name
                           ? 'border-rose-400/80 focus:ring-rose-400/30'
-                          : 'border-white/20 focus:border-cyan-400 focus:ring-cyan-400/30'
-                      } text-white text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 transition-all`}
+                          : 'border-[var(--border)] focus:border-[var(--accent)] focus:ring-[var(--accent)]/30'
+                      } text-[var(--text)] text-sm placeholder:text-[var(--text-muted)] focus:outline-none focus:ring-2 transition-all`}
                     />
                     {touched.name && errors.name && (
                       <p className="text-xs text-rose-400 font-mono mt-1">
@@ -202,8 +202,8 @@ export const ContactSection: React.FC = () => {
 
                   {/* Email Field */}
                   <div className="space-y-1.5">
-                    <label htmlFor="email" className="text-sm font-medium text-slate-200">
-                      Email Address <span className="text-cyan-400">*</span>
+                    <label htmlFor="email" className="text-sm font-medium text-[var(--text)]">
+                      Email Address <span className="text-[var(--accent)]">*</span>
                     </label>
                     <input
                       type="email"
@@ -214,11 +214,11 @@ export const ContactSection: React.FC = () => {
                       onBlur={() => handleBlur('email')}
                       required
                       placeholder="alex@company.com"
-                      className={`w-full px-4 py-2.5 rounded-xl bg-slate-950/90 border ${
+                      className={`w-full px-4 py-2.5 rounded-xl bg-[var(--surface-2)] border ${
                         touched.email && errors.email
                           ? 'border-rose-400/80 focus:ring-rose-400/30'
-                          : 'border-white/20 focus:border-cyan-400 focus:ring-cyan-400/30'
-                      } text-white text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 transition-all`}
+                          : 'border-[var(--border)] focus:border-[var(--accent)] focus:ring-[var(--accent)]/30'
+                      } text-[var(--text)] text-sm placeholder:text-[var(--text-muted)] focus:outline-none focus:ring-2 transition-all`}
                     />
                     {touched.email && errors.email && (
                       <p className="text-xs text-rose-400 font-mono mt-1">
@@ -230,8 +230,8 @@ export const ContactSection: React.FC = () => {
 
                 {/* Message Field */}
                 <div className="space-y-1.5">
-                  <label htmlFor="message" className="text-sm font-medium text-slate-200">
-                    Message <span className="text-cyan-400">*</span>
+                  <label htmlFor="message" className="text-sm font-medium text-[var(--text)]">
+                    Message <span className="text-[var(--accent)]">*</span>
                   </label>
                   <textarea
                     id="message"
@@ -242,11 +242,11 @@ export const ContactSection: React.FC = () => {
                     required
                     rows={4}
                     placeholder="Tell me about your team, role, or project..."
-                    className={`w-full px-4 py-2.5 rounded-xl bg-slate-950/90 border ${
+                    className={`w-full px-4 py-2.5 rounded-xl bg-[var(--surface-2)] border ${
                       touched.message && errors.message
                         ? 'border-rose-400/80 focus:ring-rose-400/30'
-                        : 'border-white/20 focus:border-cyan-400 focus:ring-cyan-400/30'
-                    } text-white text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 transition-all resize-none`}
+                        : 'border-[var(--border)] focus:border-[var(--accent)] focus:ring-[var(--accent)]/30'
+                    } text-[var(--text)] text-sm placeholder:text-[var(--text-muted)] focus:outline-none focus:ring-2 transition-all resize-none`}
                   />
                   {touched.message && errors.message && (
                     <p className="text-xs text-rose-400 font-mono mt-1">
@@ -293,15 +293,15 @@ export const ContactSection: React.FC = () => {
         {/* Direct Channels (spans 5 cols) */}
         <motion.div variants={staggerItemVariants} className="lg:col-span-5 flex flex-col justify-between space-y-6 h-full">
           <TiltCard
-            glareColor="rgba(139, 92, 246, 0.2)"
-            className="glass-card p-6 sm:p-8 h-full flex flex-col justify-between border border-white/10 hover:border-violet-400/40 hover:shadow-[0_16px_36px_-8px_rgba(139,92,246,0.2)] transition-all rounded-[20px]"
+            glareColor="rgba(139, 92, 246, 0.15)"
+            className="glass-card p-6 sm:p-8 h-full flex flex-col justify-between border border-[var(--border)] hover:border-violet-400/40 hover:shadow-lg transition-all rounded-[20px]"
           >
             <div className="space-y-6">
               <div>
-                <h3 className="font-display text-lg font-bold text-white mb-2">
+                <h3 className="font-display text-lg font-bold text-[var(--text)] mb-2">
                   Direct Communication
                 </h3>
-                <p className="text-sm text-slate-300 leading-relaxed">
+                <p className="text-sm text-[var(--text-muted)] leading-relaxed">
                   Feel free to email directly or copy the address to your clipboard.
                 </p>
               </div>
@@ -310,17 +310,17 @@ export const ContactSection: React.FC = () => {
               <div className="space-y-3.5">
                 {/* (8) Email with Copy-to-Clipboard Feedback */}
                 <div className="relative group">
-                  <div className="flex items-center justify-between p-3.5 rounded-xl bg-slate-950/80 border border-white/10 group-hover:border-cyan-400/50 hover:shadow-[0_0_15px_rgba(6,182,212,0.2)] transition-all">
+                  <div className="flex items-center justify-between p-3.5 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] group-hover:border-[var(--accent)]/50 transition-all">
                     <a
                       href={`mailto:${PERSONAL_INFO.email}`}
                       className="flex items-center gap-3.5 flex-1 min-w-0"
                     >
-                      <div className="p-2.5 rounded-lg bg-cyan-600/15 text-cyan-400 shrink-0 group-hover:scale-110 group-hover:rotate-6 transition-transform">
+                      <div className="p-2.5 rounded-lg bg-cyan-600/15 text-[var(--accent)] shrink-0 group-hover:scale-110 group-hover:rotate-6 transition-transform">
                         <MailIcon className="w-4 h-4" />
                       </div>
                       <div className="truncate">
-                        <span className="text-xs font-mono text-slate-400 block">Email Address</span>
-                        <span className="text-sm font-medium text-slate-200 group-hover:text-cyan-300 transition-colors truncate block">
+                        <span className="text-xs font-mono text-[var(--text-muted)] block">Email Address</span>
+                        <span className="text-sm font-medium text-[var(--text)] group-hover:text-[var(--accent)] transition-colors truncate block">
                           {PERSONAL_INFO.email}
                         </span>
                       </div>
@@ -329,15 +329,15 @@ export const ContactSection: React.FC = () => {
                     <motion.button
                       type="button"
                       onClick={handleCopyEmail}
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.92 }}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
                       transition={{ duration: 0.15 }}
-                      className="ml-2 px-3 py-1.5 rounded-lg bg-slate-900 border border-white/10 hover:border-cyan-400/50 text-xs font-mono text-slate-300 hover:text-white flex items-center gap-1.5 transition-colors shrink-0 hover:shadow-[0_0_10px_rgba(6,182,212,0.3)]"
+                      className="ml-2 px-3 py-1.5 rounded-lg bg-[var(--surface)] border border-[var(--border)] hover:border-[var(--accent)] text-xs font-mono text-[var(--text-muted)] hover:text-[var(--text)] flex items-center gap-1.5 transition-colors shrink-0"
                       aria-label="Copy email address"
                     >
                       {copied ? (
                         <>
-                          <CheckIcon className="w-3.5 h-3.5 text-emerald-400 animate-spin-once" />
+                          <CheckIcon className="w-3.5 h-3.5 text-emerald-400" />
                           <span className="text-emerald-400 font-medium">Copied!</span>
                         </>
                       ) : (
@@ -355,17 +355,17 @@ export const ContactSection: React.FC = () => {
                   href={PERSONAL_INFO.github}
                   target="_blank"
                   rel="noreferrer"
-                  whileHover={{ x: 6 }}
+                  whileHover={{ x: 4 }}
                   whileTap={{ scale: 0.98 }}
                   transition={{ duration: 0.2, ease: SHARED_EASE }}
-                  className="flex items-center gap-3.5 p-3.5 rounded-xl bg-slate-950/80 border border-white/10 hover:border-white/40 hover:shadow-[0_0_15px_rgba(255,255,255,0.1)] transition-all group"
+                  className="flex items-center gap-3.5 p-3.5 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] hover:border-slate-400/40 transition-all group"
                 >
-                  <div className="p-2.5 rounded-lg bg-slate-800 text-white shrink-0 group-hover:scale-110 group-hover:rotate-6 transition-transform">
+                  <div className="p-2.5 rounded-lg bg-[var(--surface)] border border-[var(--border)] text-[var(--text)] shrink-0 group-hover:scale-110 group-hover:rotate-6 transition-transform">
                     <GithubIcon className="w-4 h-4" />
                   </div>
                   <div>
-                    <span className="text-xs font-mono text-slate-400 block">GitHub</span>
-                    <span className="text-sm font-medium text-slate-200 group-hover:text-white transition-colors">
+                    <span className="text-xs font-mono text-[var(--text-muted)] block">GitHub</span>
+                    <span className="text-sm font-medium text-[var(--text)] transition-colors">
                       github.com/{PERSONAL_INFO.githubHandle}
                     </span>
                   </div>
@@ -376,17 +376,17 @@ export const ContactSection: React.FC = () => {
                   href={PERSONAL_INFO.linkedin}
                   target="_blank"
                   rel="noreferrer"
-                  whileHover={{ x: 6 }}
+                  whileHover={{ x: 4 }}
                   whileTap={{ scale: 0.98 }}
                   transition={{ duration: 0.2, ease: SHARED_EASE }}
-                  className="flex items-center gap-3.5 p-3.5 rounded-xl bg-slate-950/80 border border-white/10 hover:border-violet-400/60 hover:shadow-[0_0_15px_rgba(139,92,246,0.25)] transition-all group"
+                  className="flex items-center gap-3.5 p-3.5 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] hover:border-violet-400/50 transition-all group"
                 >
                   <div className="p-2.5 rounded-lg bg-violet-600/15 text-violet-400 shrink-0 group-hover:scale-110 group-hover:-rotate-6 transition-transform">
                     <LinkedinIcon className="w-4 h-4" />
                   </div>
                   <div>
-                    <span className="text-xs font-mono text-slate-400 block">LinkedIn</span>
-                    <span className="text-sm font-medium text-slate-200 group-hover:text-violet-300 transition-colors">
+                    <span className="text-xs font-mono text-[var(--text-muted)] block">LinkedIn</span>
+                    <span className="text-sm font-medium text-[var(--text)] group-hover:text-violet-400 transition-colors">
                       linkedin.com/in/{PERSONAL_INFO.linkedinHandle}
                     </span>
                   </div>
