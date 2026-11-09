@@ -13,8 +13,8 @@ import {
   LyricLine,
   parseLRC,
   findActiveLyricIndex,
-  LYRIC_OFFSET_MS,
-  updateWordHighlights,
+  DEFAULT_LYRIC_LEAD_MS,
+  DEFAULT_LYRIC_OFFSET_MS,
 } from '@/lib/lyrics';
 
 interface MusicContextType {
@@ -22,22 +22,26 @@ interface MusicContextType {
   hasStarted: boolean;
   audioError: boolean;
   activeLine: LyricLine | null;
+  activeLineIndex: number;
   lyrics: LyricLine[];
-  progressBarRef: React.RefObject<HTMLDivElement | null>;
-  wordContainerRef: React.RefObject<HTMLDivElement | null>;
+  currentTime: number;
+  lyricOffsetMs: number;
+  isDebug: boolean;
   togglePlay: (e?: React.MouseEvent) => void;
+  adjustOffset: (deltaMs: number) => void;
 }
 
 const MusicContext = createContext<MusicContextType | null>(null);
 
-const STORAGE_KEY = 'portfolio_audio_manual_paused';
+const STORAGE_MANUAL_PAUSE_KEY = 'portfolio_audio_manual_paused';
+const STORAGE_OFFSET_KEY = 'portfolio_lyric_offset';
 const TARGET_VOLUME = 0.6;
 const FADE_DURATION_MS = 1500;
 const INTERACTION_EVENTS = ['pointerdown', 'pointerup', 'touchend', 'click', 'keydown'] as const;
 
 function getStoredUserPaused(): boolean {
   try {
-    return localStorage.getItem(STORAGE_KEY) === 'true';
+    return localStorage.getItem(STORAGE_MANUAL_PAUSE_KEY) === 'true';
   } catch {
     return false;
   }
@@ -46,25 +50,39 @@ function getStoredUserPaused(): boolean {
 function setStoredUserPaused(paused: boolean): void {
   try {
     if (paused) {
-      localStorage.setItem(STORAGE_KEY, 'true');
+      localStorage.setItem(STORAGE_MANUAL_PAUSE_KEY, 'true');
     } else {
-      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(STORAGE_MANUAL_PAUSE_KEY);
     }
   } catch {
-    // Graceful fallback for privacy sandbox / restricted storage
+    // Restricted storage fallback
+  }
+}
+
+function getStoredOffset(): number {
+  try {
+    const val = localStorage.getItem(STORAGE_OFFSET_KEY);
+    return val !== null ? parseInt(val, 10) || DEFAULT_LYRIC_OFFSET_MS : DEFAULT_LYRIC_OFFSET_MS;
+  } catch {
+    return DEFAULT_LYRIC_OFFSET_MS;
   }
 }
 
 export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const progressBarRef = useRef<HTMLDivElement | null>(null);
-  const wordContainerRef = useRef<HTMLDivElement | null>(null);
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
   const [audioError, setAudioError] = useState(false);
   const [lyrics, setLyrics] = useState<LyricLine[]>([]);
   const [activeLineIndex, setActiveLineIndex] = useState<number>(-1);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [lyricOffsetMs, setLyricOffsetMs] = useState(getStoredOffset);
+  const [isDebug] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    const params = new URLSearchParams(window.location.search);
+    return params.get('debug') === '1' || window.location.hash.includes('debug');
+  });
 
   const isPlayingRef = useRef(false);
   const hasStartedRef = useRef(false);
@@ -75,6 +93,7 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
   const lyricsRef = useRef<LyricLine[]>([]);
   const activeLineIndexRef = useRef<number>(-1);
+  const lyricOffsetMsRef = useRef<number>(getStoredOffset());
   const syncRafRef = useRef<number | null>(null);
   const volumeFadeRafRef = useRef<number | null>(null);
 
@@ -83,7 +102,24 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     lyricsRef.current = lyrics;
   }, [lyrics]);
 
-  // Smooth volume fade-in from 0 to TARGET_VOLUME over ~1.5s
+  useEffect(() => {
+    lyricOffsetMsRef.current = lyricOffsetMs;
+  }, [lyricOffsetMs]);
+
+  // Calibration helper
+  const adjustOffset = useCallback((deltaMs: number) => {
+    setLyricOffsetMs((prev) => {
+      const next = prev + deltaMs;
+      lyricOffsetMsRef.current = next;
+      try {
+        localStorage.setItem(STORAGE_OFFSET_KEY, String(next));
+      } catch {}
+      console.log(`[Music Sync Calibration] Current LYRIC_OFFSET_MS: ${next}ms`);
+      return next;
+    });
+  }, []);
+
+  // Smooth volume fade from 0 to TARGET_VOLUME (0.6) over ~1.5s
   const fadeVolumeIn = useCallback((audio: HTMLAudioElement) => {
     if (volumeFadeRafRef.current) {
       cancelAnimationFrame(volumeFadeRafRef.current);
@@ -94,7 +130,7 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     const step = (now: number) => {
       const elapsed = now - startTime;
       const progress = Math.min(1, elapsed / FADE_DURATION_MS);
-      // Ease out cubic
+      // Natural cubic ease-out
       const currentVol = TARGET_VOLUME * (1 - Math.pow(1 - progress, 3));
       audio.volume = Math.min(TARGET_VOLUME, Math.max(0, currentVol));
 
@@ -108,7 +144,22 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     volumeFadeRafRef.current = requestAnimationFrame(step);
   }, []);
 
-  // Sync rAF loop
+  // Dedicated single-source synchronization tick
+  const syncCurrentLyric = useCallback(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    // Formula: activeTimeMs = audio.currentTime * 1000 + LYRIC_OFFSET_MS + LYRIC_LEAD_MS
+    const activeTimeMs = audio.currentTime * 1000 + lyricOffsetMsRef.current + DEFAULT_LYRIC_LEAD_MS;
+    const newIndex = findActiveLyricIndex(lyricsRef.current, activeTimeMs);
+
+    if (newIndex !== activeLineIndexRef.current) {
+      activeLineIndexRef.current = newIndex;
+      setActiveLineIndex(newIndex);
+    }
+  }, []);
+
+  // Stop sync rAF loop
   const stopSyncLoop = useCallback(() => {
     if (syncRafRef.current) {
       cancelAnimationFrame(syncRafRef.current);
@@ -116,6 +167,7 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     }
   }, []);
 
+  // Start continuous rAF sync loop
   const startSyncLoop = useCallback(() => {
     stopSyncLoop();
 
@@ -125,37 +177,22 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         return;
       }
 
-      const effectiveSec = audio.currentTime + LYRIC_OFFSET_MS / 1000;
-      const newIndex = findActiveLyricIndex(lyricsRef.current, effectiveSec);
+      const activeTimeMs = audio.currentTime * 1000 + lyricOffsetMsRef.current + DEFAULT_LYRIC_LEAD_MS;
+      const newIndex = findActiveLyricIndex(lyricsRef.current, activeTimeMs);
 
       if (newIndex !== activeLineIndexRef.current) {
         activeLineIndexRef.current = newIndex;
         setActiveLineIndex(newIndex);
       }
 
-      // Update progress bar ratio directly via transform scaleX (zero React re-render overhead)
-      if (newIndex >= 0 && newIndex < lyricsRef.current.length) {
-        const line = lyricsRef.current[newIndex];
-        const duration = Math.max(0.1, line.endTime - line.time);
-        const ratio = Math.max(0, Math.min(1, (effectiveSec - line.time) / duration));
-
-        if (progressBarRef.current) {
-          progressBarRef.current.style.transform = `scaleX(${ratio})`;
-        }
-
-        // If enhanced word-level data exists, illuminate active words in real time
-        if (line.words && line.words.length > 0 && wordContainerRef.current) {
-          updateWordHighlights(wordContainerRef.current, line.words, effectiveSec);
-        }
-      }
-
+      setCurrentTime(audio.currentTime);
       syncRafRef.current = requestAnimationFrame(tick);
     };
 
     syncRafRef.current = requestAnimationFrame(tick);
   }, [stopSyncLoop]);
 
-  // Main playback initiator
+  // Audio start trigger
   const startAudioPlayback = useCallback(
     (removeListenersFn: () => void) => {
       const audio = audioRef.current;
@@ -176,19 +213,20 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
             userPausedRef.current = false;
             setStoredUserPaused(false);
 
-            // Remove all one-time interaction listeners immediately upon successful start
+            // Detach all window/document one-time interaction listeners immediately
             removeListenersFn();
 
             fadeVolumeIn(audio);
+            syncCurrentLyric();
             startSyncLoop();
           })
           .catch(() => {
-            // Browser autoplay rejection (NotAllowedError)
-            // Listeners stay registered for the next interaction attempt
+            // Browser autoplay rejection (expected NotAllowedError)
+            // Listeners remain attached for the subsequent gesture
           });
       }
     },
-    [fadeVolumeIn, startSyncLoop]
+    [fadeVolumeIn, startSyncLoop, syncCurrentLyric]
   );
 
   // Manual Toggle Handler
@@ -206,7 +244,7 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       if (!audio) return;
 
       if (!isPlayingRef.current) {
-        // Play / Resume
+        // User wants to Play / Resume
         userPausedRef.current = false;
         setStoredUserPaused(false);
         audio.volume = TARGET_VOLUME;
@@ -219,32 +257,34 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
               setHasStarted(true);
               isPlayingRef.current = true;
               setIsPlaying(true);
+              syncCurrentLyric();
               startSyncLoop();
             })
             .catch(() => {});
         }
       } else {
-        // Manual Pause
+        // User explicitly Paused
         userPausedRef.current = true;
         setStoredUserPaused(true);
         isPlayingRef.current = false;
         setIsPlaying(false);
         audio.pause();
         stopSyncLoop();
+        // Immediately lock onto exact paused currentTime
+        syncCurrentLyric();
       }
     },
-    [startSyncLoop, stopSyncLoop]
+    [startSyncLoop, stopSyncLoop, syncCurrentLyric]
   );
 
-  // Master setup effect
+  // Master Setup Effect
   useEffect(() => {
-    // 1. Check user preference from localStorage
-    const savedPaused = getStoredUserPaused();
-    if (savedPaused) {
+    // 1. Check saved manual pause preference
+    if (getStoredUserPaused()) {
       userPausedRef.current = true;
     }
 
-    // 2. Fetch and parse LRC lyrics (graceful fallback if 404 or fails)
+    // 2. Fetch and parse lyrics.lrc
     fetch('/assets/audio/lyrics.lrc')
       .then((res) => {
         if (!res.ok) throw new Error('Lyrics file not found');
@@ -254,8 +294,8 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         const parsed = parseLRC(text);
         setLyrics(parsed);
       })
-      .catch(() => {
-        // Keep empty lyrics; pill remains hidden without errors
+      .catch((err) => {
+        console.warn('[Music System] lyrics.lrc missing or unavailable. Floating lyrics disabled gracefully.', err);
         setLyrics([]);
       });
 
@@ -265,7 +305,15 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     audio.loop = true;
     audio.preload = 'auto';
 
-    // 3. Remove interaction listeners helper
+    // 5. Setup immediate event listeners on audio for seamless resync
+    const handleSeekedOrTimeUpdate = () => {
+      syncCurrentLyric();
+    };
+    audio.addEventListener('seeked', handleSeekedOrTimeUpdate);
+    audio.addEventListener('seeking', handleSeekedOrTimeUpdate);
+    audio.addEventListener('timeupdate', handleSeekedOrTimeUpdate);
+
+    // 6. Interaction capture listeners
     listenersActiveRef.current = true;
     const removeInteractionListeners = () => {
       if (!listenersActiveRef.current) return;
@@ -276,20 +324,17 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       });
     };
 
-    // 4. One-time first interaction capture listener
     const handleFirstInteraction = (e: Event) => {
       if (hasStartedRef.current) {
         removeInteractionListeners();
         return;
       }
 
-      // If user had manually paused on previous visit, respect it and don't auto-start
       if (userPausedRef.current) {
         removeInteractionListeners();
         return;
       }
 
-      // Check if clicked element is the music button
       const target = e.target as HTMLElement | null;
       const isButtonClicked = !!target?.closest('[data-music-btn="true"]');
 
@@ -300,7 +345,7 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       startAudioPlayback(removeInteractionListeners);
     };
 
-    // 5. Attempt immediate autoplay on page load inside try/catch
+    // 7. Initial Autoplay Attempt
     try {
       if (!userPausedRef.current) {
         const initialPlay = audio.play();
@@ -312,10 +357,10 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
               isPlayingRef.current = true;
               setIsPlaying(true);
               fadeVolumeIn(audio);
+              syncCurrentLyric();
               startSyncLoop();
             })
             .catch(() => {
-              // Browser autoplay policy rejected as expected; wait for user gesture
               attachListeners();
             });
         }
@@ -334,7 +379,7 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       });
     }
 
-    // 6. Tab Visibility handling
+    // 8. Tab Visibility Handling
     const handleVisibilityChange = () => {
       if (document.hidden) {
         if (isPlayingRef.current) {
@@ -348,6 +393,7 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
           audio.play().then(() => {
             isPlayingRef.current = true;
             setIsPlaying(true);
+            syncCurrentLyric();
             startSyncLoop();
           }).catch(() => {});
         }
@@ -355,19 +401,38 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     };
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
-    // 7. Cleanup
+    // 9. Hotkeys for Live Calibration (?debug=1)
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+
+      const step = e.shiftKey ? 250 : 50;
+      if (e.key === '[') {
+        e.preventDefault();
+        adjustOffset(-step);
+      } else if (e.key === ']') {
+        e.preventDefault();
+        adjustOffset(step);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+
+    // Cleanup
     return () => {
       removeInteractionListeners();
       document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('keydown', handleKeyDown);
       stopSyncLoop();
+      if (audio) {
+        audio.removeEventListener('seeked', handleSeekedOrTimeUpdate);
+        audio.removeEventListener('seeking', handleSeekedOrTimeUpdate);
+        audio.removeEventListener('timeupdate', handleSeekedOrTimeUpdate);
+        audio.pause();
+      }
       if (volumeFadeRafRef.current) {
         cancelAnimationFrame(volumeFadeRafRef.current);
       }
-      if (audio) {
-        audio.pause();
-      }
     };
-  }, [fadeVolumeIn, startAudioPlayback, startSyncLoop, stopSyncLoop]);
+  }, [adjustOffset, fadeVolumeIn, startAudioPlayback, startSyncLoop, stopSyncLoop, syncCurrentLyric]);
 
   const activeLine =
     activeLineIndex >= 0 && activeLineIndex < lyrics.length ? lyrics[activeLineIndex] : null;
@@ -379,10 +444,13 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         hasStarted,
         audioError,
         activeLine,
+        activeLineIndex,
         lyrics,
-        progressBarRef,
-        wordContainerRef,
+        currentTime,
+        lyricOffsetMs,
+        isDebug,
         togglePlay,
+        adjustOffset,
       }}
     >
       <audio
@@ -393,7 +461,10 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         playsInline
         style={{ display: 'none' }}
         aria-hidden="true"
-        onError={() => setAudioError(true)}
+        onError={() => {
+          console.warn('[Music System] song.mp3 failed to load. Music system gracefully disabled.');
+          setAudioError(true);
+        }}
       />
       {children}
     </MusicContext.Provider>

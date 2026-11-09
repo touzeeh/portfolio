@@ -2,18 +2,15 @@
 
 import React from 'react';
 import { MusicProvider } from './MusicContext';
-import { MusicButton } from './MusicButton';
-import { LyricsPill } from './LyricsPill';
+import { MusicDock } from './MusicDock';
 
 export { useMusic } from './MusicContext';
-export { MusicButton } from './MusicButton';
-export { LyricsPill } from './LyricsPill';
+export { MusicDock } from './MusicDock';
 
 export const BackgroundMusic: React.FC = () => {
   return (
     <MusicProvider>
-      <LyricsPill />
-      <MusicButton />
+      <MusicDock />
     </MusicProvider>
   );
 };
