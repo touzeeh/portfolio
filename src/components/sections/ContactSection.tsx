@@ -2,8 +2,9 @@
 
 import React, { useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
+import Image from 'next/image';
 import { PERSONAL_INFO } from '@/data/portfolioData';
-import { GithubIcon, LinkedinIcon, MailIcon, CheckIcon, CopyIcon } from '@/components/ui/Icons';
+import { CheckIcon, CopyIcon } from '@/components/ui/Icons';
 import { TiltCard } from '@/components/ui/TiltCard';
 import {
   scrollRevealVariants,
@@ -315,8 +316,8 @@ export const ContactSection: React.FC = () => {
                       href={`mailto:${PERSONAL_INFO.email}`}
                       className="flex items-center gap-3.5 flex-1 min-w-0"
                     >
-                      <div className="p-2.5 rounded-lg bg-cyan-600/15 text-[var(--accent)] shrink-0 group-hover:scale-110 group-hover:rotate-6 transition-transform">
-                        <MailIcon className="w-4 h-4" />
+                      <div className="p-2.5 rounded-lg bg-cyan-600/15 text-[var(--accent)] shrink-0 group-hover:scale-110 group-hover:rotate-6 transition-transform flex items-center justify-center">
+                        <Image src="/icons/gmail.png" alt="Gmail" width={16} height={16} className="w-4 h-4 object-contain" />
                       </div>
                       <div className="truncate">
                         <span className="text-xs font-mono text-[var(--text-muted)] block">Email Address</span>
@@ -360,8 +361,8 @@ export const ContactSection: React.FC = () => {
                   transition={{ duration: 0.2, ease: SHARED_EASE }}
                   className="flex items-center gap-3.5 p-3.5 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] hover:border-slate-400/40 transition-all group"
                 >
-                  <div className="p-2.5 rounded-lg bg-[var(--surface)] border border-[var(--border)] text-[var(--text)] shrink-0 group-hover:scale-110 group-hover:rotate-6 transition-transform">
-                    <GithubIcon className="w-4 h-4" />
+                  <div className="p-2.5 rounded-lg bg-[var(--surface)] border border-[var(--border)] text-[var(--text)] shrink-0 group-hover:scale-110 group-hover:rotate-6 transition-transform flex items-center justify-center">
+                    <Image src="/icons/github.png" alt="GitHub" width={16} height={16} className="w-4 h-4 object-contain" />
                   </div>
                   <div>
                     <span className="text-xs font-mono text-[var(--text-muted)] block">GitHub</span>
@@ -381,8 +382,8 @@ export const ContactSection: React.FC = () => {
                   transition={{ duration: 0.2, ease: SHARED_EASE }}
                   className="flex items-center gap-3.5 p-3.5 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] hover:border-violet-400/50 transition-all group"
                 >
-                  <div className="p-2.5 rounded-lg bg-violet-600/15 text-violet-400 shrink-0 group-hover:scale-110 group-hover:-rotate-6 transition-transform">
-                    <LinkedinIcon className="w-4 h-4" />
+                  <div className="p-2.5 rounded-lg bg-violet-600/15 text-violet-400 shrink-0 group-hover:scale-110 group-hover:-rotate-6 transition-transform flex items-center justify-center">
+                    <Image src="/icons/linkedin.png" alt="LinkedIn" width={16} height={16} className="w-4 h-4 object-contain" />
                   </div>
                   <div>
                     <span className="text-xs font-mono text-[var(--text-muted)] block">LinkedIn</span>

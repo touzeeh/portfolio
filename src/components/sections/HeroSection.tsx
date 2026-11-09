@@ -2,11 +2,9 @@
 
 import React, { useEffect, useSyncExternalStore } from 'react';
 import { motion, useReducedMotion, useSpring } from 'framer-motion';
+import Image from 'next/image';
 import { PERSONAL_INFO } from '@/data/portfolioData';
 import {
-  GithubIcon,
-  LinkedinIcon,
-  MailIcon,
   FileTextIcon,
   ArrowUpRightIcon,
   TrophyIcon,
@@ -119,25 +117,30 @@ export const HeroSection: React.FC = () => {
         animate="visible"
         className="relative z-10 max-w-4xl mx-auto text-center flex flex-col items-center gap-5 sm:gap-6"
       >
-        {/* Availability Pill */}
+        {/* 1st Place Winner Badge on Top */}
         <motion.div variants={itemVariants} className="flex items-center justify-center">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--surface-2)]/90 backdrop-blur-md border border-[var(--border)] text-xs font-mono text-[var(--text-muted)] shadow-sm">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-            </span>
-            <span>{PERSONAL_INFO.status}</span>
-          </div>
+          <motion.a
+            href="#wins"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.96 }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--surface-2)]/90 backdrop-blur-md border border-amber-500/30 hover:border-amber-400/60 text-xs font-mono text-amber-300 shadow-sm hover:shadow-[0_0_15px_rgba(245,158,11,0.25)] transition-all group"
+            title="View Hackathon Win & Verified Proof"
+          >
+            <TrophyIcon className="w-3.5 h-3.5 text-amber-400 group-hover:scale-110 transition-transform" />
+            <span className="font-semibold text-amber-300">1st Place Winner</span>
+            <span className="text-[var(--text-muted)]">• Smart Health Hackathon 2025 (InnerSight 3D)</span>
+            <span className="text-amber-400 font-bold group-hover:translate-x-0.5 transition-transform">→</span>
+          </motion.a>
         </motion.div>
 
-        {/* Heading & Recruiter-Targeted Copy */}
+        {/* Heading & Recruiter-Targeted Copy: Just "Touzeeh" */}
         <motion.div variants={itemVariants} className="space-y-4 max-w-4xl mx-auto">
           {/* Masked reveal container on intro */}
           <div className="overflow-hidden py-1">
-            <h1 className="font-display text-[clamp(1.95rem,5.2vw,4.4rem)] font-bold tracking-tight text-[var(--text)] [text-wrap:balance] leading-[1.14]">
+            <h1 className="font-display text-[clamp(2.1rem,6vw,4.5rem)] font-bold tracking-tight text-[var(--text)] [text-wrap:balance] leading-[1.14]">
               <span>Hi, I'm </span>
-              <span className="min-[400px]:whitespace-nowrap text-gradient drop-shadow-[0_0_25px_rgba(34,211,238,0.3)]">
-                {PERSONAL_INFO.fullName}.
+              <span className="text-gradient drop-shadow-[0_0_25px_rgba(34,211,238,0.3)]">
+                Touzeeh.
               </span>
             </h1>
           </div>
@@ -187,52 +190,58 @@ export const HeroSection: React.FC = () => {
             <span>Resume</span>
           </MagneticButton>
 
-          {/* Social Icon Buttons (Touch targets >= 44px) */}
+          {/* Social Icon Buttons (with official downloaded logos) */}
           <div className="flex items-center gap-2 sm:ml-2">
             <MagneticButton
               href={PERSONAL_INFO.github}
               target="_blank"
               rel="noreferrer"
-              className="btn-icon min-h-[44px] min-w-[44px] focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+              className="btn-icon min-h-[44px] min-w-[44px] focus-visible:ring-2 focus-visible:ring-[var(--accent)] group"
               aria-label="GitHub Profile"
               title="GitHub Profile"
             >
-              <GithubIcon size={18} />
+              <Image
+                src="/icons/github.png"
+                alt="GitHub"
+                width={19}
+                height={19}
+                className="w-[19px] h-[19px] object-contain opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all"
+              />
             </MagneticButton>
 
             <MagneticButton
               href={PERSONAL_INFO.linkedin}
               target="_blank"
               rel="noreferrer"
-              className="btn-icon min-h-[44px] min-w-[44px] focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+              className="btn-icon min-h-[44px] min-w-[44px] focus-visible:ring-2 focus-visible:ring-[var(--accent)] group"
               aria-label="LinkedIn Profile"
               title="LinkedIn Profile"
             >
-              <LinkedinIcon size={18} />
+              <Image
+                src="/icons/linkedin.png"
+                alt="LinkedIn"
+                width={18}
+                height={18}
+                className="w-[18px] h-[18px] object-contain opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all"
+              />
             </MagneticButton>
 
             <MagneticButton
               href={`mailto:${PERSONAL_INFO.email}`}
-              className="btn-icon min-h-[44px] min-w-[44px] focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+              className="btn-icon min-h-[44px] min-w-[44px] focus-visible:ring-2 focus-visible:ring-[var(--accent)] group"
               aria-label="Send direct email"
               title="Send direct email"
             >
-              <MailIcon size={18} />
+              <Image
+                src="/icons/gmail.png"
+                alt="Gmail"
+                width={18}
+                height={18}
+                className="w-[18px] h-[18px] object-contain opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all"
+              />
             </MagneticButton>
           </div>
         </motion.div>
-
-        {/* Quiet 1-line proof under the CTA row */}
-        <motion.a
-          href="#wins"
-          variants={itemVariants}
-          whileHover={{ scale: 1.03 }}
-          className="inline-flex items-center gap-2 text-xs font-mono text-[var(--text-muted)] hover:text-[var(--award)] transition-colors pt-2 group"
-          title="View Hackathon Win & Verified Proof"
-        >
-          <TrophyIcon className="w-3.5 h-3.5 text-[var(--award)] group-hover:scale-110 transition-transform" />
-          <span>1st Place Winner &bull; Smart Health Hackathon 2025 (InnerSight 3D) &rarr;</span>
-        </motion.a>
       </motion.div>
     </section>
   );
