@@ -1,12 +1,19 @@
 'use client';
 
 import React from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 import { SITE_DATA } from '@/data/site';
 import { GithubIcon, LinkedinIcon, MailIcon, ArrowUpIcon } from '@/components/ui/Icons';
+import { SHARED_EASE } from '@/lib/animations';
 
 export const Footer: React.FC = () => {
+  const shouldReduceMotion = useReducedMotion();
+
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({
+      top: 0,
+      behavior: shouldReduceMotion ? 'auto' : 'smooth',
+    });
   };
 
   return (
@@ -17,48 +24,60 @@ export const Footer: React.FC = () => {
           © 2026 <span className="text-[var(--text)] font-semibold">{SITE_DATA.personal.fullName}</span>. Built with calm precision.
         </p>
 
-        {/* Socials & Back to Top */}
+        {/* Socials & Back to Top with spring animations */}
         <div className="flex items-center gap-2">
-          <a
+          <motion.a
             href={SITE_DATA.personal.github}
             target="_blank"
             rel="noreferrer"
-            className="w-10 h-10 rounded-[8px] border border-[var(--border)] hover:border-[var(--accent)] hover:text-[var(--text)] flex items-center justify-center transition-colors"
+            whileHover={shouldReduceMotion ? undefined : { scale: 1.15, y: -2 }}
+            whileTap={shouldReduceMotion ? undefined : { scale: 0.92 }}
+            transition={{ duration: 0.18, ease: SHARED_EASE }}
+            className="w-10 h-10 rounded-[8px] border border-[var(--border)] hover:border-[var(--accent)] hover:text-[var(--text)] hover:shadow-[0_0_12px_rgba(34,211,238,0.25)] flex items-center justify-center transition-colors"
             aria-label="GitHub Profile"
             title="GitHub Profile"
           >
             <GithubIcon size={16} />
-          </a>
+          </motion.a>
 
-          <a
+          <motion.a
             href={SITE_DATA.personal.linkedin}
             target="_blank"
             rel="noreferrer"
-            className="w-10 h-10 rounded-[8px] border border-[var(--border)] hover:border-[var(--accent)] hover:text-[var(--text)] flex items-center justify-center transition-colors"
+            whileHover={shouldReduceMotion ? undefined : { scale: 1.15, y: -2 }}
+            whileTap={shouldReduceMotion ? undefined : { scale: 0.92 }}
+            transition={{ duration: 0.18, ease: SHARED_EASE }}
+            className="w-10 h-10 rounded-[8px] border border-[var(--border)] hover:border-[var(--accent)] hover:text-[var(--text)] hover:shadow-[0_0_12px_rgba(34,211,238,0.25)] flex items-center justify-center transition-colors"
             aria-label="LinkedIn Profile"
             title="LinkedIn Profile"
           >
             <LinkedinIcon size={16} />
-          </a>
+          </motion.a>
 
-          <a
+          <motion.a
             href={`mailto:${SITE_DATA.personal.email}`}
-            className="w-10 h-10 rounded-[8px] border border-[var(--border)] hover:border-[var(--accent)] hover:text-[var(--text)] flex items-center justify-center transition-colors"
+            whileHover={shouldReduceMotion ? undefined : { scale: 1.15, y: -2 }}
+            whileTap={shouldReduceMotion ? undefined : { scale: 0.92 }}
+            transition={{ duration: 0.18, ease: SHARED_EASE }}
+            className="w-10 h-10 rounded-[8px] border border-[var(--border)] hover:border-[var(--accent)] hover:text-[var(--text)] hover:shadow-[0_0_12px_rgba(34,211,238,0.25)] flex items-center justify-center transition-colors"
             aria-label="Send direct email"
             title="Send direct email"
           >
             <MailIcon size={16} />
-          </a>
+          </motion.a>
 
-          <button
+          <motion.button
             type="button"
             onClick={scrollToTop}
-            className="w-10 h-10 rounded-[8px] border border-[var(--border)] hover:border-[var(--accent)] hover:text-[var(--text)] flex items-center justify-center transition-colors ml-2"
+            whileHover={shouldReduceMotion ? undefined : { scale: 1.15, y: -2 }}
+            whileTap={shouldReduceMotion ? undefined : { scale: 0.92 }}
+            transition={{ duration: 0.18, ease: SHARED_EASE }}
+            className="w-10 h-10 rounded-[8px] border border-[var(--border)] hover:border-[var(--accent)] hover:text-[var(--text)] hover:shadow-[0_0_12px_rgba(34,211,238,0.25)] flex items-center justify-center transition-colors ml-2 group"
             aria-label="Scroll back to top"
             title="Back to top"
           >
-            <ArrowUpIcon size={16} />
-          </button>
+            <ArrowUpIcon size={16} className="group-hover:-translate-y-0.5 transition-transform duration-200" />
+          </motion.button>
         </div>
       </div>
     </footer>

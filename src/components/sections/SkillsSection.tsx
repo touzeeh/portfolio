@@ -55,13 +55,19 @@ export const SkillsSection: React.FC = () => {
               className="glass-card p-6 sm:p-7 flex flex-col justify-between h-full border border-white/10 hover:border-cyan-400/40 hover:shadow-[0_16px_36px_-8px_rgba(6,182,212,0.18)] transition-all rounded-[20px]"
             >
               <div className="space-y-4">
-                {/* Category Header */}
+                {/* Category Header with pulsing status aura */}
                 <div className="flex items-center gap-3">
-                  <span
-                    className="w-3.5 h-3.5 rounded-full shrink-0 shadow-[0_0_10px_currentColor]"
-                    style={{ backgroundColor: category.accentColor, color: category.accentColor }}
-                  />
-                  <h3 className="font-display text-lg font-bold text-white">
+                  <div className="relative flex items-center justify-center">
+                    <span
+                      className="animate-ping absolute inline-flex h-4 w-4 rounded-full opacity-60"
+                      style={{ backgroundColor: category.accentColor }}
+                    />
+                    <span
+                      className="relative w-3.5 h-3.5 rounded-full shrink-0 shadow-[0_0_12px_currentColor]"
+                      style={{ backgroundColor: category.accentColor, color: category.accentColor }}
+                    />
+                  </div>
+                  <h3 className="font-display text-lg font-bold text-white group-hover:text-cyan-300 transition-colors">
                     {category.name}
                   </h3>
                 </div>
@@ -70,15 +76,15 @@ export const SkillsSection: React.FC = () => {
                   {category.description}
                 </p>
 
-                {/* Prominent, readable skill chips with interactive hover */}
+                {/* Prominent, readable skill chips with interactive spring hover */}
                 <div className="flex flex-wrap gap-2 pt-3">
                   {category.items.map((skill) => (
                     <motion.span
                       key={skill}
-                      whileHover={shouldReduceMotion ? undefined : { y: -3, scale: 1.05 }}
-                      whileTap={shouldReduceMotion ? undefined : { scale: 0.96 }}
-                      transition={{ duration: 0.2, ease: SHARED_EASE }}
-                      className="px-3.5 py-2 rounded-lg text-sm font-mono font-medium bg-slate-900/90 border border-white/10 text-slate-200 hover:border-cyan-400/60 hover:text-white hover:shadow-[0_0_12px_rgba(6,182,212,0.25)] transition-all cursor-default shadow-sm"
+                      whileHover={shouldReduceMotion ? undefined : { y: -4, scale: 1.08 }}
+                      whileTap={shouldReduceMotion ? undefined : { scale: 0.95 }}
+                      transition={{ duration: 0.18, ease: SHARED_EASE }}
+                      className="px-3.5 py-2 rounded-lg text-sm font-mono font-medium bg-slate-900/90 border border-white/10 text-slate-200 hover:border-cyan-400/70 hover:text-white hover:shadow-[0_0_16px_rgba(6,182,212,0.35)] transition-all cursor-default shadow-sm select-none"
                     >
                       {skill}
                     </motion.span>

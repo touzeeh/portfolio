@@ -105,15 +105,17 @@ export const WinsSection: React.FC = () => {
                   {win.description}
                 </p>
 
-                {/* Tags */}
+                {/* Tags with spring hover */}
                 <div className="flex flex-wrap gap-1.5 pt-1">
                   {win.tags.map((tag) => (
-                    <span
+                    <motion.span
                       key={tag}
-                      className="px-2 py-0.5 rounded-md text-[11px] font-mono bg-slate-900 border border-white/10 text-slate-300"
+                      whileHover={shouldReduceMotion ? undefined : { y: -2, scale: 1.05 }}
+                      transition={{ duration: 0.15, ease: SHARED_EASE }}
+                      className="px-2 py-0.5 rounded-md text-[11px] font-mono bg-slate-900 border border-white/10 hover:border-amber-400/40 text-slate-300 transition-colors cursor-default"
                     >
                       {tag}
-                    </span>
+                    </motion.span>
                   ))}
                 </div>
               </div>
@@ -123,13 +125,13 @@ export const WinsSection: React.FC = () => {
                 <motion.button
                   type="button"
                   onClick={() => setSelectedWin(win)}
-                  whileHover={shouldReduceMotion ? undefined : { scale: 1.04, y: -1 }}
-                  whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
+                  whileHover={shouldReduceMotion ? undefined : { scale: 1.08, y: -2 }}
+                  whileTap={shouldReduceMotion ? undefined : { scale: 0.94 }}
                   transition={{ duration: 0.2, ease: SHARED_EASE }}
-                  className="btn-secondary text-xs py-2 px-3.5 flex items-center gap-1.5 hover:border-amber-400/40 text-amber-300 group/btn"
+                  className="btn-secondary text-xs py-2 px-3.5 flex items-center gap-1.5 hover:border-amber-400/50 hover:text-amber-200 text-amber-300 group/btn shadow-sm hover:shadow-[0_0_16px_rgba(245,158,11,0.3)]"
                 >
                   <span>View Proof</span>
-                  <EyeIcon className="w-3.5 h-3.5 group-hover/btn:scale-110 transition-transform" />
+                  <EyeIcon className="w-3.5 h-3.5 group-hover/btn:scale-125 group-hover/btn:rotate-6 transition-transform duration-200" />
                 </motion.button>
               </div>
             </TiltCard>
@@ -151,9 +153,9 @@ export const WinsSection: React.FC = () => {
             aria-modal="true"
           >
             <motion.div
-              initial={shouldReduceMotion ? { scale: 1, opacity: 1 } : { scale: 0.94, opacity: 0, y: 15 }}
+              initial={shouldReduceMotion ? { scale: 1, opacity: 1 } : { scale: 0.92, opacity: 0, y: 15 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={shouldReduceMotion ? { scale: 1, opacity: 0 } : { scale: 0.94, opacity: 0, y: 15 }}
+              exit={shouldReduceMotion ? { scale: 1, opacity: 0 } : { scale: 0.92, opacity: 0, y: 15 }}
               transition={{ duration: 0.3, ease: SHARED_EASE }}
               className="relative w-full max-w-2xl bg-slate-900 border-2 border-amber-400/50 rounded-2xl overflow-hidden shadow-2xl shadow-amber-500/20"
               onClick={(e) => e.stopPropagation()}
@@ -172,16 +174,19 @@ export const WinsSection: React.FC = () => {
                   fill
                   className="object-contain p-4"
                 />
-                <button
+                <motion.button
                   type="button"
                   onClick={() => setSelectedWin(null)}
-                  className="absolute top-4 right-4 p-2 rounded-full bg-slate-900/90 text-slate-300 hover:text-white border border-white/20 transition z-20"
+                  whileHover={shouldReduceMotion ? undefined : { scale: 1.15, rotate: 90 }}
+                  whileTap={shouldReduceMotion ? undefined : { scale: 0.9 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute top-4 right-4 p-2 rounded-full bg-slate-900/90 text-slate-300 hover:text-white border border-white/20 hover:border-amber-400/50 transition-colors z-20 shadow-md"
                   aria-label="Close modal"
                 >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
-                </button>
+                </motion.button>
               </div>
 
               {/* Modal Body */}

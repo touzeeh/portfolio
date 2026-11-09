@@ -57,17 +57,23 @@ export const HeroSection: React.FC = () => {
       >
         {/* Eyebrow Proof Row */}
         <motion.div variants={itemVariants} className="flex flex-wrap items-center justify-center gap-3">
-          <a
+          <motion.a
             href="#wins"
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--surface-2)] border border-[var(--border)] hover:border-[var(--award)] text-xs font-mono font-medium text-[var(--award)] transition-colors focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+            whileHover={shouldReduceMotion ? undefined : { scale: 1.05, y: -2 }}
+            whileTap={shouldReduceMotion ? undefined : { scale: 0.96 }}
+            transition={{ duration: 0.2, ease: SHARED_EASE }}
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--surface-2)]/90 backdrop-blur-md border border-[var(--border)] hover:border-[var(--award)] text-xs font-mono font-medium text-[var(--award)] transition-all focus-visible:ring-2 focus-visible:ring-[var(--accent)] group hover:shadow-[0_0_18px_rgba(251,191,36,0.35)]"
             title="View Hackathon Awards"
           >
-            <TrophyIcon className="w-3.5 h-3.5 text-[var(--award)]" />
+            <TrophyIcon className="w-3.5 h-3.5 text-[var(--award)] group-hover:rotate-12 group-hover:scale-110 transition-transform duration-300" />
             <span>{PERSONAL_INFO.proofHighlight}</span>
-          </a>
+          </motion.a>
 
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--surface-2)] border border-[var(--border)] text-xs font-mono text-[var(--text-muted)]">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" aria-hidden="true" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--surface-2)]/90 backdrop-blur-md border border-[var(--border)] text-xs font-mono text-[var(--text-muted)]">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+            </span>
             <span>{PERSONAL_INFO.status}</span>
           </div>
         </motion.div>
@@ -75,7 +81,7 @@ export const HeroSection: React.FC = () => {
         {/* 1-Line Proof-Led Headline */}
         <motion.div variants={itemVariants} className="space-y-4">
           <h1 className="font-display text-hero-fluid font-bold tracking-tight text-[var(--text)] max-w-2xl mx-auto">
-            Hi, I'm <span className="text-gradient">{PERSONAL_INFO.fullName}</span>.
+            Hi, I'm <span className="text-gradient drop-shadow-[0_0_25px_rgba(34,211,238,0.3)]">{PERSONAL_INFO.fullName}</span>.
           </h1>
           <p className="text-xl sm:text-2xl md:text-[26px] font-medium text-[var(--text)] max-w-2xl mx-auto leading-relaxed">
             {PERSONAL_INFO.headline}
@@ -90,65 +96,80 @@ export const HeroSection: React.FC = () => {
           {PERSONAL_INFO.subheadline}
         </motion.p>
 
-        {/* Action Row: Hero owns the only solid primary CTA */}
+        {/* Action Row: Hero owns the only solid primary CTA with rich interactive animations */}
         <motion.div
           variants={itemVariants}
           className="flex flex-wrap items-center justify-center gap-3.5 pt-2"
         >
-          {/* Primary CTA (Solid fill) */}
-          <a
+          {/* Primary CTA (Solid fill with shimmer sweep & arrow motion) */}
+          <motion.a
             href="#projects"
-            className="btn-primary"
+            whileHover={shouldReduceMotion ? undefined : { scale: 1.05, y: -2 }}
+            whileTap={shouldReduceMotion ? undefined : { scale: 0.96 }}
+            transition={{ duration: 0.2, ease: SHARED_EASE }}
+            className="btn-primary group"
           >
             <span>View projects</span>
-            <ArrowUpRightIcon className="w-4 h-4" />
-          </a>
+            <ArrowUpRightIcon className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-200" />
+          </motion.a>
 
-          {/* Secondary Outline CTA */}
-          <a
+          {/* Secondary Outline CTA with document icon tilt */}
+          <motion.a
             href={PERSONAL_INFO.resumeUrl}
             target="_blank"
             rel="noreferrer"
-            className="btn-secondary"
+            whileHover={shouldReduceMotion ? undefined : { scale: 1.05, y: -2 }}
+            whileTap={shouldReduceMotion ? undefined : { scale: 0.96 }}
+            transition={{ duration: 0.2, ease: SHARED_EASE }}
+            className="btn-secondary group"
             aria-label="Download Resume (PDF)"
             title="Download 1-Page Resume PDF"
           >
-            <FileTextIcon className="w-4 h-4 text-[var(--accent)]" />
+            <FileTextIcon className="w-4 h-4 text-[var(--accent)] group-hover:-rotate-12 group-hover:scale-110 transition-transform duration-200" />
             <span>Resume</span>
-          </a>
+          </motion.a>
 
-          {/* Labelled Social Links */}
+          {/* Labelled Social Links with spring rotation */}
           <div className="flex items-center gap-2 sm:ml-2">
-            <a
+            <motion.a
               href={PERSONAL_INFO.github}
               target="_blank"
               rel="noreferrer"
+              whileHover={shouldReduceMotion ? undefined : { scale: 1.15, rotate: 6, y: -2 }}
+              whileTap={shouldReduceMotion ? undefined : { scale: 0.92 }}
+              transition={{ duration: 0.2, ease: SHARED_EASE }}
               className="btn-icon"
               aria-label="GitHub Profile"
               title="GitHub Profile"
             >
               <GithubIcon size={18} />
-            </a>
+            </motion.a>
 
-            <a
+            <motion.a
               href={PERSONAL_INFO.linkedin}
               target="_blank"
               rel="noreferrer"
+              whileHover={shouldReduceMotion ? undefined : { scale: 1.15, rotate: -6, y: -2 }}
+              whileTap={shouldReduceMotion ? undefined : { scale: 0.92 }}
+              transition={{ duration: 0.2, ease: SHARED_EASE }}
               className="btn-icon"
               aria-label="LinkedIn Profile"
               title="LinkedIn Profile"
             >
               <LinkedinIcon size={18} />
-            </a>
+            </motion.a>
 
-            <a
+            <motion.a
               href={`mailto:${PERSONAL_INFO.email}`}
+              whileHover={shouldReduceMotion ? undefined : { scale: 1.15, rotate: 6, y: -2 }}
+              whileTap={shouldReduceMotion ? undefined : { scale: 0.92 }}
+              transition={{ duration: 0.2, ease: SHARED_EASE }}
               className="btn-icon"
               aria-label="Send direct email"
               title="Send direct email"
             >
               <MailIcon size={18} />
-            </a>
+            </motion.a>
           </div>
         </motion.div>
       </motion.div>

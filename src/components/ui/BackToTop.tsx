@@ -36,12 +36,12 @@ export const BackToTop: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 12 }}
           transition={{ duration: 0.25, ease: SHARED_EASE }}
-          whileHover={shouldReduceMotion ? undefined : { scale: 1.08, y: -2 }}
-          whileTap={shouldReduceMotion ? undefined : { scale: 0.94 }}
-          className="fixed bottom-6 right-6 z-40 w-11 h-11 rounded-[10px] bg-[var(--surface)] border border-[var(--border)] text-[var(--text-muted)] hover:text-[var(--text)] hover:border-[var(--accent)] shadow-lg backdrop-blur-md flex items-center justify-center cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] group"
+          whileHover={shouldReduceMotion ? undefined : { scale: 1.12, y: -3 }}
+          whileTap={shouldReduceMotion ? undefined : { scale: 0.92 }}
+          className="fixed bottom-6 right-6 z-40 w-11 h-11 rounded-[10px] bg-[var(--surface)]/90 border border-[var(--border)] text-[var(--text-muted)] hover:text-[var(--text)] hover:border-[var(--accent)] hover:shadow-[0_0_18px_rgba(34,211,238,0.35)] shadow-xl backdrop-blur-md flex items-center justify-center cursor-pointer transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] group"
           aria-label="Back to Top"
         >
-          <ArrowUpIcon size={18} className="group-hover:-translate-y-0.5 transition-transform" />
+          <ArrowUpIcon size={18} className="group-hover:-translate-y-1 group-hover:text-[var(--accent)] transition-all duration-200" />
         </motion.button>
       )}
     </AnimatePresence>

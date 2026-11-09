@@ -262,14 +262,15 @@ export const ContactSection: React.FC = () => {
                   </p>
                 )}
 
-                {/* (6) Send button with loading/success/error states and spring physics */}
+                {/* (6) Send button with loading/success/error states, shimmer sweep & spring physics */}
                 <motion.button
                   type="submit"
                   disabled={status === 'loading'}
-                  whileHover={shouldReduceMotion ? undefined : { scale: 1.02, y: -1 }}
-                  whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
+                  animate={status === 'error' && !shouldReduceMotion ? { x: [-5, 5, -5, 5, 0] } : undefined}
+                  whileHover={shouldReduceMotion ? undefined : { scale: 1.03, y: -2 }}
+                  whileTap={shouldReduceMotion ? undefined : { scale: 0.96 }}
                   transition={{ duration: 0.2, ease: SHARED_EASE }}
-                  className={`btn-primary w-full py-3 text-sm font-semibold flex items-center justify-center gap-2 cursor-pointer shadow-lg hover:shadow-cyan-500/20 ${
+                  className={`btn-primary w-full py-3 text-sm font-semibold flex items-center justify-center gap-2 cursor-pointer shadow-lg hover:shadow-cyan-500/25 ${
                     status === 'loading' ? 'opacity-70 cursor-wait' : ''
                   }`}
                 >
@@ -309,12 +310,12 @@ export const ContactSection: React.FC = () => {
               <div className="space-y-3.5">
                 {/* (8) Email with Copy-to-Clipboard Feedback */}
                 <div className="relative group">
-                  <div className="flex items-center justify-between p-3.5 rounded-xl bg-slate-950/80 border border-white/10 group-hover:border-cyan-400/50 transition-all">
+                  <div className="flex items-center justify-between p-3.5 rounded-xl bg-slate-950/80 border border-white/10 group-hover:border-cyan-400/50 hover:shadow-[0_0_15px_rgba(6,182,212,0.2)] transition-all">
                     <a
                       href={`mailto:${PERSONAL_INFO.email}`}
                       className="flex items-center gap-3.5 flex-1 min-w-0"
                     >
-                      <div className="p-2.5 rounded-lg bg-cyan-600/15 text-cyan-400 shrink-0 group-hover:scale-105 transition-transform">
+                      <div className="p-2.5 rounded-lg bg-cyan-600/15 text-cyan-400 shrink-0 group-hover:scale-110 group-hover:rotate-6 transition-transform">
                         <MailIcon className="w-4 h-4" />
                       </div>
                       <div className="truncate">
@@ -328,14 +329,15 @@ export const ContactSection: React.FC = () => {
                     <motion.button
                       type="button"
                       onClick={handleCopyEmail}
-                      whileHover={shouldReduceMotion ? undefined : { scale: 1.06 }}
-                      whileTap={shouldReduceMotion ? undefined : { scale: 0.94 }}
-                      className="ml-2 px-3 py-1.5 rounded-lg bg-slate-900 border border-white/10 hover:border-cyan-400/50 text-xs font-mono text-slate-300 hover:text-white flex items-center gap-1.5 transition-colors shrink-0"
+                      whileHover={shouldReduceMotion ? undefined : { scale: 1.1 }}
+                      whileTap={shouldReduceMotion ? undefined : { scale: 0.92 }}
+                      transition={{ duration: 0.15 }}
+                      className="ml-2 px-3 py-1.5 rounded-lg bg-slate-900 border border-white/10 hover:border-cyan-400/50 text-xs font-mono text-slate-300 hover:text-white flex items-center gap-1.5 transition-colors shrink-0 hover:shadow-[0_0_10px_rgba(6,182,212,0.3)]"
                       aria-label="Copy email address"
                     >
                       {copied ? (
                         <>
-                          <CheckIcon className="w-3.5 h-3.5 text-emerald-400" />
+                          <CheckIcon className="w-3.5 h-3.5 text-emerald-400 animate-spin-once" />
                           <span className="text-emerald-400 font-medium">Copied!</span>
                         </>
                       ) : (
@@ -353,11 +355,12 @@ export const ContactSection: React.FC = () => {
                   href={PERSONAL_INFO.github}
                   target="_blank"
                   rel="noreferrer"
-                  whileHover={shouldReduceMotion ? undefined : { x: 3 }}
+                  whileHover={shouldReduceMotion ? undefined : { x: 6 }}
+                  whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
                   transition={{ duration: 0.2, ease: SHARED_EASE }}
-                  className="flex items-center gap-3.5 p-3.5 rounded-xl bg-slate-950/80 border border-white/10 hover:border-white/30 transition-all group"
+                  className="flex items-center gap-3.5 p-3.5 rounded-xl bg-slate-950/80 border border-white/10 hover:border-white/40 hover:shadow-[0_0_15px_rgba(255,255,255,0.1)] transition-all group"
                 >
-                  <div className="p-2.5 rounded-lg bg-slate-800 text-white shrink-0 group-hover:scale-105 transition-transform">
+                  <div className="p-2.5 rounded-lg bg-slate-800 text-white shrink-0 group-hover:scale-110 group-hover:rotate-6 transition-transform">
                     <GithubIcon className="w-4 h-4" />
                   </div>
                   <div>
@@ -373,11 +376,12 @@ export const ContactSection: React.FC = () => {
                   href={PERSONAL_INFO.linkedin}
                   target="_blank"
                   rel="noreferrer"
-                  whileHover={shouldReduceMotion ? undefined : { x: 3 }}
+                  whileHover={shouldReduceMotion ? undefined : { x: 6 }}
+                  whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
                   transition={{ duration: 0.2, ease: SHARED_EASE }}
-                  className="flex items-center gap-3.5 p-3.5 rounded-xl bg-slate-950/80 border border-white/10 hover:border-violet-400/50 transition-all group"
+                  className="flex items-center gap-3.5 p-3.5 rounded-xl bg-slate-950/80 border border-white/10 hover:border-violet-400/60 hover:shadow-[0_0_15px_rgba(139,92,246,0.25)] transition-all group"
                 >
-                  <div className="p-2.5 rounded-lg bg-violet-600/15 text-violet-400 shrink-0 group-hover:scale-105 transition-transform">
+                  <div className="p-2.5 rounded-lg bg-violet-600/15 text-violet-400 shrink-0 group-hover:scale-110 group-hover:-rotate-6 transition-transform">
                     <LinkedinIcon className="w-4 h-4" />
                   </div>
                   <div>

@@ -109,9 +109,11 @@ export const ProjectsSection: React.FC = () => {
               {featuredProject.metrics && (
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-5">
                   {featuredProject.metrics.map((m) => (
-                    <div
+                    <motion.div
                       key={m.label}
-                      className="p-2.5 rounded-xl bg-slate-950/70 border border-white/10 text-center"
+                      whileHover={shouldReduceMotion ? undefined : { y: -4, scale: 1.04 }}
+                      transition={{ duration: 0.2, ease: SHARED_EASE }}
+                      className="p-2.5 rounded-xl bg-slate-950/80 border border-white/10 hover:border-cyan-400/50 hover:shadow-[0_0_15px_rgba(6,182,212,0.2)] text-center transition-colors cursor-default"
                     >
                       <span className="text-xs font-mono text-cyan-400 font-bold block">
                         {m.value}
@@ -119,7 +121,7 @@ export const ProjectsSection: React.FC = () => {
                       <span className="text-[11px] text-slate-300 font-medium block mt-0.5">
                         {m.label}
                       </span>
-                    </div>
+                    </motion.div>
                   ))}
                 </div>
               )}
@@ -162,15 +164,17 @@ export const ProjectsSection: React.FC = () => {
                 </div>
               </div>
 
-              {/* Tech Stack Chips */}
+              {/* Tech Stack Chips with spring hover */}
               <div className="pt-2 border-t border-white/10 flex flex-wrap gap-2">
                 {featuredProject.stack.map((tech) => (
-                  <span
+                  <motion.span
                     key={tech}
-                    className="px-3 py-1 rounded-lg bg-slate-900 border border-white/15 text-xs font-mono font-medium text-slate-200 hover:border-cyan-400/50 transition-colors"
+                    whileHover={shouldReduceMotion ? undefined : { y: -3, scale: 1.08 }}
+                    transition={{ duration: 0.18, ease: SHARED_EASE }}
+                    className="px-3 py-1 rounded-lg bg-slate-900 border border-white/15 text-xs font-mono font-medium text-slate-200 hover:border-cyan-400/60 hover:text-white hover:shadow-[0_0_12px_rgba(6,182,212,0.25)] transition-all cursor-default"
                   >
                     {tech}
-                  </span>
+                  </motion.span>
                 ))}
               </div>
             </div>
@@ -207,8 +211,8 @@ export const ProjectsSection: React.FC = () => {
                     </motion.div>
                   )}
                   {/* Corner brackets */}
-                  <div className="absolute top-2 left-2 w-3.5 h-3.5 border-t-2 border-l-2 border-white/40 pointer-events-none" />
-                  <div className="absolute top-2 right-2 w-3.5 h-3.5 border-t-2 border-r-2 border-white/40 pointer-events-none" />
+                  <div className="absolute top-2 left-2 w-3.5 h-3.5 border-t-2 border-l-2 border-white/40 pointer-events-none group-hover:scale-110 transition-transform" />
+                  <div className="absolute top-2 right-2 w-3.5 h-3.5 border-t-2 border-r-2 border-white/40 pointer-events-none group-hover:scale-110 transition-transform" />
                 </div>
 
                 {/* Title & Tagline */}
@@ -239,17 +243,20 @@ export const ProjectsSection: React.FC = () => {
 
                 {/* RouteGuard: Terminal Install Command with 1-Click Copy */}
                 {project.installCmd && (
-                  <div className="p-2.5 rounded-xl bg-slate-950 border border-white/15 flex items-center justify-between gap-2">
+                  <div className="p-2.5 rounded-xl bg-slate-950 border border-white/15 flex items-center justify-between gap-2 shadow-inner">
                     <div className="flex items-center gap-2 overflow-hidden">
                       <TerminalIcon className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
                       <code className="text-xs font-mono text-slate-200 truncate select-all">
                         {project.installCmd}
                       </code>
                     </div>
-                    <button
+                    <motion.button
                       type="button"
                       onClick={() => handleCopyInstall(project.installCmd!)}
-                      className="p-1.5 rounded-lg bg-slate-900 border border-white/10 hover:border-cyan-400/50 text-slate-300 hover:text-white transition shrink-0"
+                      whileHover={shouldReduceMotion ? undefined : { scale: 1.12 }}
+                      whileTap={shouldReduceMotion ? undefined : { scale: 0.9 }}
+                      transition={{ duration: 0.15 }}
+                      className="p-1.5 rounded-lg bg-slate-900 border border-white/10 hover:border-cyan-400/50 text-slate-300 hover:text-white transition shrink-0 hover:shadow-[0_0_10px_rgba(6,182,212,0.3)]"
                       aria-label="Copy install command"
                       title="Copy install command"
                     >
@@ -258,7 +265,7 @@ export const ProjectsSection: React.FC = () => {
                       ) : (
                         <CopyIcon className="w-3.5 h-3.5" />
                       )}
-                    </button>
+                    </motion.button>
                   </div>
                 )}
 
@@ -266,13 +273,15 @@ export const ProjectsSection: React.FC = () => {
                 {project.metrics && (
                   <div className="flex flex-wrap gap-2 pt-1">
                     {project.metrics.map((m) => (
-                      <div
+                      <motion.div
                         key={m.label}
-                        className="px-2.5 py-1 rounded-lg bg-slate-950/80 border border-white/10 text-xs font-mono"
+                        whileHover={shouldReduceMotion ? undefined : { y: -3, scale: 1.05 }}
+                        transition={{ duration: 0.18, ease: SHARED_EASE }}
+                        className="px-2.5 py-1 rounded-lg bg-slate-950/80 border border-white/10 hover:border-cyan-400/50 text-xs font-mono transition-colors cursor-default hover:shadow-[0_0_10px_rgba(6,182,212,0.2)]"
                       >
                         <span className="text-cyan-400 font-semibold">{m.value}</span>{' '}
                         <span className="text-slate-400">({m.label})</span>
-                      </div>
+                      </motion.div>
                     ))}
                   </div>
                 )}
@@ -281,12 +290,14 @@ export const ProjectsSection: React.FC = () => {
               {/* Tech Chips */}
               <div className="flex flex-wrap gap-1.5 pt-4 border-t border-white/10 mt-4">
                 {project.stack.map((tech) => (
-                  <span
+                  <motion.span
                     key={tech}
-                    className="px-2.5 py-1 rounded-md bg-slate-900 border border-white/10 text-xs font-mono text-slate-300"
+                    whileHover={shouldReduceMotion ? undefined : { y: -2, scale: 1.06 }}
+                    transition={{ duration: 0.15, ease: SHARED_EASE }}
+                    className="px-2.5 py-1 rounded-md bg-slate-900 border border-white/10 hover:border-cyan-400/50 hover:text-white text-xs font-mono text-slate-300 transition-colors cursor-default"
                   >
                     {tech}
-                  </span>
+                  </motion.span>
                 ))}
               </div>
             </TiltCard>

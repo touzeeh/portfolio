@@ -161,7 +161,13 @@ export const AboutSection: React.FC = () => {
 
             <div className="pt-5 border-t border-white/[0.08] mt-6 flex items-center justify-between text-xs font-mono text-slate-400">
               <span>Status:</span>
-              <span className="text-emerald-400 font-medium">Open to opportunities</span>
+              <span className="inline-flex items-center gap-2 text-emerald-400 font-medium">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                </span>
+                <span>Open to opportunities</span>
+              </span>
             </div>
           </TiltCard>
         </motion.div>

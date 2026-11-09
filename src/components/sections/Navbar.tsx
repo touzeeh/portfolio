@@ -86,33 +86,25 @@ export const Navbar: React.FC = () => {
       />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between">
-        {/* Wordmark Left */}
-        <a
-          href="#hero"
-          onClick={(e) => {
-            e.preventDefault();
-            handleNavClick('hero');
-          }}
-          className="font-display font-semibold text-base sm:text-lg tracking-tight text-[var(--text)] hover:text-[var(--accent)] transition-colors flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-[var(--accent)] rounded"
-          aria-label={`${SITE_DATA.personal.fullName} Home`}
-        >
-          <span>{SITE_DATA.personal.shortName}</span>
-          <span className="text-[var(--accent)] font-mono text-sm">.</span>
-        </a>
+        {/* Left balance spacer on desktop to keep center pill nav centered */}
+        <div className="hidden md:block w-24 shrink-0" aria-hidden="true" />
 
         {/* Center Pill Nav (Desktop): Scroll-spy, NO active item in hero */}
         <nav
           aria-label="Main section navigation"
-          className="hidden md:flex items-center gap-1 p-1 rounded-full bg-[var(--surface-2)] border border-[var(--border)]"
+          className="hidden md:flex items-center gap-1 p-1 rounded-full bg-[var(--surface-2)]/90 backdrop-blur-md border border-[var(--border)] shadow-lg shadow-black/25"
         >
           {SITE_DATA.nav.map((item) => {
             const isActive = activeSection === item.id;
             return (
-              <button
+              <motion.button
                 key={item.id}
                 type="button"
                 onClick={() => handleNavClick(item.id)}
-                className={`relative px-3.5 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                whileHover={shouldReduceMotion ? undefined : { scale: 1.05 }}
+                whileTap={shouldReduceMotion ? undefined : { scale: 0.95 }}
+                transition={{ duration: 0.18, ease: SHARED_EASE }}
+                className={`relative px-3.5 py-1.5 rounded-full text-xs font-medium transition-all ${
                   isActive
                     ? 'text-[var(--text)] font-semibold'
                     : 'text-[var(--text-muted)] hover:text-[var(--text)]'
@@ -123,42 +115,48 @@ export const Navbar: React.FC = () => {
                   <motion.div
                     layoutId="activePill"
                     transition={{ type: 'spring', damping: 26, stiffness: 380 }}
-                    className="absolute inset-0 rounded-full bg-[var(--surface)] border border-[var(--border)] shadow-sm"
+                    className="absolute inset-0 rounded-full bg-[var(--surface)] border border-[var(--accent)]/40 shadow-[0_0_12px_rgba(34,211,238,0.2)]"
                   />
                 )}
-                <span className="relative z-10 font-mono text-[11px] text-[var(--accent)] mr-1.5 opacity-80">
+                <span className="relative z-10 font-mono text-[11px] text-[var(--accent)] mr-1.5 opacity-90">
                   {item.number}
                 </span>
                 <span className="relative z-10">{item.label}</span>
-              </button>
+              </motion.button>
             );
           })}
         </nav>
 
-        {/* Right: Compact Outline Contact CTA */}
-        <div className="flex items-center gap-2.5">
-          <a
+        {/* Right: Contact CTA with interactive spring animation & Mobile Hamburger */}
+        <div className="flex items-center gap-2.5 ml-auto md:ml-0">
+          <motion.a
             href="#contact"
             onClick={(e) => {
               e.preventDefault();
               handleNavClick('contact');
             }}
-            className="hidden sm:inline-flex items-center gap-1.5 min-h-[44px] px-4 rounded-[10px] bg-transparent border border-[var(--border)] text-[var(--text)] hover:border-[var(--accent)] hover:text-[var(--accent)] text-xs font-semibold transition-all focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+            whileHover={shouldReduceMotion ? undefined : { scale: 1.05, y: -1 }}
+            whileTap={shouldReduceMotion ? undefined : { scale: 0.95 }}
+            transition={{ duration: 0.2, ease: SHARED_EASE }}
+            className="hidden sm:inline-flex items-center gap-1.5 min-h-[44px] px-4 rounded-[10px] bg-[var(--surface-2)]/80 hover:bg-[var(--surface-2)] border border-[var(--border)] hover:border-[var(--accent)] text-[var(--text)] hover:text-[var(--accent)] text-xs font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-[var(--accent)] group shadow-sm hover:shadow-[0_0_15px_rgba(34,211,238,0.2)]"
           >
             <span>Contact</span>
-            <ArrowUpRightIcon className="w-3.5 h-3.5" />
-          </a>
+            <ArrowUpRightIcon className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
+          </motion.a>
 
           {/* Mobile Menu Hamburger */}
-          <button
+          <motion.button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            whileHover={shouldReduceMotion ? undefined : { scale: 1.05 }}
+            whileTap={shouldReduceMotion ? undefined : { scale: 0.92 }}
+            transition={{ duration: 0.15 }}
             className="md:hidden w-11 h-11 rounded-[10px] bg-[var(--surface-2)] border border-[var(--border)] text-[var(--text)] flex items-center justify-center focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
             aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
             aria-expanded={mobileMenuOpen}
           >
             {mobileMenuOpen ? <XIcon className="w-5 h-5" /> : <MenuIcon className="w-5 h-5" />}
-          </button>
+          </motion.button>
         </div>
       </div>
 
@@ -167,44 +165,51 @@ export const Navbar: React.FC = () => {
         {mobileMenuOpen && (
           <motion.div
             ref={mobileMenuRef}
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.2, ease: SHARED_EASE }}
-            className="md:hidden border-b border-[var(--border)] bg-[var(--surface)] px-6 py-6 shadow-xl flex flex-col gap-3"
+            initial={{ opacity: 0, y: -12, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -12, scale: 0.98 }}
+            transition={{ duration: 0.22, ease: SHARED_EASE }}
+            className="md:hidden border-b border-[var(--border)] bg-[var(--surface)]/98 backdrop-blur-xl px-6 py-6 shadow-2xl flex flex-col gap-3"
             role="dialog"
             aria-modal="true"
             aria-label="Mobile Navigation"
           >
             <div className="flex flex-col gap-1.5">
-              {SITE_DATA.nav.map((item) => (
-                <button
+              {SITE_DATA.nav.map((item, index) => (
+                <motion.button
                   key={item.id}
                   type="button"
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.04, duration: 0.2, ease: SHARED_EASE }}
+                  whileHover={shouldReduceMotion ? undefined : { x: 4 }}
+                  whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
                   onClick={() => handleNavClick(item.id)}
                   className={`flex items-center justify-between min-h-[44px] px-4 rounded-[10px] text-sm font-medium transition-colors ${
                     activeSection === item.id
-                      ? 'bg-[var(--surface-2)] text-[var(--accent)] font-semibold border border-[var(--border)]'
+                      ? 'bg-[var(--surface-2)] text-[var(--accent)] font-semibold border border-[var(--border)] shadow-sm'
                       : 'text-[var(--text)] hover:bg-[var(--surface-2)]'
                   }`}
                 >
                   <span>{item.label}</span>
                   <span className="font-mono text-xs text-[var(--text-muted)]">{item.number}</span>
-                </button>
+                </motion.button>
               ))}
             </div>
 
             <div className="pt-3 border-t border-[var(--border)] flex items-center gap-3">
-              <a
+              <motion.a
                 href="#contact"
+                whileHover={shouldReduceMotion ? undefined : { scale: 1.02, y: -1 }}
+                whileTap={shouldReduceMotion ? undefined : { scale: 0.96 }}
                 onClick={(e) => {
                   e.preventDefault();
                   handleNavClick('contact');
                 }}
-                className="btn-primary flex-1 text-center justify-center text-xs"
+                className="btn-primary flex-1 text-center justify-center text-xs shadow-md"
               >
                 <span>Contact</span>
-              </a>
+              </motion.a>
             </div>
           </motion.div>
         )}
