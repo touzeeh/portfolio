@@ -14,7 +14,7 @@ import { ContactSection } from '@/components/sections/ContactSection';
 import { Footer } from '@/components/sections/Footer';
 import { BackToTop } from '@/components/ui/BackToTop';
 import { CustomCursor } from '@/components/ui/CustomCursor';
-import { AudioPlayer } from '@/components/ui/AudioPlayer';
+import { BackgroundMusic } from '@/components/ui/Music';
 import { WayfindingRouteLine } from '@/components/ui/WayfindingRouteLine';
 
 // Dynamic import with ssr: false for Three.js Canvas (untouched)
@@ -57,8 +57,8 @@ function PortfolioContent() {
       {/* Back to Top */}
       <BackToTop />
 
-      {/* Floating Background GTA IV Audio Soundtrack Player */}
-      <AudioPlayer />
+      {/* Floating Background Music & Synced Lyrics System */}
+      <BackgroundMusic />
 
       {/* Custom Desktop Precision Cursor */}
       <CustomCursor />
