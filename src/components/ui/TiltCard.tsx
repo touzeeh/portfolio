@@ -52,16 +52,14 @@ export const TiltCard: React.FC<CardProps> = ({
       style={{ willChange: 'transform' }}
     >
       {/* Sensitive cursor spotlight glare */}
-      {!shouldReduceMotion && (
-        <div
-          className="pointer-events-none absolute -inset-px transition-opacity duration-300 ease-out z-0"
-          style={{
-            opacity: mousePos.opacity,
-            background: `radial-gradient(350px circle at ${mousePos.x}px ${mousePos.y}px, ${glareColor}, transparent 75%)`,
-          }}
-          aria-hidden="true"
-        />
-      )}
+      <div
+        className="pointer-events-none absolute -inset-px transition-opacity duration-300 ease-out z-0"
+        style={{
+          opacity: mousePos.opacity,
+          background: `radial-gradient(350px circle at ${mousePos.x}px ${mousePos.y}px, ${glareColor}, transparent 75%)`,
+        }}
+        aria-hidden="true"
+      />
       <div className="relative z-10 w-full h-full">
         {children}
       </div>

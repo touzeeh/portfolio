@@ -67,7 +67,7 @@ const TimelineRow: React.FC<{ item: ExperienceItem; index: number }> = ({ item }
             {item.tags.map((tag) => (
               <motion.span
                 key={tag}
-                whileHover={shouldReduceMotion ? undefined : { y: -3, scale: 1.08 }}
+                whileHover={{ y: -3, scale: 1.08 }}
                 transition={{ duration: 0.18, ease: SHARED_EASE }}
                 className="px-2 py-0.5 rounded-md text-[11px] font-mono bg-slate-900 border border-white/10 hover:border-cyan-400/60 hover:text-white hover:shadow-[0_0_10px_rgba(6,182,212,0.3)] transition-all cursor-default"
               >
@@ -123,7 +123,7 @@ export const ExperienceSection: React.FC = () => {
         {/* Dynamic Active Line drawn with scroll progress with subtle neon laser glow */}
         <motion.div
           style={{
-            scaleY: shouldReduceMotion ? 1 : scrollYProgress,
+            scaleY: scrollYProgress,
             transformOrigin: 'top',
             willChange: 'transform',
           }}

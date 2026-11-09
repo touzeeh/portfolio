@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useMemo, useSyncExternalStore } from 'react';
+import React, { useEffect, useRef, useMemo, useState, useSyncExternalStore } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { useReducedMotion } from 'framer-motion';
 import * as THREE from 'three';
@@ -21,31 +21,31 @@ const InnerSightBuilding: React.FC<InnerSightBuildingProps> = ({
   const pulseNodeRef = useRef<THREE.Mesh>(null!);
   const wireframeMatRef = useRef<THREE.LineBasicMaterial>(null!);
 
-  // A* path coordinates across 3 floors (L1 -> Elevator -> L2 -> Stairs -> L3 Clinic)
-  const pathPoints = useMemo(
+  // A* path coordinates across 3 floors (L1 Entrance -> L1 Elevator -> L2 Hall -> L2 Stairs -> L3 Clinic)
+  const waypoints = useMemo(
     () => [
-      new THREE.Vector3(-1.4, -1.3, 1.0),
+      new THREE.Vector3(-1.5, -1.3, 1.0),
       new THREE.Vector3(-0.6, -1.3, 1.0),
       new THREE.Vector3(-0.6, -1.3, -0.4),
-      new THREE.Vector3(-0.1, -1.3, -0.4),
-      new THREE.Vector3(-0.1, 0.0, -0.4),
+      new THREE.Vector3(-0.1, -1.3, -0.4), // Elevator L1
+      new THREE.Vector3(-0.1, 0.0, -0.4),  // Elevator L2
       new THREE.Vector3(0.8, 0.0, -0.4),
       new THREE.Vector3(0.8, 0.0, 0.6),
-      new THREE.Vector3(1.1, 0.0, 0.6),
-      new THREE.Vector3(1.1, 1.3, 0.6),
+      new THREE.Vector3(1.1, 0.0, 0.6),   // Stairs L2
+      new THREE.Vector3(1.1, 1.3, 0.6),   // Stairs L3
       new THREE.Vector3(0.2, 1.3, 0.6),
-      new THREE.Vector3(-0.8, 1.3, -0.5),
+      new THREE.Vector3(-0.8, 1.3, -0.5), // Destination Clinic
     ],
     []
   );
 
   const curve = useMemo(
-    () => new THREE.CatmullRomCurve3(pathPoints, false, 'catmullrom', 0.2),
-    [pathPoints]
+    () => new THREE.CatmullRomCurve3(waypoints, false, 'catmullrom', 0.15),
+    [waypoints]
   );
 
   const pathGeometry = useMemo(
-    () => new THREE.BufferGeometry().setFromPoints(curve.getPoints(80)),
+    () => new THREE.BufferGeometry().setFromPoints(curve.getPoints(100)),
     [curve]
   );
 
@@ -53,29 +53,33 @@ const InnerSightBuilding: React.FC<InnerSightBuildingProps> = ({
   const floorGridSegments = useMemo(() => {
     const points: THREE.Vector3[] = [];
     const floors = [-1.3, 0.0, 1.3];
-    const width = 3.6;
+    const width = 3.8;
     const depth = 2.8;
     const halfW = width / 2;
     const halfD = depth / 2;
 
     floors.forEach((y) => {
-      // Perimeter
+      // Outer Perimeter
       points.push(new THREE.Vector3(-halfW, y, -halfD), new THREE.Vector3(halfW, y, -halfD));
       points.push(new THREE.Vector3(halfW, y, -halfD), new THREE.Vector3(halfW, y, halfD));
       points.push(new THREE.Vector3(halfW, y, halfD), new THREE.Vector3(-halfW, y, halfD));
       points.push(new THREE.Vector3(-halfW, y, halfD), new THREE.Vector3(-halfW, y, -halfD));
 
-      // Internal Corridors
+      // Major Corridor Grid
       points.push(new THREE.Vector3(-halfW, y, 0), new THREE.Vector3(halfW, y, 0));
       points.push(new THREE.Vector3(0, y, -halfD), new THREE.Vector3(0, y, halfD));
+
+      // Sub-grids for architectural feel
+      points.push(new THREE.Vector3(-halfW * 0.5, y, -halfD), new THREE.Vector3(-halfW * 0.5, y, halfD));
+      points.push(new THREE.Vector3(halfW * 0.5, y, -halfD), new THREE.Vector3(halfW * 0.5, y, halfD));
     });
 
-    // Vertical Structural Shafts
-    const corners = [
+    // Vertical Structural Shafts (Corner Columns + Elevator/Stair Cores)
+    const columns = [
       [-halfW, -halfD], [halfW, -halfD], [halfW, halfD], [-halfW, halfD],
       [-0.1, -0.4], [1.1, 0.6],
     ];
-    corners.forEach(([x, z]) => {
+    columns.forEach(([x, z]) => {
       points.push(new THREE.Vector3(x, -1.3, z), new THREE.Vector3(x, 1.3, z));
     });
 
@@ -86,7 +90,7 @@ const InnerSightBuilding: React.FC<InnerSightBuildingProps> = ({
     const mat = new THREE.LineBasicMaterial({
       color: '#22d3ee',
       transparent: true,
-      opacity: 0.85,
+      opacity: 0.95,
       blending: THREE.AdditiveBlending,
     });
     return new THREE.Line(pathGeometry, mat);
@@ -96,18 +100,18 @@ const InnerSightBuilding: React.FC<InnerSightBuildingProps> = ({
     if (reducedMotion) return;
     const t = state.clock.getElapsedTime();
 
-    // 1. Scroll-linked path animation
+    // 1. Moving Packet along A* path
     if (pulseNodeRef.current) {
       const scrollInfluence = (scrollRef.current * 3.5) % 1;
-      const progress = (t * 0.18 + scrollInfluence * 0.4) % 1;
+      const progress = (t * 0.16 + scrollInfluence * 0.3) % 1;
       const pos = curve.getPoint(progress);
       pulseNodeRef.current.position.copy(pos);
     }
 
-    // 2. Scroll descent: Building smoothly descends out of view when scrolling down past Hero
+    // 2. Scroll descent and soft rotation
     if (buildingGroup.current) {
-      const baseOffsetY = isMobile ? 0.6 : 0.15;
-      const targetY = baseOffsetY - scrollRef.current * 22;
+      const baseOffsetY = isMobile ? 0.35 : 0.05;
+      const targetY = baseOffsetY - scrollRef.current * 20;
       buildingGroup.current.position.y = THREE.MathUtils.lerp(
         buildingGroup.current.position.y,
         targetY,
@@ -115,33 +119,33 @@ const InnerSightBuilding: React.FC<InnerSightBuildingProps> = ({
       );
 
       // Subtle architectural isometric sway
-      buildingGroup.current.rotation.y = -0.65 + Math.sin(t * 0.22) * 0.025;
-      buildingGroup.current.rotation.x = 0.52 + Math.cos(t * 0.18) * 0.015;
+      buildingGroup.current.rotation.y = -0.62 + Math.sin(t * 0.2) * 0.03;
+      buildingGroup.current.rotation.x = 0.52 + Math.cos(t * 0.16) * 0.02;
 
-      // Fade out building as user scrolls towards lower sections to prevent any text overlap
-      const scrollFade = Math.max(0, 1 - scrollRef.current * 4.5);
+      // Fade out building as user scrolls down past hero
+      const scrollFade = Math.max(0, 1 - scrollRef.current * 4.2);
       if (wireframeMatRef.current) {
         wireframeMatRef.current.opacity = THREE.MathUtils.lerp(
           wireframeMatRef.current.opacity,
-          0.35 * scrollFade,
+          0.62 * scrollFade,
           0.1
         );
       }
     }
   });
 
-  const basePos: [number, number, number] = isMobile ? [0, 0.6, -3.6] : [0, 0.15, -2.6];
-  const scale = isMobile ? 0.58 : 0.92;
+  const basePos: [number, number, number] = isMobile ? [0, 0.35, -3.2] : [0, 0.05, -2.4];
+  const scale = isMobile ? 0.62 : 0.98;
 
   return (
-    <group ref={buildingGroup} position={basePos} scale={scale} rotation={[0.52, -0.65, 0]}>
-      {/* Structural Wireframe Grid */}
+    <group ref={buildingGroup} position={basePos} scale={scale} rotation={[0.52, -0.62, 0]}>
+      {/* Structural Wireframe Grid (boosted visibility: opacity 0.62) */}
       <lineSegments geometry={floorGridSegments}>
         <lineBasicMaterial
           ref={wireframeMatRef}
-          color="#22d3ee"
+          color="#06b6d4"
           transparent
-          opacity={0.35}
+          opacity={0.62}
           blending={THREE.AdditiveBlending}
         />
       </lineSegments>
@@ -149,22 +153,34 @@ const InnerSightBuilding: React.FC<InnerSightBuildingProps> = ({
       {/* Translucent Floor Slabs */}
       {[-1.3, 0.0, 1.3].map((y, i) => (
         <mesh key={i} position={[0, y, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-          <planeGeometry args={[3.6, 2.8]} />
+          <planeGeometry args={[3.8, 2.8]} />
           <meshBasicMaterial
-            color="#0891b2"
+            color="#083344"
             transparent
-            opacity={0.05}
+            opacity={0.14}
             side={THREE.DoubleSide}
             depthWrite={false}
           />
         </mesh>
       ))}
 
+      {/* Static Junction Nodes along A* Path */}
+      {waypoints.map((pt, idx) => (
+        <mesh key={idx} position={pt}>
+          <sphereGeometry args={[0.045, 12, 12]} />
+          <meshBasicMaterial
+            color={idx === waypoints.length - 1 ? '#a78bfa' : '#22d3ee'}
+            transparent
+            opacity={0.8}
+          />
+        </mesh>
+      ))}
+
       {/* Target Destination Clinic Beacon */}
       <mesh position={[-0.8, 1.3, -0.5]}>
-        <sphereGeometry args={[0.08, 16, 16]} />
-        <meshBasicMaterial color="#a78bfa" />
-        <pointLight color="#a78bfa" intensity={1.2} distance={2.5} />
+        <sphereGeometry args={[0.09, 16, 16]} />
+        <meshBasicMaterial color="#c084fc" />
+        <pointLight color="#c084fc" intensity={2.0} distance={3} />
       </mesh>
 
       {/* Active Glowing A* Path Line */}
@@ -172,9 +188,9 @@ const InnerSightBuilding: React.FC<InnerSightBuildingProps> = ({
 
       {/* Traveling Waypoint Packet */}
       <mesh ref={pulseNodeRef}>
-        <sphereGeometry args={[0.07, 16, 16]} />
+        <sphereGeometry args={[0.08, 16, 16]} />
         <meshBasicMaterial color="#ffffff" />
-        <pointLight color="#22d3ee" intensity={1.6} distance={2.5} />
+        <pointLight color="#22d3ee" intensity={2.4} distance={3.5} />
       </mesh>
     </group>
   );
@@ -201,7 +217,7 @@ const SideGutterRelic: React.FC<{
         color="#a78bfa"
         wireframe
         transparent
-        opacity={0.22}
+        opacity={0.25}
         blending={THREE.AdditiveBlending}
       />
     </mesh>
@@ -219,7 +235,7 @@ const CosmicScene: React.FC<CosmicSceneProps> = ({
   reducedMotion,
   scrollRef,
 }) => {
-  const particleCount = isMobile ? 100 : 280;
+  const particleCount = isMobile ? 90 : 220;
 
   const [dustPositions, dustColors] = useMemo(() => {
     const pos = new Float32Array(particleCount * 3);
@@ -259,7 +275,7 @@ const CosmicScene: React.FC<CosmicSceneProps> = ({
         scrollRef={scrollRef}
       />
 
-      {/* Far Outer Gutters Relics (Desktop only: stationed outside 1200px container) */}
+      {/* Far Outer Gutters Relics */}
       {!isMobile && (
         <>
           <SideGutterRelic position={[-9.2, 0.4, -3.5]} reducedMotion={reducedMotion} />
@@ -277,7 +293,7 @@ const CosmicScene: React.FC<CosmicSceneProps> = ({
           size={isMobile ? 0.028 : 0.035}
           vertexColors
           transparent
-          opacity={0.35}
+          opacity={0.32}
           sizeAttenuation
           blending={THREE.AdditiveBlending}
           depthWrite={false}
@@ -290,6 +306,7 @@ const CosmicScene: React.FC<CosmicSceneProps> = ({
 export const Scene3D: React.FC<{ isMobile?: boolean }> = ({ isMobile = false }) => {
   const shouldReduceMotion = Boolean(useReducedMotion());
   const scrollRef = useRef(0);
+  const [isHeroVisible, setIsHeroVisible] = useState(true);
 
   // Performance Guard 1: Detect WebGL support with static fallback
   const webGlSupported = useSyncExternalStore(
@@ -330,6 +347,22 @@ export const Scene3D: React.FC<{ isMobile?: boolean }> = ({ isMobile = false }) 
     () => isMobile
   );
 
+  // Performance Guard 4: IntersectionObserver to pause rendering when hero is offscreen
+  useEffect(() => {
+    const heroEl = document.getElementById('hero');
+    if (!heroEl) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsHeroVisible(entry.isIntersecting);
+      },
+      { threshold: 0.05 }
+    );
+
+    observer.observe(heroEl);
+    return () => observer.disconnect();
+  }, []);
+
   useEffect(() => {
     const handleScroll = () => {
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
@@ -356,18 +389,18 @@ export const Scene3D: React.FC<{ isMobile?: boolean }> = ({ isMobile = false }) 
       aria-hidden="true"
     >
       <Canvas
-        camera={{ position: [0, 0, 8], fov: isTouchMobile ? 54 : 46 }}
-        dpr={[1, Math.min(typeof window !== 'undefined' ? window.devicePixelRatio : 1, 1.75)]}
-        frameloop={isHidden ? 'never' : 'always'}
+        camera={{ position: [0, 0, 7.8], fov: isTouchMobile ? 54 : 45 }}
+        dpr={[1, Math.min(typeof window !== 'undefined' ? window.devicePixelRatio : 1, 2)]}
+        frameloop={isHidden || !isHeroVisible ? 'never' : 'always'}
         gl={{
           antialias: !isTouchMobile,
           alpha: true,
           powerPreference: 'high-performance',
-          depth: false,
+          depth: true,
         }}
       >
-        <ambientLight intensity={0.7} />
-        <pointLight position={[0, 0, 6]} intensity={1.5} color="#22d3ee" distance={20} />
+        <ambientLight intensity={0.8} />
+        <pointLight position={[0, 0, 6]} intensity={1.8} color="#22d3ee" distance={20} />
         <pointLight position={[6, -4, 4]} intensity={1.2} color="#a78bfa" distance={18} />
         <CosmicScene
           isMobile={isTouchMobile}

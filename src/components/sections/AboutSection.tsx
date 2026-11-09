@@ -98,7 +98,7 @@ export const AboutSection: React.FC = () => {
                 {/* Academic Item */}
                 <div className="flex items-start gap-3.5 group">
                   <motion.div
-                    whileHover={shouldReduceMotion ? undefined : { scale: 1.1, rotate: 5 }}
+                    whileHover={{ scale: 1.1, rotate: 5 }}
                     transition={{ duration: 0.2, ease: SHARED_EASE }}
                     className="p-2.5 rounded-[12px] bg-cyan-600/15 border border-cyan-500/25 text-cyan-400 shrink-0"
                   >
@@ -120,7 +120,7 @@ export const AboutSection: React.FC = () => {
                 {/* Location & Relocation */}
                 <div className="flex items-start gap-3.5 group">
                   <motion.div
-                    whileHover={shouldReduceMotion ? undefined : { scale: 1.1, rotate: -5 }}
+                    whileHover={{ scale: 1.1, rotate: -5 }}
                     transition={{ duration: 0.2, ease: SHARED_EASE }}
                     className="p-2.5 rounded-[12px] bg-violet-600/15 border border-violet-500/25 text-violet-400 shrink-0"
                   >
@@ -140,7 +140,7 @@ export const AboutSection: React.FC = () => {
                 {/* Internship Window */}
                 <div className="flex items-start gap-3.5 group">
                   <motion.div
-                    whileHover={shouldReduceMotion ? undefined : { scale: 1.1, rotate: 5 }}
+                    whileHover={{ scale: 1.1, rotate: 5 }}
                     transition={{ duration: 0.2, ease: SHARED_EASE }}
                     className="p-2.5 rounded-[12px] bg-emerald-600/15 border border-emerald-500/25 text-emerald-400 shrink-0"
                   >

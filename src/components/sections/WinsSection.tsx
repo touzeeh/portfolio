@@ -160,7 +160,7 @@ export const WinsSection: React.FC = () => {
                   {win.tags.map((tag) => (
                     <motion.span
                       key={tag}
-                      whileHover={shouldReduceMotion ? undefined : { y: -2, scale: 1.05 }}
+                      whileHover={{ y: -2, scale: 1.05 }}
                       transition={{ duration: 0.15, ease: SHARED_EASE }}
                       className="px-2 py-0.5 rounded-md text-[11px] font-mono bg-slate-900 border border-white/10 hover:border-amber-400/40 text-slate-300 transition-colors cursor-default"
                     >
@@ -175,8 +175,8 @@ export const WinsSection: React.FC = () => {
                 <motion.button
                   type="button"
                   onClick={(e) => handleOpen(win, e)}
-                  whileHover={shouldReduceMotion ? undefined : { scale: 1.08, y: -2 }}
-                  whileTap={shouldReduceMotion ? undefined : { scale: 0.94 }}
+                  whileHover={{ scale: 1.08, y: -2 }}
+                  whileTap={{ scale: 0.94 }}
                   transition={{ duration: 0.2, ease: SHARED_EASE }}
                   className="btn-secondary text-xs py-2 px-3.5 flex items-center gap-1.5 hover:border-amber-400/50 hover:text-amber-200 text-amber-300 group/btn shadow-sm hover:shadow-[0_0_16px_rgba(245,158,11,0.3)] cursor-pointer"
                 >
@@ -223,8 +223,8 @@ export const WinsSection: React.FC = () => {
                   <motion.button
                     type="button"
                     onClick={handleClose}
-                    whileHover={shouldReduceMotion ? undefined : { scale: 1.15, rotate: 90 }}
-                    whileTap={shouldReduceMotion ? undefined : { scale: 0.9 }}
+                    whileHover={{ scale: 1.15, rotate: 90 }}
+                    whileTap={{ scale: 0.9 }}
                     transition={{ duration: 0.2 }}
                     className="absolute top-3 right-3 sm:top-3.5 sm:right-3.5 p-2 rounded-full bg-slate-950/90 text-slate-300 hover:text-white border border-white/20 hover:border-amber-400/60 transition-colors z-40 shadow-xl cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
                     aria-label="Close modal"

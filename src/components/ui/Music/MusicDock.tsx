@@ -1,60 +1,30 @@
 'use client';
 
-import React, { useState, useRef, useLayoutEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { useMusic } from './MusicContext';
 import { SHARED_EASE } from '@/lib/animations';
 
-interface AutoScalingTextProps {
+interface LyricLineDisplayProps {
   text: string;
+  isMobileStrip?: boolean;
 }
 
-const AutoScalingText: React.FC<AutoScalingTextProps> = ({ text }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const textRef = useRef<HTMLSpanElement>(null);
-  const [scale, setScale] = useState(1);
-  const [hasOverflow, setHasOverflow] = useState(false);
-
-  useLayoutEffect(() => {
-    if (!containerRef.current || !textRef.current) return;
-
-    // Reset temporarily to measure raw natural width
-    textRef.current.style.transform = 'none';
-    const cWidth = containerRef.current.clientWidth;
-    const tWidth = textRef.current.scrollWidth;
-
-    if (cWidth > 0 && tWidth > cWidth) {
-      const computedScale = Math.max(0.85, cWidth / tWidth);
-      setScale(computedScale);
-      // If even at 85% it exceeds available width, enable soft edge fade mask
-      setHasOverflow(tWidth * computedScale > cWidth);
-    } else {
-      setScale(1);
-      setHasOverflow(false);
-    }
-  }, [text]);
-
+const LyricLineDisplay: React.FC<LyricLineDisplayProps> = ({ text, isMobileStrip = false }) => {
   return (
     <div
-      ref={containerRef}
-      className="relative max-w-[min(520px,80vw)] max-sm:max-w-[75vw] overflow-hidden whitespace-nowrap"
+      className={`relative min-w-0 overflow-hidden whitespace-nowrap ${
+        isMobileStrip ? 'max-w-[80vw]' : 'w-full'
+      }`}
       style={{
-        maskImage: hasOverflow
-          ? 'linear-gradient(to right, black 85%, transparent 100%)'
-          : undefined,
-        WebkitMaskImage: hasOverflow
-          ? 'linear-gradient(to right, black 85%, transparent 100%)'
-          : undefined,
+        maskImage: 'linear-gradient(to right, black 85%, transparent 100%)',
+        WebkitMaskImage: 'linear-gradient(to right, black 85%, transparent 100%)',
       }}
     >
       <span
-        ref={textRef}
-        style={{
-          display: 'inline-block',
-          transform: scale < 1 ? `scale(${scale})` : undefined,
-          transformOrigin: 'left center',
-        }}
-        className="font-sans font-medium text-[clamp(14px,1.1vw,18px)] max-sm:text-[13px] tracking-[0.01em] text-[var(--text)]/50 drop-shadow-[0_1px_3px_rgba(0,0,0,0.65)] select-none whitespace-nowrap"
+        className={`font-sans font-medium tracking-[0.01em] text-[var(--text)]/50 drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)] select-none whitespace-nowrap block truncate ${
+          isMobileStrip ? 'text-[12px]' : 'text-[13px]'
+        }`}
       >
         {text}
       </span>
@@ -78,9 +48,14 @@ export const MusicDock: React.FC = () => {
 
   const shouldReduceMotion = useReducedMotion();
   const [isHovered, setIsHovered] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   if (audioError) {
-    return null; // Gracefully hidden if audio asset fails completely
+    return null;
   }
 
   const isVocalsActive =
@@ -95,7 +70,7 @@ export const MusicDock: React.FC = () => {
       {isDebug && (
         <aside
           aria-label="Audio Calibration HUD"
-          className="fixed bottom-20 left-6 z-50 px-3 py-1.5 rounded-lg bg-[var(--surface-2)]/95 border border-[var(--accent)]/40 text-[11px] font-mono text-[var(--accent)] shadow-xl flex items-center gap-3 backdrop-blur-md select-none"
+          className="fixed top-18 left-4 sm:left-6 z-[60] px-3 py-1.5 rounded-lg bg-[var(--surface-2)]/95 border border-[var(--accent)]/40 text-[11px] font-mono text-[var(--accent)] shadow-2xl flex items-center gap-3 backdrop-blur-md select-none"
         >
           <span>
             {currentTime.toFixed(2)}s | Line #{activeLineIndex >= 0 ? activeLineIndex : '-'} | Offset:{' '}
@@ -122,35 +97,24 @@ export const MusicDock: React.FC = () => {
         </aside>
       )}
 
-      {/* Main Music Dock: fixed bottom-left, horizontal layout */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{
-          opacity: !hasStarted ? 1 : isPlaying ? 1 : 0.7, // Dims to 0.7 when paused
-        }}
-        transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-        className="fixed bottom-5 left-5 sm:bottom-6 sm:left-6 z-40 flex items-center gap-3 select-none pointer-events-auto"
-        style={{
-          paddingBottom: 'env(safe-area-inset-bottom, 0px)',
-          paddingLeft: 'env(safe-area-inset-left, 0px)',
-        }}
-      >
-        {/* Play/Pause Button: ~34px circle, thin cyan ring, no filled background */}
+      {/* Main Music Dock: Left slot of Header grid */}
+      <div className="flex items-center gap-2.5 min-w-0 max-w-full select-none">
+        {/* 28px Play/Pause Button: thin cyan ring, no filled background */}
         <div className="relative flex items-center shrink-0">
-          {/* Pre-start gentle ripple pulse */}
-          {!hasStarted && !shouldReduceMotion && (
+          {/* Pre-start ripple pulse ring */}
+          {mounted && !hasStarted && !shouldReduceMotion && (
             <span
-              className="absolute -inset-1.5 rounded-full bg-[var(--accent)]/20 animate-ping pointer-events-none"
+              className="absolute -inset-1 rounded-full bg-[var(--accent)]/25 animate-ping pointer-events-none"
               aria-hidden="true"
             />
           )}
 
-          {/* While playing: slow rotating glow ring */}
-          {isPlaying && !shouldReduceMotion && (
+          {/* While playing: very slow rotating glow ring */}
+          {mounted && isPlaying && !shouldReduceMotion && (
             <motion.div
               animate={{ rotate: 360 }}
-              transition={{ repeat: Infinity, duration: 12, ease: 'linear' }}
-              className="absolute -inset-1 rounded-full border border-dashed border-[var(--accent)]/30 pointer-events-none"
+              transition={{ repeat: Infinity, duration: 14, ease: 'linear' }}
+              className="absolute -inset-0.5 rounded-full border border-dashed border-[var(--accent)]/30 pointer-events-none"
               aria-hidden="true"
             />
           )}
@@ -158,15 +122,16 @@ export const MusicDock: React.FC = () => {
           <motion.button
             type="button"
             data-music-btn="true"
+            data-cursor-hover="true"
             onClick={togglePlay}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             whileHover={shouldReduceMotion ? undefined : { scale: 1.08 }}
             whileTap={shouldReduceMotion ? undefined : { scale: 0.92 }}
             transition={{ duration: 0.18, ease: SHARED_EASE }}
-            className={`relative w-[34px] h-[34px] rounded-full flex items-center justify-center bg-transparent transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] cursor-pointer ${
+            className={`relative w-7 h-7 rounded-full flex items-center justify-center bg-transparent transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] cursor-pointer ${
               isPlaying
-                ? 'border border-[var(--accent)]/60 text-[var(--accent)] shadow-[0_0_14px_rgba(34,211,238,0.3)]'
+                ? 'border border-[var(--accent)]/60 text-[var(--accent)] shadow-[0_0_12px_rgba(34,211,238,0.25)]'
                 : 'border border-[var(--border)] text-[var(--text-muted)] hover:text-[var(--text)] hover:border-[var(--accent)]/50 opacity-60'
             }`}
             aria-label={isPlaying ? 'Pause music' : 'Play music'}
@@ -189,7 +154,7 @@ export const MusicDock: React.FC = () => {
                       : { scale: 0.6, rotate: 25, opacity: 0 }
                   }
                   transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-                  className="w-3 h-3 fill-current"
+                  className="w-2.5 h-2.5 fill-current"
                   viewBox="0 0 24 24"
                 >
                   <rect x="6" y="5" width="4" height="14" rx="1.5" />
@@ -210,7 +175,7 @@ export const MusicDock: React.FC = () => {
                       : { scale: 0.6, rotate: -25, opacity: 0 }
                   }
                   transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-                  className="w-3 h-3 fill-current translate-x-[0.5px]"
+                  className="w-2.5 h-2.5 fill-current translate-x-[0.5px]"
                   viewBox="0 0 24 24"
                 >
                   <path d="M8 5.14v13.72a1 1 0 0 0 1.5.86l11-6.86a1 1 0 0 0 0-1.72l-11-6.86A1 1 0 0 0 8 5.14z" />
@@ -218,20 +183,20 @@ export const MusicDock: React.FC = () => {
               )}
             </AnimatePresence>
 
-            {/* 3 Tiny Equalizer Bars inside the ring while playing */}
-            {isPlaying && !shouldReduceMotion && (
+            {/* 3 tiny equalizer bars inside ring while playing */}
+            {mounted && isPlaying && !shouldReduceMotion && (
               <div
-                className="absolute bottom-1 flex items-end justify-center gap-[1.5px] h-2 pointer-events-none"
+                className="absolute bottom-0.5 flex items-end justify-center gap-[1px] h-1.5 pointer-events-none"
                 aria-hidden="true"
               >
-                <span className="w-[1.5px] bg-[var(--accent)] rounded-full animate-music-bar-1" />
-                <span className="w-[1.5px] bg-[var(--accent)] rounded-full animate-music-bar-2" />
-                <span className="w-[1.5px] bg-[var(--accent)] rounded-full animate-music-bar-3" />
+                <span className="w-[1.2px] bg-[var(--accent)] rounded-full animate-music-bar-1" />
+                <span className="w-[1.2px] bg-[var(--accent)] rounded-full animate-music-bar-2" />
+                <span className="w-[1.2px] bg-[var(--accent)] rounded-full animate-music-bar-3" />
               </div>
             )}
           </motion.button>
 
-          {/* Hint text before first interaction: "tap anywhere to play ♪" */}
+          {/* Hint text before music starts: "tap anywhere to play ♪" */}
           <AnimatePresence>
             {!hasStarted && (
               <motion.div
@@ -239,7 +204,7 @@ export const MusicDock: React.FC = () => {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -6 }}
                 transition={{ duration: 0.25 }}
-                className="absolute left-full ml-3 top-1/2 -translate-y-1/2 font-sans font-medium text-xs text-[var(--accent)] whitespace-nowrap pointer-events-none drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]"
+                className="absolute left-full ml-2.5 top-1/2 -translate-y-1/2 font-sans font-medium text-xs text-[var(--accent)] whitespace-nowrap pointer-events-none drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]"
               >
                 tap anywhere to play ♪
               </motion.div>
@@ -254,7 +219,7 @@ export const MusicDock: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 4 }}
                 transition={{ duration: 0.15 }}
-                className="absolute left-0 bottom-full mb-2 px-2 py-0.5 rounded bg-[var(--surface-2)]/90 border border-[var(--border)] text-[var(--text)] text-[11px] font-sans whitespace-nowrap shadow-md pointer-events-none"
+                className="absolute left-0 top-full mt-2 px-2 py-0.5 rounded bg-[var(--surface-2)]/95 border border-[var(--border)] text-[var(--text)] text-[11px] font-sans whitespace-nowrap shadow-md pointer-events-none z-50"
               >
                 {isPlaying ? 'Pause' : 'Play'}
               </motion.div>
@@ -262,9 +227,9 @@ export const MusicDock: React.FC = () => {
           </AnimatePresence>
         </div>
 
-        {/* Floating Lyric Line: NO box, NO border, NO background, NO blur panel */}
+        {/* Desktop Inline Lyric Line (Shown on viewports >= 1100px) */}
         <div
-          className="relative h-7 flex items-center min-w-0 pointer-events-none overflow-hidden"
+          className="hidden min-[1100px]:flex relative h-6 items-center min-w-0 flex-1 overflow-hidden pointer-events-none"
           aria-live="off"
         >
           <AnimatePresence mode="popLayout" initial={false}>
@@ -274,7 +239,7 @@ export const MusicDock: React.FC = () => {
                 initial={
                   shouldReduceMotion
                     ? { opacity: 0 }
-                    : { opacity: 0, y: 6, filter: 'blur(4px)' }
+                    : { opacity: 0, y: 6, filter: 'blur(3px)' }
                 }
                 animate={{
                   opacity: 1,
@@ -284,21 +249,58 @@ export const MusicDock: React.FC = () => {
                 exit={
                   shouldReduceMotion
                     ? { opacity: 0 }
-                    : { opacity: 0, filter: 'blur(4px)' }
+                    : { opacity: 0, filter: 'blur(3px)' }
                 }
                 transition={{
-                  duration: 0.45,
-                  ease: [0.22, 1, 0.36, 1],
+                  duration: 0.35,
+                  ease: 'easeInOut',
                   opacity: { duration: 0.25 },
                 }}
-                className="flex items-center min-w-0"
+                className="flex items-center min-w-0 w-full"
               >
-                <AutoScalingText text={activeLine.text} />
+                <LyricLineDisplay text={activeLine.text} />
               </motion.div>
             )}
           </AnimatePresence>
         </div>
-      </motion.div>
+      </div>
+
+      {/* Responsive Sub-Header Lyric Strip (Shown below 1100px, left-aligned right under header) */}
+      <div
+        className="block min-[1100px]:hidden fixed top-[60px] sm:top-[68px] left-4 sm:left-6 z-40 pointer-events-none select-none max-w-[80vw]"
+        aria-live="off"
+      >
+        <AnimatePresence mode="popLayout" initial={false}>
+          {isVocalsActive && activeLine && (
+            <motion.div
+              key={activeLine.id}
+              initial={
+                shouldReduceMotion
+                  ? { opacity: 0 }
+                  : { opacity: 0, y: 4, filter: 'blur(3px)' }
+              }
+              animate={{
+                opacity: 1,
+                y: 0,
+                filter: 'blur(0px)',
+              }}
+              exit={
+                shouldReduceMotion
+                  ? { opacity: 0 }
+                  : { opacity: 0, filter: 'blur(3px)' }
+              }
+              transition={{
+                duration: 0.35,
+                ease: 'easeInOut',
+                opacity: { duration: 0.25 },
+              }}
+              className="flex items-center min-w-0"
+            >
+              <LyricLineDisplay text={activeLine.text} isMobileStrip />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </>
   );
 };

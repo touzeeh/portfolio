@@ -4,6 +4,17 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useReducedMotion, AnimatePresence } from 'framer-motion';
 import { SITE_DATA } from '@/data/site';
 import { ArrowUpRightIcon, MenuIcon, XIcon } from '@/components/ui/Icons';
+import dynamic from 'next/dynamic';
+
+const MusicDock = dynamic(
+  () => import('@/components/ui/Music').then((m) => m.MusicDock),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="w-7 h-7 rounded-full border border-[var(--border)] opacity-40 shrink-0" />
+    ),
+  }
+);
 import { SHARED_EASE } from '@/lib/animations';
 
 export const Navbar: React.FC = () => {
@@ -14,34 +25,71 @@ export const Navbar: React.FC = () => {
   const { scrollYProgress } = useScroll();
   const mobileMenuRef = useRef<HTMLDivElement>(null);
 
-  // Scroll-spy with IntersectionObserver / window scroll check
+  // Scroll-spy with IntersectionObserver & distance-to-focal-point
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
 
-      // NO active nav item in the hero section (< 280px)
-      if (window.scrollY < 280) {
+      // NO active nav item in the hero section (< 260px)
+      if (window.scrollY < 260) {
         setActiveSection('');
         return;
       }
 
-      let current = '';
+      // Compute section closest to target reading zone (top 35% of viewport)
+      const focalY = window.innerHeight * 0.35;
+      let closestId = '';
+      let closestDist = Infinity;
+
       for (const item of SITE_DATA.nav) {
         const el = document.getElementById(item.id);
         if (el) {
           const rect = el.getBoundingClientRect();
-          if (rect.top <= 200 && rect.bottom >= 100) {
-            current = item.id;
-            break;
+          if (rect.top <= focalY + 120 && rect.bottom >= focalY - 80) {
+            const dist = Math.abs(rect.top - focalY);
+            if (dist < closestDist) {
+              closestDist = dist;
+              closestId = item.id;
+            }
           }
         }
       }
-      setActiveSection(current);
+      if (closestId) {
+        setActiveSection(closestId);
+      }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    // IntersectionObserver fallback for smooth entry
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (window.scrollY < 260) {
+          setActiveSection('');
+          return;
+        }
+        const visible = entries.filter((e) => e.isIntersecting);
+        if (visible.length > 0) {
+          visible.sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+          setActiveSection(visible[0].target.id);
+        }
+      },
+      {
+        rootMargin: '-20% 0px -40% 0px',
+        threshold: [0.15, 0.3, 0.6],
+      }
+    );
+
+    SITE_DATA.nav.forEach((item) => {
+      const el = document.getElementById(item.id);
+      if (el) observer.observe(el);
+    });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      observer.disconnect();
+    };
   }, []);
 
   // Trap focus when mobile menu is open
@@ -85,14 +133,16 @@ export const Navbar: React.FC = () => {
         aria-hidden="true"
       />
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between">
-        {/* Left balance spacer on desktop to keep center pill nav centered */}
-        <div className="hidden md:block w-24 shrink-0" aria-hidden="true" />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-[1fr_auto_1fr] items-center">
+        {/* Left Column: Music Dock (28px button + 10px gap + lyric line) */}
+        <div className="min-w-0 flex items-center pr-3">
+          <MusicDock />
+        </div>
 
-        {/* Center Pill Nav (Desktop): Scroll-spy, NO active item in hero */}
+        {/* Center Column: Center Pill Nav (Desktop) */}
         <nav
           aria-label="Main section navigation"
-          className="hidden md:flex items-center gap-1 p-1 rounded-full bg-[var(--surface-2)]/90 backdrop-blur-md border border-[var(--border)] shadow-lg shadow-black/25"
+          className="hidden md:flex items-center justify-center gap-1 p-1 rounded-full bg-[var(--surface-2)]/90 backdrop-blur-md border border-[var(--border)] shadow-lg shadow-black/25"
         >
           {SITE_DATA.nav.map((item) => {
             const isActive = activeSection === item.id;
@@ -101,8 +151,8 @@ export const Navbar: React.FC = () => {
                 key={item.id}
                 type="button"
                 onClick={() => handleNavClick(item.id)}
-                whileHover={shouldReduceMotion ? undefined : { scale: 1.05 }}
-                whileTap={shouldReduceMotion ? undefined : { scale: 0.95 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 transition={{ duration: 0.18, ease: SHARED_EASE }}
                 className={`relative px-3.5 py-1.5 rounded-full text-xs font-medium transition-all ${
                   isActive
@@ -127,16 +177,16 @@ export const Navbar: React.FC = () => {
           })}
         </nav>
 
-        {/* Right: Contact CTA with interactive spring animation & Mobile Hamburger */}
-        <div className="flex items-center gap-2.5 ml-auto md:ml-0">
+        {/* Right Column: Contact CTA & Mobile Hamburger */}
+        <div className="flex items-center justify-end gap-2.5">
           <motion.a
             href="#contact"
             onClick={(e) => {
               e.preventDefault();
               handleNavClick('contact');
             }}
-            whileHover={shouldReduceMotion ? undefined : { scale: 1.05, y: -1 }}
-            whileTap={shouldReduceMotion ? undefined : { scale: 0.95 }}
+            whileHover={{ scale: 1.05, y: -1 }}
+            whileTap={{ scale: 0.95 }}
             transition={{ duration: 0.2, ease: SHARED_EASE }}
             className="hidden sm:inline-flex items-center gap-1.5 min-h-[44px] px-4 rounded-[10px] bg-[var(--surface-2)]/80 hover:bg-[var(--surface-2)] border border-[var(--border)] hover:border-[var(--accent)] text-[var(--text)] hover:text-[var(--accent)] text-xs font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-[var(--accent)] group shadow-sm hover:shadow-[0_0_15px_rgba(34,211,238,0.2)]"
           >
@@ -148,8 +198,8 @@ export const Navbar: React.FC = () => {
           <motion.button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            whileHover={shouldReduceMotion ? undefined : { scale: 1.05 }}
-            whileTap={shouldReduceMotion ? undefined : { scale: 0.92 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.92 }}
             transition={{ duration: 0.15 }}
             className="md:hidden w-11 h-11 rounded-[10px] bg-[var(--surface-2)] border border-[var(--border)] text-[var(--text)] flex items-center justify-center focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
             aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
@@ -182,8 +232,8 @@ export const Navbar: React.FC = () => {
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.04, duration: 0.2, ease: SHARED_EASE }}
-                  whileHover={shouldReduceMotion ? undefined : { x: 4 }}
-                  whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
+                  whileHover={{ x: 4 }}
+                  whileTap={{ scale: 0.97 }}
                   onClick={() => handleNavClick(item.id)}
                   className={`flex items-center justify-between min-h-[44px] px-4 rounded-[10px] text-sm font-medium transition-colors ${
                     activeSection === item.id
@@ -200,8 +250,8 @@ export const Navbar: React.FC = () => {
             <div className="pt-3 border-t border-[var(--border)] flex items-center gap-3">
               <motion.a
                 href="#contact"
-                whileHover={shouldReduceMotion ? undefined : { scale: 1.02, y: -1 }}
-                whileTap={shouldReduceMotion ? undefined : { scale: 0.96 }}
+                whileHover={{ scale: 1.02, y: -1 }}
+                whileTap={{ scale: 0.96 }}
                 onClick={(e) => {
                   e.preventDefault();
                   handleNavClick('contact');

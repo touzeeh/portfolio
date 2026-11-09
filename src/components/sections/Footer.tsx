@@ -30,8 +30,8 @@ export const Footer: React.FC = () => {
             href={SITE_DATA.personal.github}
             target="_blank"
             rel="noreferrer"
-            whileHover={shouldReduceMotion ? undefined : { scale: 1.15, y: -2 }}
-            whileTap={shouldReduceMotion ? undefined : { scale: 0.92 }}
+            whileHover={{ scale: 1.15, y: -2 }}
+            whileTap={{ scale: 0.92 }}
             transition={{ duration: 0.18, ease: SHARED_EASE }}
             className="w-10 h-10 rounded-[8px] border border-[var(--border)] hover:border-[var(--accent)] hover:text-[var(--text)] hover:shadow-[0_0_12px_rgba(34,211,238,0.25)] flex items-center justify-center transition-colors"
             aria-label="GitHub Profile"
@@ -44,8 +44,8 @@ export const Footer: React.FC = () => {
             href={SITE_DATA.personal.linkedin}
             target="_blank"
             rel="noreferrer"
-            whileHover={shouldReduceMotion ? undefined : { scale: 1.15, y: -2 }}
-            whileTap={shouldReduceMotion ? undefined : { scale: 0.92 }}
+            whileHover={{ scale: 1.15, y: -2 }}
+            whileTap={{ scale: 0.92 }}
             transition={{ duration: 0.18, ease: SHARED_EASE }}
             className="w-10 h-10 rounded-[8px] border border-[var(--border)] hover:border-[var(--accent)] hover:text-[var(--text)] hover:shadow-[0_0_12px_rgba(34,211,238,0.25)] flex items-center justify-center transition-colors"
             aria-label="LinkedIn Profile"
@@ -56,8 +56,8 @@ export const Footer: React.FC = () => {
 
           <motion.a
             href={`mailto:${SITE_DATA.personal.email}`}
-            whileHover={shouldReduceMotion ? undefined : { scale: 1.15, y: -2 }}
-            whileTap={shouldReduceMotion ? undefined : { scale: 0.92 }}
+            whileHover={{ scale: 1.15, y: -2 }}
+            whileTap={{ scale: 0.92 }}
             transition={{ duration: 0.18, ease: SHARED_EASE }}
             className="w-10 h-10 rounded-[8px] border border-[var(--border)] hover:border-[var(--accent)] hover:text-[var(--text)] hover:shadow-[0_0_12px_rgba(34,211,238,0.25)] flex items-center justify-center transition-colors"
             aria-label="Send direct email"
@@ -69,8 +69,8 @@ export const Footer: React.FC = () => {
           <motion.button
             type="button"
             onClick={scrollToTop}
-            whileHover={shouldReduceMotion ? undefined : { scale: 1.15, y: -2 }}
-            whileTap={shouldReduceMotion ? undefined : { scale: 0.92 }}
+            whileHover={{ scale: 1.15, y: -2 }}
+            whileTap={{ scale: 0.92 }}
             transition={{ duration: 0.18, ease: SHARED_EASE }}
             className="w-10 h-10 rounded-[8px] border border-[var(--border)] hover:border-[var(--accent)] hover:text-[var(--text)] hover:shadow-[0_0_12px_rgba(34,211,238,0.25)] flex items-center justify-center transition-colors ml-2 group"
             aria-label="Scroll back to top"

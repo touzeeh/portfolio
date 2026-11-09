@@ -81,8 +81,8 @@ export const SkillsSection: React.FC = () => {
                   {category.items.map((skill) => (
                     <motion.span
                       key={skill}
-                      whileHover={shouldReduceMotion ? undefined : { y: -4, scale: 1.08 }}
-                      whileTap={shouldReduceMotion ? undefined : { scale: 0.95 }}
+                      whileHover={{ y: -4, scale: 1.08 }}
+                      whileTap={{ scale: 0.95 }}
                       transition={{ duration: 0.18, ease: SHARED_EASE }}
                       className="px-3.5 py-2 rounded-lg text-sm font-mono font-medium bg-slate-900/90 border border-white/10 text-slate-200 hover:border-cyan-400/70 hover:text-white hover:shadow-[0_0_16px_rgba(6,182,212,0.35)] transition-all cursor-default shadow-sm select-none"
                     >

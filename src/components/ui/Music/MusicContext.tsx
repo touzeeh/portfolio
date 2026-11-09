@@ -15,6 +15,7 @@ import {
   findActiveLyricIndex,
   DEFAULT_LYRIC_LEAD_MS,
   DEFAULT_LYRIC_OFFSET_MS,
+  validateLyricsTiming,
 } from '@/lib/lyrics';
 
 interface MusicContextType {
@@ -292,6 +293,7 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       })
       .then((text) => {
         const parsed = parseLRC(text);
+        validateLyricsTiming(parsed, audioRef.current?.duration);
         setLyrics(parsed);
       })
       .catch((err) => {
@@ -309,9 +311,13 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     const handleSeekedOrTimeUpdate = () => {
       syncCurrentLyric();
     };
+    const handleLoadedMetadata = () => {
+      validateLyricsTiming(lyricsRef.current, audio.duration);
+    };
     audio.addEventListener('seeked', handleSeekedOrTimeUpdate);
     audio.addEventListener('seeking', handleSeekedOrTimeUpdate);
     audio.addEventListener('timeupdate', handleSeekedOrTimeUpdate);
+    audio.addEventListener('loadedmetadata', handleLoadedMetadata);
 
     // 6. Interaction capture listeners
     listenersActiveRef.current = true;
@@ -426,6 +432,7 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         audio.removeEventListener('seeked', handleSeekedOrTimeUpdate);
         audio.removeEventListener('seeking', handleSeekedOrTimeUpdate);
         audio.removeEventListener('timeupdate', handleSeekedOrTimeUpdate);
+        audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
         audio.pause();
       }
       if (volumeFadeRafRef.current) {

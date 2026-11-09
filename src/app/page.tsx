@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { MotionConfig } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import { SmoothScroll, useScrollProgress } from '@/components/ui/SmoothScroll';
 import { Navbar } from '@/components/sections/Navbar';
@@ -14,7 +15,7 @@ import { ContactSection } from '@/components/sections/ContactSection';
 import { Footer } from '@/components/sections/Footer';
 import { BackToTop } from '@/components/ui/BackToTop';
 import { CustomCursor } from '@/components/ui/CustomCursor';
-import { BackgroundMusic } from '@/components/ui/Music';
+import { MusicProvider } from '@/components/ui/Music';
 import { WayfindingRouteLine } from '@/components/ui/WayfindingRouteLine';
 
 // Dynamic import with ssr: false for Three.js Canvas (untouched)
@@ -57,9 +58,6 @@ function PortfolioContent() {
       {/* Back to Top */}
       <BackToTop />
 
-      {/* Floating Background Music & Synced Lyrics System */}
-      <BackgroundMusic />
-
       {/* Custom Desktop Precision Cursor */}
       <CustomCursor />
     </div>
@@ -68,8 +66,12 @@ function PortfolioContent() {
 
 export default function Home() {
   return (
-    <SmoothScroll>
-      <PortfolioContent />
-    </SmoothScroll>
+    <MotionConfig reducedMotion="user">
+      <SmoothScroll>
+        <MusicProvider>
+          <PortfolioContent />
+        </MusicProvider>
+      </SmoothScroll>
+    </MotionConfig>
   );
 }

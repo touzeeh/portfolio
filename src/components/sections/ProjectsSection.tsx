@@ -118,7 +118,7 @@ export const ProjectsSection: React.FC = () => {
                   {featuredProject.metrics.map((m) => (
                     <motion.div
                       key={m.label}
-                      whileHover={shouldReduceMotion ? undefined : { y: -4, scale: 1.04 }}
+                      whileHover={{ y: -4, scale: 1.04 }}
                       transition={{ duration: 0.2, ease: SHARED_EASE }}
                       className="p-2.5 rounded-xl bg-slate-950/80 border border-white/10 hover:border-cyan-400/50 hover:shadow-[0_0_15px_rgba(6,182,212,0.2)] text-center transition-colors cursor-default"
                     >
@@ -176,7 +176,7 @@ export const ProjectsSection: React.FC = () => {
                 {featuredProject.stack.map((tech) => (
                   <motion.span
                     key={tech}
-                    whileHover={shouldReduceMotion ? undefined : { y: -3, scale: 1.08 }}
+                    whileHover={{ y: -3, scale: 1.08 }}
                     transition={{ duration: 0.18, ease: SHARED_EASE }}
                     className="px-3 py-1 rounded-lg bg-slate-900 border border-white/15 text-xs font-mono font-medium text-slate-200 hover:border-cyan-400/60 hover:text-white hover:shadow-[0_0_12px_rgba(6,182,212,0.25)] transition-all cursor-default"
                   >
@@ -260,8 +260,8 @@ export const ProjectsSection: React.FC = () => {
                     <motion.button
                       type="button"
                       onClick={() => handleCopyInstall(project.installCmd!)}
-                      whileHover={shouldReduceMotion ? undefined : { scale: 1.12 }}
-                      whileTap={shouldReduceMotion ? undefined : { scale: 0.9 }}
+                      whileHover={{ scale: 1.12 }}
+                      whileTap={{ scale: 0.9 }}
                       transition={{ duration: 0.15 }}
                       className="p-1.5 rounded-lg bg-slate-900 border border-white/10 hover:border-cyan-400/50 text-slate-300 hover:text-white transition shrink-0 hover:shadow-[0_0_10px_rgba(6,182,212,0.3)]"
                       aria-label="Copy install command"
@@ -282,7 +282,7 @@ export const ProjectsSection: React.FC = () => {
                     {project.metrics.map((m) => (
                       <motion.div
                         key={m.label}
-                        whileHover={shouldReduceMotion ? undefined : { y: -3, scale: 1.05 }}
+                        whileHover={{ y: -3, scale: 1.05 }}
                         transition={{ duration: 0.18, ease: SHARED_EASE }}
                         className="px-2.5 py-1 rounded-lg bg-slate-950/80 border border-white/10 hover:border-cyan-400/50 text-xs font-mono transition-colors cursor-default hover:shadow-[0_0_10px_rgba(6,182,212,0.2)]"
                       >
@@ -299,7 +299,7 @@ export const ProjectsSection: React.FC = () => {
                 {project.stack.map((tech) => (
                   <motion.span
                     key={tech}
-                    whileHover={shouldReduceMotion ? undefined : { y: -2, scale: 1.06 }}
+                    whileHover={{ y: -2, scale: 1.06 }}
                     transition={{ duration: 0.15, ease: SHARED_EASE }}
                     className="px-2.5 py-1 rounded-md bg-slate-900 border border-white/10 hover:border-cyan-400/50 hover:text-white text-xs font-mono text-slate-300 transition-colors cursor-default"
                   >

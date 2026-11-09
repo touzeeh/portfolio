@@ -24,8 +24,44 @@ export interface LyricLine {
   isInstrumental: boolean;
 }
 
-export const DEFAULT_LYRIC_LEAD_MS = 120;
-export const DEFAULT_LYRIC_OFFSET_MS = 0;
+// Per user spec: 0ms lead time so lyrics start appearing exactly at timestamp, never earlier
+export const DEFAULT_LYRIC_LEAD_MS = 0;
+
+// Per user spec: Negative value makes lyrics appear later. Initialized to -150ms.
+export const DEFAULT_LYRIC_OFFSET_MS = -150;
+
+/**
+ * Validates whether parsed lyrics match the audio duration and reasonable starting bounds.
+ * Warns if last timestamp exceeds audio.duration or first timestamp exceeds 30s.
+ */
+export function validateLyricsTiming(lines: LyricLine[], audioDurationSec?: number): boolean {
+  if (!lines || lines.length === 0) return false;
+
+  const firstLine = lines.find((l) => !l.isInstrumental && l.text.trim().length > 0);
+  if (firstLine && firstLine.timeMs > 30 * 1000) {
+    console.warn(
+      `[LRC Self-Check] Warning: First vocal timestamp (${(firstLine.timeMs / 1000).toFixed(
+        1
+      )}s) starts > 30s into the track. The .lrc may belong to a different song version.`
+    );
+  }
+
+  if (audioDurationSec && audioDurationSec > 0) {
+    const lastLine = lines[lines.length - 1];
+    if (lastLine.timeMs > audioDurationSec * 1000) {
+      console.warn(
+        `[LRC Self-Check] Warning: Last lyric timestamp (${(lastLine.timeMs / 1000).toFixed(
+          1
+        )}s) exceeds audio duration (${audioDurationSec.toFixed(
+          1
+        )}s). The .lrc may belong to a different song version.`
+      );
+      return false;
+    }
+  }
+
+  return true;
+}
 
 /**
  * Parses fractional seconds safely without centisecond / millisecond confusion.

@@ -156,8 +156,8 @@ export const ContactSection: React.FC = () => {
                 </p>
                 <motion.button
                   type="button"
-                  whileHover={shouldReduceMotion ? undefined : { scale: 1.04 }}
-                  whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.97 }}
                   onClick={() => {
                     setStatus('idle');
                     setStatusMessage('');
@@ -267,8 +267,8 @@ export const ContactSection: React.FC = () => {
                   type="submit"
                   disabled={status === 'loading'}
                   animate={status === 'error' && !shouldReduceMotion ? { x: [-5, 5, -5, 5, 0] } : undefined}
-                  whileHover={shouldReduceMotion ? undefined : { scale: 1.03, y: -2 }}
-                  whileTap={shouldReduceMotion ? undefined : { scale: 0.96 }}
+                  whileHover={{ scale: 1.03, y: -2 }}
+                  whileTap={{ scale: 0.96 }}
                   transition={{ duration: 0.2, ease: SHARED_EASE }}
                   className={`btn-primary w-full py-3 text-sm font-semibold flex items-center justify-center gap-2 cursor-pointer shadow-lg hover:shadow-cyan-500/25 ${
                     status === 'loading' ? 'opacity-70 cursor-wait' : ''
@@ -329,8 +329,8 @@ export const ContactSection: React.FC = () => {
                     <motion.button
                       type="button"
                       onClick={handleCopyEmail}
-                      whileHover={shouldReduceMotion ? undefined : { scale: 1.1 }}
-                      whileTap={shouldReduceMotion ? undefined : { scale: 0.92 }}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.92 }}
                       transition={{ duration: 0.15 }}
                       className="ml-2 px-3 py-1.5 rounded-lg bg-slate-900 border border-white/10 hover:border-cyan-400/50 text-xs font-mono text-slate-300 hover:text-white flex items-center gap-1.5 transition-colors shrink-0 hover:shadow-[0_0_10px_rgba(6,182,212,0.3)]"
                       aria-label="Copy email address"
@@ -355,8 +355,8 @@ export const ContactSection: React.FC = () => {
                   href={PERSONAL_INFO.github}
                   target="_blank"
                   rel="noreferrer"
-                  whileHover={shouldReduceMotion ? undefined : { x: 6 }}
-                  whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
+                  whileHover={{ x: 6 }}
+                  whileTap={{ scale: 0.98 }}
                   transition={{ duration: 0.2, ease: SHARED_EASE }}
                   className="flex items-center gap-3.5 p-3.5 rounded-xl bg-slate-950/80 border border-white/10 hover:border-white/40 hover:shadow-[0_0_15px_rgba(255,255,255,0.1)] transition-all group"
                 >
@@ -376,8 +376,8 @@ export const ContactSection: React.FC = () => {
                   href={PERSONAL_INFO.linkedin}
                   target="_blank"
                   rel="noreferrer"
-                  whileHover={shouldReduceMotion ? undefined : { x: 6 }}
-                  whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
+                  whileHover={{ x: 6 }}
+                  whileTap={{ scale: 0.98 }}
                   transition={{ duration: 0.2, ease: SHARED_EASE }}
                   className="flex items-center gap-3.5 p-3.5 rounded-xl bg-slate-950/80 border border-white/10 hover:border-violet-400/60 hover:shadow-[0_0_15px_rgba(139,92,246,0.25)] transition-all group"
                 >
