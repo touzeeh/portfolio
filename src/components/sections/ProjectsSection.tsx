@@ -66,10 +66,17 @@ export const ProjectsSection: React.FC = () => {
         whileInView="visible"
         viewport={VIEWPORT_CONFIG}
         variants={scrollRevealVariants}
+        className="relative group/flagship"
       >
+        {/* Animated Cyber Aura Ring */}
+        <div
+          className="absolute -inset-[1px] rounded-[26px] bg-gradient-to-r from-cyan-500/20 via-violet-500/20 to-cyan-500/20 opacity-40 group-hover/flagship:opacity-100 blur-sm transition-opacity duration-500 pointer-events-none"
+          aria-hidden="true"
+        />
+
         <TiltCard
           glareColor="rgba(6, 182, 212, 0.25)"
-          className="glass-card overflow-hidden border border-cyan-500/30 hover:border-cyan-400/60 hover:shadow-[0_20px_50px_-10px_rgba(6,182,212,0.3)] transition-all rounded-[24px] group"
+          className="glass-card overflow-hidden border border-cyan-500/40 hover:border-cyan-400 hover:shadow-[0_20px_50px_-10px_rgba(6,182,212,0.35)] transition-all rounded-[24px] group"
         >
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 p-6 sm:p-8">
             {/* Left: Interactive Media Preview */}

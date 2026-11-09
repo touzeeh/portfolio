@@ -465,8 +465,36 @@
 
 /* Custom Cursor: fine pointer desktop only */
 @media (pointer: fine) {
-  .custom-cursor-active {
+  html, body, a, button, input, select, textarea, [role="button"], .btn-primary, .btn-secondary, .btn-icon, .btn-ghost, .site-card, .tech-chip {
     cursor: none !important;
+  }
+}
+
+/* Cyber Holographic Border Beam */
+@keyframes border-beam-flow {
+  0% {
+    offset-distance: 0%;
+  }
+  100% {
+    offset-distance: 100%;
+  }
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes float-slow {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-8px) scale(1.02);
   }
 }
 

@@ -47,8 +47,18 @@ export const HeroSection: React.FC = () => {
     <section
       id="hero"
       aria-label="Introduction"
-      className="relative min-h-[90vh] flex flex-col justify-center items-center px-4 sm:px-6 pt-32 pb-20 max-w-6xl mx-auto"
+      className="relative min-h-[90vh] flex flex-col justify-center items-center px-4 sm:px-6 pt-32 pb-20 max-w-6xl mx-auto overflow-hidden"
     >
+      {/* Ambient Floating Holographic Cyber Orbs */}
+      <div
+        className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[340px] bg-gradient-to-r from-cyan-500/12 via-violet-500/10 to-cyan-500/8 blur-3xl pointer-events-none -z-10 animate-[float-slow_8s_ease-in-out_infinite]"
+        aria-hidden="true"
+      />
+      <div
+        className="absolute bottom-10 right-1/4 w-[280px] h-[180px] bg-violet-600/10 blur-2xl pointer-events-none -z-10 animate-[float-slow_10s_ease-in-out_infinite_reverse]"
+        aria-hidden="true"
+      />
+
       <motion.div
         variants={containerVariants}
         initial="hidden"

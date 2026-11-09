@@ -14,6 +14,8 @@ import { ContactSection } from '@/components/sections/ContactSection';
 import { Footer } from '@/components/sections/Footer';
 import { BackToTop } from '@/components/ui/BackToTop';
 import { CustomCursor } from '@/components/ui/CustomCursor';
+import { AudioPlayer } from '@/components/ui/AudioPlayer';
+import { WayfindingRouteLine } from '@/components/ui/WayfindingRouteLine';
 
 // Dynamic import with ssr: false for Three.js Canvas (untouched)
 const Scene3D = dynamic(
@@ -35,6 +37,9 @@ function PortfolioContent() {
       {/* Stage 1 Foundation: Sticky Header with Wordmark, Pill Nav, Theme Toggle & Focus-trapped Mobile Menu */}
       <Navbar />
 
+      {/* Vertical Wayfinding Route Line Track (draws on scroll with glowing nodes) */}
+      <WayfindingRouteLine />
+
       {/* Main Content (Untouched section content for Stage 1) */}
       <main id="main-content" className="relative z-10 pb-16">
         <HeroSection />
@@ -51,6 +56,9 @@ function PortfolioContent() {
 
       {/* Back to Top */}
       <BackToTop />
+
+      {/* Floating Background GTA IV Audio Soundtrack Player */}
+      <AudioPlayer />
 
       {/* Custom Desktop Precision Cursor */}
       <CustomCursor />
