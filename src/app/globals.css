@@ -464,10 +464,22 @@
 }
 
 /* Custom Cursor: fine pointer desktop only */
-@media (pointer: fine) {
-  html, body, a, button, input, select, textarea, [role="button"], .btn-primary, .btn-secondary, .btn-icon, .btn-ghost, .site-card, .tech-chip {
-    cursor: none !important;
-  }
+html.custom-cursor-active,
+html.custom-cursor-active *,
+html.custom-cursor-active body,
+html.custom-cursor-active a,
+html.custom-cursor-active button,
+html.custom-cursor-active input,
+html.custom-cursor-active select,
+html.custom-cursor-active textarea,
+html.custom-cursor-active [role="button"],
+html.custom-cursor-active .btn-primary,
+html.custom-cursor-active .btn-secondary,
+html.custom-cursor-active .btn-icon,
+html.custom-cursor-active .btn-ghost,
+html.custom-cursor-active .site-card,
+html.custom-cursor-active .tech-chip {
+  cursor: none !important;
 }
 
 /* Cyber Holographic Border Beam */
