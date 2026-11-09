@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef } from 'react';
 
-const TARGET_VOLUME = 0.85; // High volume as requested
+const TARGET_VOLUME = 0.28; // Pleasant low background volume (audible without being loud)
 
 export const AudioPlayer: React.FC = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -98,7 +98,7 @@ export const AudioPlayer: React.FC = () => {
   return (
     <audio
       ref={audioRef}
-      src="/gta_iv_theme.mp3"
+      src="/natural.mp3"
       loop
       preload="auto"
       playsInline
