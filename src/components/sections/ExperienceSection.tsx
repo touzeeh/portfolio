@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef } from 'react';
-import { motion, useScroll, useInView, useReducedMotion } from 'framer-motion';
+import { motion, useScroll, useInView } from 'framer-motion';
 import { EXPERIENCES } from '@/data/portfolioData';
 import type { ExperienceItem } from '@/types';
 import { TiltCard } from '@/components/ui/TiltCard';
@@ -14,14 +14,13 @@ import {
 const TimelineRow: React.FC<{ item: ExperienceItem; index: number }> = ({ item }) => {
   const rowRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(rowRef, { amount: 0.4, once: false });
-  const shouldReduceMotion = useReducedMotion();
 
   return (
     <div ref={rowRef} className="relative group pl-8 sm:pl-10">
       {/* (5) Node Dot that activates per entry with sensitive glow and radar ring */}
       <motion.div
         animate={{
-          scale: isInView ? (shouldReduceMotion ? 1 : 1.25) : 1,
+          scale: isInView ? 1.25 : 1,
           borderColor: isInView ? '#22d3ee' : 'rgba(255, 255, 255, 0.2)',
           backgroundColor: isInView ? '#083344' : '#030712',
           boxShadow: isInView ? '0 0 16px rgba(6, 182, 212, 0.95)' : 'none',
@@ -30,7 +29,7 @@ const TimelineRow: React.FC<{ item: ExperienceItem; index: number }> = ({ item }
         className="absolute -left-[6px] sm:-left-[7px] top-3 w-4 h-4 rounded-full border-2 border-white/20 bg-slate-950 z-10 flex items-center justify-center"
         style={{ willChange: 'transform' }}
       >
-        {isInView && !shouldReduceMotion && (
+        {isInView && (
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-60" />
         )}
       </motion.div>
@@ -83,7 +82,6 @@ const TimelineRow: React.FC<{ item: ExperienceItem; index: number }> = ({ item }
 
 export const ExperienceSection: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const shouldReduceMotion = useReducedMotion();
 
   // (5) Timeline line that draws with scroll progress
   const { scrollYProgress } = useScroll({

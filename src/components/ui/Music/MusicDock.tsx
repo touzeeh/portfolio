@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useSyncExternalStore } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { useMusic } from './MusicContext';
 import { SHARED_EASE } from '@/lib/animations';
@@ -42,17 +42,18 @@ export const MusicDock: React.FC = () => {
     currentTime,
     lyricOffsetMs,
     isDebug,
+    audioLevel,
     togglePlay,
     adjustOffset,
   } = useMusic();
 
   const shouldReduceMotion = useReducedMotion();
   const [isHovered, setIsHovered] = useState(false);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
 
   if (audioError) {
     return null;
@@ -105,6 +106,19 @@ export const MusicDock: React.FC = () => {
           {mounted && !hasStarted && !shouldReduceMotion && (
             <span
               className="absolute -inset-1 rounded-full bg-[var(--accent)]/25 animate-ping pointer-events-none"
+              aria-hidden="true"
+            />
+          )}
+
+          {/* Dynamic Audio-Reactive Pulsing Glow Ring (Web Audio AnalyserNode) */}
+          {mounted && isPlaying && !shouldReduceMotion && audioLevel > 0.05 && (
+            <motion.div
+              animate={{
+                scale: 1 + audioLevel * 0.45,
+                opacity: 0.35 + audioLevel * 0.55,
+              }}
+              transition={{ duration: 0.08, ease: 'linear' }}
+              className="absolute -inset-1 rounded-full border border-cyan-400 shadow-[0_0_16px_rgba(34,211,238,0.7)] pointer-events-none"
               aria-hidden="true"
             />
           )}

@@ -5,10 +5,10 @@ export const PERSONAL_INFO = {
   legalName: 'Mohammed Touzeeh Ahmed', // Preserved for formal resume only
   shortName: 'Touzeeh',
   title: 'Full-Stack & 3D Web Developer',
-  headline: 'Building spatial web applications and 3D interfaces with Three.js.',
+  headline: 'Full-stack engineer building 3D WebGL interfaces with Three.js and TypeScript.',
   proofHighlight: '1st Place Winner • Smart Health Hackathon 2025',
-  subheadline: '2nd-year CSE student engineering graph routing systems and robust full-stack APIs.',
-  bio: 'Building spatial web applications and 3D interfaces with Three.js. 2nd-year CSE student engineering graph routing systems and robust full-stack APIs.',
+  subheadline: '2nd-year CSE student developing Python backends and graph routing algorithms.',
+  bio: 'Full-stack engineer building 3D WebGL interfaces with Three.js and TypeScript. 2nd-year CSE student developing Python backends and graph routing algorithms.',
   
   website: 'https://touzeeh.xyz',
   email: 'touzeeh@engineer.com',
@@ -16,7 +16,7 @@ export const PERSONAL_INFO = {
   githubHandle: 'touzeeh',
   linkedin: 'https://www.linkedin.com/in/touzeeh/',
   linkedinHandle: 'touzeeh',
-  resumeUrl: '/resume.pdf',
+  resumeUrl: '/Touzeeh_Ahmed_Resume.pdf',
   avatarPlaceholder: '/avatar-placeholder.png',
   
   institution: '',
@@ -161,7 +161,7 @@ export const WINS: WinItem[] = [
     rank: '1st Place Winner',
     category: 'Healthcare & Spatial Systems',
     date: 'October 2025',
-    description: 'Awarded 1st place for InnerSight—a 3D hospital wayfinding tool featuring weighted graph routing (A*) with sub-millisecond compute time on benchmark floorplans* to guide patients across multi-floor clinical facilities.',
+    description: 'Awarded 1st place for InnerSight—a 3D hospital wayfinding tool featuring fast A* graph routing to guide patients across multi-floor clinical facilities.',
     image: '/wins/innersight-win.svg',
     projectTitle: 'InnerSight',
     tags: ['1st Place', 'Three.js', 'A* Algorithm'],

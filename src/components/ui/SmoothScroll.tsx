@@ -1,7 +1,7 @@
+/* oxlint-disable react/only-export-components */
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import Lenis from 'lenis';
 
 interface ScrollContextValue {
   progress: number;
@@ -17,6 +17,11 @@ const ScrollContext = createContext<ScrollContextValue>({
 
 export const useScrollProgress = () => useContext(ScrollContext);
 
+/**
+ * Native Pure Scroll Provider
+ * Replaces any smooth-scroll libraries (Lenis, Locomotive) with 100% native scrolling.
+ * Guarantees zero scroll-hijacking, flawless scroll-spy, and unhindered modal inner scroll.
+ */
 export const SmoothScroll: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [scrollState, setScrollState] = useState<ScrollContextValue>({
     progress: 0,
@@ -26,10 +31,9 @@ export const SmoothScroll: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     const isTouch = window.matchMedia('(pointer: coarse)').matches || 'ontouchstart' in window;
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // Direct native scroll calculation
-    const updateScrollProgress = (currentY: number) => {
+    const updateScrollProgress = () => {
+      const currentY = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const progress = docHeight > 0 ? Math.min(Math.max(currentY / docHeight, 0), 1) : 0;
       setScrollState({
@@ -39,51 +43,10 @@ export const SmoothScroll: React.FC<{ children: React.ReactNode }> = ({ children
       });
     };
 
-    if (prefersReducedMotion) {
-      const handleNativeScroll = () => updateScrollProgress(window.scrollY);
-      window.addEventListener('scroll', handleNativeScroll, { passive: true });
-      return () => window.removeEventListener('scroll', handleNativeScroll);
-    }
+    window.addEventListener('scroll', updateScrollProgress, { passive: true });
+    updateScrollProgress();
 
-    // Configure Lenis with optimized settings for mobile and desktop
-    const lenis = new Lenis({
-      duration: isTouch ? 0.9 : 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: 'vertical',
-      gestureOrientation: 'vertical',
-      smoothWheel: true,
-      syncTouch: false, // Don't fight native hardware momentum on mobile touchscreens
-      touchMultiplier: 1,
-    });
-
-    lenis.on('scroll', (e: { progress: number; scroll: number }) => {
-      setScrollState({
-        progress: e.progress,
-        scrollY: e.scroll,
-        isMobile: isTouch,
-      });
-    });
-
-    // Also fallback to native scroll listener for instant 120Hz response on mobile
-    const handleNativeScroll = () => {
-      if (isTouch) {
-        updateScrollProgress(window.scrollY);
-      }
-    };
-    window.addEventListener('scroll', handleNativeScroll, { passive: true });
-
-    let animationFrameId: number;
-    function raf(time: number) {
-      lenis.raf(time);
-      animationFrameId = requestAnimationFrame(raf);
-    }
-    animationFrameId = requestAnimationFrame(raf);
-
-    return () => {
-      cancelAnimationFrame(animationFrameId);
-      window.removeEventListener('scroll', handleNativeScroll);
-      lenis.destroy();
-    };
+    return () => window.removeEventListener('scroll', updateScrollProgress);
   }, []);
 
   return (

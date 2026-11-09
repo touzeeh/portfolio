@@ -1,3 +1,4 @@
+/* oxlint-disable react/only-export-components */
 import type { Metadata, Viewport } from 'next';
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
@@ -26,6 +27,11 @@ export const metadata: Metadata = {
   description: `${SITE_DATA.personal.headline} ${SITE_DATA.personal.supportingLine}`,
   authors: [{ name: SITE_DATA.personal.fullName, url: SITE_DATA.personal.github }],
   creator: SITE_DATA.personal.fullName,
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/favicon.svg',
+  },
   openGraph: {
     type: 'website',
     locale: 'en_US',
@@ -33,11 +39,20 @@ export const metadata: Metadata = {
     title: `${SITE_DATA.personal.fullName} • Portfolio`,
     description: SITE_DATA.personal.headline,
     siteName: `${SITE_DATA.personal.fullName} Portfolio`,
+    images: [
+      {
+        url: 'https://touzeeh.xyz/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: `${SITE_DATA.personal.fullName} • ${SITE_DATA.personal.title}`,
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: `${SITE_DATA.personal.fullName} • Portfolio`,
     description: SITE_DATA.personal.headline,
+    images: ['https://touzeeh.xyz/og-image.png'],
   },
   robots: {
     index: true,
@@ -64,6 +79,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable} dark scroll-smooth`}>
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('theme');var m=window.matchMedia('(prefers-color-scheme: light)').matches;var dark=t==='dark'||(!t&&!m);var d=document.documentElement;if(dark){d.classList.add('dark');d.classList.remove('light');d.setAttribute('data-theme','dark');}else{d.classList.add('light');d.classList.remove('dark');d.setAttribute('data-theme','light');}}catch(e){}})();`,
+          }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

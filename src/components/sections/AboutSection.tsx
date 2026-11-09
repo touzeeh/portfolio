@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { PERSONAL_INFO } from '@/data/portfolioData';
 import { GraduationCapIcon, MapPinIcon, TerminalIcon } from '@/components/ui/Icons';
 import { TiltCard } from '@/components/ui/TiltCard';
@@ -14,7 +14,6 @@ import {
 } from '@/lib/animations';
 
 export const AboutSection: React.FC = () => {
-  const shouldReduceMotion = useReducedMotion();
 
   return (
     <section id="about" className="py-24 px-4 sm:px-6 max-w-6xl mx-auto">

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useSyncExternalStore } from 'react';
 import { motion, useMotionValue, useSpring, AnimatePresence } from 'framer-motion';
 
 interface ClickRipple {
@@ -14,8 +14,18 @@ export const CustomCursor: React.FC = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [isClicking, setIsClicking] = useState(false);
   const [isTextInput, setIsTextInput] = useState(false);
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
   const [ripples, setRipples] = useState<ClickRipple[]>([]);
+
+  const isTouchDevice = useSyncExternalStore(
+    (callback) => {
+      if (typeof window === 'undefined') return () => {};
+      const media = window.matchMedia('(pointer: coarse)');
+      media.addEventListener('change', callback);
+      return () => media.removeEventListener('change', callback);
+    },
+    () => (typeof window !== 'undefined' ? window.matchMedia('(pointer: coarse)').matches : false),
+    () => false
+  );
 
   // Raw mouse coordinates
   const rawX = useMotionValue(-100);
@@ -30,14 +40,7 @@ export const CustomCursor: React.FC = () => {
   const ringY = useSpring(rawY, { damping: 28, stiffness: 450, mass: 0.16 });
 
   useEffect(() => {
-    // Detect touch / coarse pointer devices
-    if (typeof window !== 'undefined') {
-      const matchCoarse = window.matchMedia('(pointer: coarse)').matches;
-      if (matchCoarse) {
-        setIsTouchDevice(true);
-        return;
-      }
-    }
+    if (isTouchDevice) return;
 
     let hasAddedClass = false;
 
@@ -102,7 +105,7 @@ export const CustomCursor: React.FC = () => {
       document.removeEventListener('mouseenter', handleMouseEnter);
       document.documentElement.classList.remove('custom-cursor-active');
     };
-  }, [rawX, rawY, isVisible, dotX, dotY, ringX, ringY, isTextInput]);
+  }, [rawX, rawY, isVisible, dotX, dotY, ringX, ringY, isTextInput, isTouchDevice]);
 
   // Clean up completed ripples after animation
   useEffect(() => {

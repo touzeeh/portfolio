@@ -1,3 +1,4 @@
+/* oxlint-disable react/only-export-components */
 'use client';
 
 import React, {
@@ -28,6 +29,7 @@ interface MusicContextType {
   currentTime: number;
   lyricOffsetMs: number;
   isDebug: boolean;
+  audioLevel: number;
   togglePlay: (e?: React.MouseEvent) => void;
   adjustOffset: (deltaMs: number) => void;
 }
@@ -71,6 +73,9 @@ function getStoredOffset(): number {
 
 export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const analyserRef = useRef<AnalyserNode | null>(null);
+  const [audioLevel, setAudioLevel] = useState(0);
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
@@ -118,6 +123,25 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       console.log(`[Music Sync Calibration] Current LYRIC_OFFSET_MS: ${next}ms`);
       return next;
     });
+  }, []);
+
+  const initAnalyser = useCallback(() => {
+    if (audioContextRef.current || !audioRef.current) return;
+    try {
+      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioCtx) return;
+      const actx = new AudioCtx();
+      const analyser = actx.createAnalyser();
+      analyser.fftSize = 64;
+      const source = actx.createMediaElementSource(audioRef.current);
+      source.connect(analyser);
+      analyser.connect(actx.destination);
+      audioContextRef.current = actx;
+      analyserRef.current = analyser;
+    } catch (err) {
+      // Graceful fallback to CSS equalizer
+      console.warn('[Music] Web Audio AnalyserNode fallback:', err);
+    }
   }, []);
 
   // Smooth volume fade from 0 to TARGET_VOLUME (0.6) over ~1.5s
@@ -184,6 +208,17 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       if (newIndex !== activeLineIndexRef.current) {
         activeLineIndexRef.current = newIndex;
         setActiveLineIndex(newIndex);
+      }
+
+      if (analyserRef.current) {
+        const dataArray = new Uint8Array(analyserRef.current.frequencyBinCount);
+        analyserRef.current.getByteFrequencyData(dataArray);
+        let sum = 0;
+        for (let i = 0; i < dataArray.length; i++) {
+          sum += dataArray[i];
+        }
+        const avg = sum / (dataArray.length * 255);
+        setAudioLevel(avg);
       }
 
       setCurrentTime(audio.currentTime);
@@ -396,7 +431,11 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       } else {
         if (wasPlayingBeforeHideRef.current && !userPausedRef.current) {
           wasPlayingBeforeHideRef.current = false;
-          audio.play().then(() => {
+          initAnalyser();
+      if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
+        audioContextRef.current.resume().catch(() => {});
+      }
+      audio.play().then(() => {
             isPlayingRef.current = true;
             setIsPlaying(true);
             syncCurrentLyric();
@@ -439,7 +478,7 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         cancelAnimationFrame(volumeFadeRafRef.current);
       }
     };
-  }, [adjustOffset, fadeVolumeIn, startAudioPlayback, startSyncLoop, stopSyncLoop, syncCurrentLyric]);
+  }, [adjustOffset, fadeVolumeIn, initAnalyser, startAudioPlayback, startSyncLoop, stopSyncLoop, syncCurrentLyric]);
 
   const activeLine =
     activeLineIndex >= 0 && activeLineIndex < lyrics.length ? lyrics[activeLineIndex] : null;
@@ -456,6 +495,7 @@ export const MusicProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         currentTime,
         lyricOffsetMs,
         isDebug,
+        audioLevel,
         togglePlay,
         adjustOffset,
       }}

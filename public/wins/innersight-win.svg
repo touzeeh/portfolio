@@ -79,11 +79,11 @@
 
   <!-- Title & Event Details -->
   <text x="400" y="348" fill="#ffffff" font-family="system-ui, sans-serif" font-size="24" font-weight="800" text-anchor="middle" letter-spacing="-0.5">InnerSight • 3D Spatial Wayfinding</text>
-  <text x="400" y="380" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="15" font-weight="500" text-anchor="middle">National Collegiate Innovation Challenge</text>
+  <text x="400" y="380" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="15" font-weight="500" text-anchor="middle">Smart Health Hackathon 2025</text>
 
   <!-- Verification Tech Footer -->
   <g transform="translate(180, 420)">
     <rect width="440" height="28" rx="8" fill="#0f172a" stroke="#ffffff" stroke-opacity="0.1"/>
-    <text x="220" y="18" fill="#38bdf8" font-family="monospace" font-size="11" text-anchor="middle" letter-spacing="1">AWARD VERIFIED • HEALTHCARE &amp; 3D SYSTEMS TRACK</text>
+    <text x="220" y="18" fill="#38bdf8" font-family="monospace" font-size="11" text-anchor="middle" letter-spacing="1">HEALTHCARE &amp; 3D SYSTEMS TRACK</text>
   </g>
 </svg>

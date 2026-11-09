@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useCallback, useSyncExternalStore } from 'react';
+import React, { useState, useEffect, useRef, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 import Image from 'next/image';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { WINS } from '@/data/portfolioData';
 import type { WinItem } from '@/types';
-import { TrophyIcon, EyeIcon, SparklesIcon } from '@/components/ui/Icons';
+import { TrophyIcon, EyeIcon, SparklesIcon, ArrowUpRightIcon } from '@/components/ui/Icons';
 import { TiltCard } from '@/components/ui/TiltCard';
 import {
   scrollRevealVariants,
@@ -29,12 +29,12 @@ export const WinsSection: React.FC = () => {
     setSelectedWin(win);
   };
 
-  const handleClose = useCallback(() => {
+  const handleClose = () => {
     setSelectedWin(null);
     if (lastActiveElementRef.current) {
       lastActiveElementRef.current.focus();
     }
-  }, []);
+  };
 
   // Lock background scroll without layout shift
   useEffect(() => {
@@ -67,7 +67,7 @@ export const WinsSection: React.FC = () => {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedWin, handleClose]);
+  }, [selectedWin]);
 
   return (
     <section id="wins" className="py-24 px-4 sm:px-6 max-w-6xl mx-auto">
@@ -250,9 +250,23 @@ export const WinsSection: React.FC = () => {
                     {/* Modal Body Info Section */}
                     <div className="p-5 sm:p-6 space-y-4">
                       <div className="flex flex-wrap items-center justify-between gap-2">
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-amber-500/20 border border-amber-400/40 text-amber-300 text-xs font-mono font-bold">
-                          <TrophyIcon className="w-3.5 h-3.5 text-amber-400" />
-                          {selectedWin.rank}
+                        <span className="relative overflow-hidden inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-amber-500/20 border border-amber-400/40 text-amber-300 text-xs font-mono font-bold shadow-sm">
+                          <motion.span
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            animate={{ scale: [1, 1.25, 1], opacity: 1 }}
+                            transition={{ duration: 0.6, ease: 'easeOut' }}
+                          >
+                            <TrophyIcon className="w-3.5 h-3.5 text-amber-400" />
+                          </motion.span>
+                          <span>{selectedWin.rank}</span>
+                          {/* One-time shine sweep across 1ST PLACE WINNER ribbon */}
+                          <motion.span
+                            initial={{ x: '-100%' }}
+                            animate={{ x: '200%' }}
+                            transition={{ duration: 0.8, delay: 0.2, ease: 'easeInOut' }}
+                            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent pointer-events-none"
+                            aria-hidden="true"
+                          />
                         </span>
                         <span className="text-xs font-mono text-slate-400">
                           {selectedWin.date} • {selectedWin.competition}
@@ -271,7 +285,7 @@ export const WinsSection: React.FC = () => {
                         </p>
                       </div>
 
-                      <div className="pt-4 border-t border-white/[0.08] flex items-center justify-between">
+                      <div className="pt-4 border-t border-white/[0.08] flex flex-wrap items-center justify-between gap-3">
                         <div className="flex flex-wrap gap-1.5">
                           {selectedWin.tags.map((tag) => (
                             <span
@@ -282,6 +296,17 @@ export const WinsSection: React.FC = () => {
                             </span>
                           ))}
                         </div>
+                        {selectedWin.proofUrl && (
+                          <a
+                            href={selectedWin.proofUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/15 border border-amber-400/40 text-amber-300 hover:bg-amber-500/25 text-xs font-mono font-medium transition-colors"
+                          >
+                            <span>View GitHub Proof</span>
+                            <ArrowUpRightIcon className="w-3.5 h-3.5" />
+                          </a>
+                        )}
                       </div>
                     </div>
                   </div>

@@ -1,3 +1,4 @@
+/* oxlint-disable react/only-export-components */
 'use client';
 
 import React from 'react';

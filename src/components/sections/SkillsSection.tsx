@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { SKILL_CATEGORIES } from '@/data/portfolioData';
 import { TiltCard } from '@/components/ui/TiltCard';
 import {
@@ -13,7 +13,6 @@ import {
 } from '@/lib/animations';
 
 export const SkillsSection: React.FC = () => {
-  const shouldReduceMotion = useReducedMotion();
 
   return (
     <section id="skills" className="py-24 px-4 sm:px-6 max-w-6xl mx-auto">
