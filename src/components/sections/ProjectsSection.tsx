@@ -76,7 +76,7 @@ export const ProjectsSection: React.FC = () => {
 
         <TiltCard
           glareColor="rgba(6, 182, 212, 0.25)"
-          className="glass-card overflow-hidden border border-cyan-500/40 hover:border-cyan-400 hover:shadow-[0_20px_50px_-10px_rgba(6,182,212,0.35)] transition-all rounded-[24px] group"
+          className="glass-card overflow-hidden rounded-[24px] group"
         >
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 p-6 sm:p-8">
             {/* Left: Interactive Media Preview */}
@@ -100,7 +100,7 @@ export const ProjectsSection: React.FC = () => {
                 )}
 
                 {/* Hackathon 1st Place Pill Overlay */}
-                <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5 px-3 py-1 rounded-md bg-slate-950/90 backdrop-blur-md border border-amber-400/60 text-xs font-mono font-bold text-amber-300 shadow-lg">
+                <div className="glass-pill absolute top-3 left-3 z-10 flex items-center gap-1.5 px-3 py-1 rounded-md border border-amber-400/50 text-xs font-mono font-bold text-amber-300 shadow-lg">
                   <TrophyIcon className="w-3.5 h-3.5 text-amber-400" />
                   <span>1st Place Winner • Spatial Health</span>
                 </div>
@@ -114,7 +114,7 @@ export const ProjectsSection: React.FC = () => {
                       key={m.label}
                       whileHover={{ y: -4, scale: 1.04 }}
                       transition={{ duration: 0.2, ease: SHARED_EASE }}
-                      className="p-2.5 rounded-xl bg-slate-950/80 border border-white/10 hover:border-cyan-400/40 text-center transition-colors cursor-default"
+                      className="glass-subcard p-2.5 rounded-xl text-center transition-colors cursor-default hover:border-cyan-400/40"
                     >
                       <span className="text-xs font-mono text-cyan-400 font-bold block">
                         {m.value}
@@ -131,7 +131,7 @@ export const ProjectsSection: React.FC = () => {
             {/* Right: Technical Architecture & Problem Breakdown */}
             <div className="lg:col-span-6 flex flex-col justify-between space-y-4">
               <div>
-                <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-[var(--accent)]/10 border border-[var(--accent)]/30 text-[var(--accent)] text-xs font-mono font-semibold mb-2">
+                <div className="glass-pill inline-flex items-center gap-2 px-2.5 py-1 rounded-md border border-[var(--accent)]/30 text-[var(--accent)] text-xs font-mono font-semibold mb-2">
                   Featured Project • Flagship 3D System
                 </div>
                 <h3 className="font-display text-2xl sm:text-3xl font-bold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">
@@ -241,7 +241,7 @@ export const ProjectsSection: React.FC = () => {
 
                 {/* RouteGuard: Terminal Install Command with 1-Click Copy */}
                 {project.installCmd && (
-                  <div className="p-2.5 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] flex items-center justify-between gap-2 shadow-inner">
+                  <div className="glass-subcard p-2.5 rounded-xl flex items-center justify-between gap-2 shadow-inner">
                     <div className="flex items-center gap-2 overflow-hidden">
                       <TerminalIcon className="w-3.5 h-3.5 text-[var(--accent)] shrink-0" />
                       <code className="text-xs font-mono text-[var(--text)] truncate select-all">
@@ -254,7 +254,7 @@ export const ProjectsSection: React.FC = () => {
                       whileHover={{ scale: 1.12 }}
                       whileTap={{ scale: 0.9 }}
                       transition={{ duration: 0.15 }}
-                      className="p-1.5 rounded-lg bg-[var(--surface)] border border-[var(--border)] text-[var(--text-muted)] hover:text-[var(--text)] hover:border-[var(--accent)] transition shrink-0"
+                      className="p-1.5 rounded-lg bg-[var(--surface)] border border-[var(--border)] text-[var(--text-muted)] hover:text-[var(--text)] hover:border-[var(--accent)] transition shrink-0 cursor-pointer"
                       aria-label="Copy install command"
                       title="Copy install command"
                     >
@@ -275,7 +275,7 @@ export const ProjectsSection: React.FC = () => {
                         key={m.label}
                         whileHover={{ y: -3, scale: 1.05 }}
                         transition={{ duration: 0.18, ease: SHARED_EASE }}
-                        className="px-2.5 py-1 rounded-lg bg-[var(--surface-2)] border border-[var(--border)] text-xs font-mono transition-colors cursor-default"
+                        className="glass-subcard px-2.5 py-1 rounded-lg text-xs font-mono transition-colors cursor-default"
                       >
                         <span className="text-[var(--accent)] font-semibold">{m.value}</span>{' '}
                         <span className="text-[var(--text-muted)]">({m.label})</span>
@@ -292,7 +292,7 @@ export const ProjectsSection: React.FC = () => {
                     key={tech}
                     whileHover={{ y: -2, scale: 1.06 }}
                     transition={{ duration: 0.15, ease: SHARED_EASE }}
-                    className="px-2.5 py-1 rounded-md bg-[var(--surface-2)] border border-[var(--border)] hover:border-[var(--accent)] text-xs font-mono text-[var(--text-muted)] hover:text-[var(--text)] transition-colors cursor-default"
+                    className="tech-chip text-xs cursor-default"
                   >
                     {tech}
                   </motion.span>

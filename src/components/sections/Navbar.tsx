@@ -270,7 +270,7 @@ export const Navbar: React.FC = () => {
             whileHover={{ scale: 1.05, y: -1 }}
             whileTap={{ scale: 0.95 }}
             transition={{ duration: 0.2, ease: SHARED_EASE }}
-            className="hidden sm:inline-flex items-center gap-1.5 min-h-[40px] px-3.5 rounded-[10px] bg-[var(--surface-2)]/80 hover:bg-[var(--surface-2)] border border-[var(--border)] hover:border-[var(--accent)] text-[var(--text)] hover:text-[var(--accent)] text-xs font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-[var(--accent)] group shadow-sm hover:shadow-[0_0_15px_rgba(34,211,238,0.2)]"
+            className="hidden sm:inline-flex items-center gap-1.5 min-h-[40px] px-3.5 rounded-[10px] btn-secondary text-xs font-semibold focus-visible:ring-2 focus-visible:ring-[var(--accent)] group shadow-sm hover:shadow-[0_0_15px_rgba(34,211,238,0.2)]"
           >
             <span>Contact</span>
             <ArrowUpRightIcon className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
@@ -283,7 +283,7 @@ export const Navbar: React.FC = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.92 }}
             transition={{ duration: 0.15 }}
-            className="md:hidden w-11 h-11 rounded-[10px] bg-[var(--surface-2)] border border-[var(--border)] text-[var(--text)] flex items-center justify-center focus-visible:ring-2 focus-visible:ring-[var(--accent)] cursor-pointer"
+            className="md:hidden w-11 h-11 rounded-[10px] btn-icon text-[var(--text)] flex items-center justify-center focus-visible:ring-2 focus-visible:ring-[var(--accent)] cursor-pointer"
             aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
             aria-expanded={mobileMenuOpen}
           >
@@ -292,7 +292,7 @@ export const Navbar: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile Drawer (Accessible modal with focus trapping) */}
+      {/* Mobile Drawer (Accessible modal with focus trapping & glass UI) */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
@@ -301,7 +301,7 @@ export const Navbar: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.25, ease: SHARED_EASE }}
-            className="md:hidden fixed inset-x-0 top-[60px] bg-[var(--surface)]/98 backdrop-blur-2xl border-b border-[var(--border)] shadow-2xl p-6 select-none z-50"
+            className="md:hidden fixed inset-x-0 top-[60px] bg-[#070A14]/95 backdrop-blur-3xl border-b border-white/10 shadow-2xl p-6 select-none z-50"
             role="dialog"
             aria-modal="true"
             aria-label="Mobile Navigation"
@@ -316,21 +316,21 @@ export const Navbar: React.FC = () => {
                     onClick={() => handleNavClick(item.id)}
                     whileHover={{ x: 4 }}
                     whileTap={{ scale: 0.97 }}
-                    className={`flex items-center justify-between w-full p-3.5 rounded-xl text-left text-sm font-medium transition-colors ${
+                    className={`flex items-center justify-between w-full p-3.5 rounded-xl text-left text-sm font-medium transition-all ${
                       isActive
-                        ? 'bg-[var(--surface-2)] text-[var(--accent)] border border-[var(--border)] font-semibold'
-                        : 'text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-[var(--surface-2)]/50'
+                        ? 'glass-subcard text-[var(--accent)] !border-cyan-400/40 font-semibold'
+                        : 'text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-white/[0.04]'
                     }`}
                   >
                     <span className="flex-1 text-sm">{item.label}</span>
                     {isActive && (
-                      <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] shadow-[0_0_8px_var(--accent)]" />
                     )}
                   </motion.button>
                 );
               })}
 
-              <div className="pt-4 mt-2 border-t border-[var(--border)]">
+              <div className="pt-4 mt-2 border-t border-white/10">
                 <motion.a
                   href="#contact"
                   onClick={(e) => {

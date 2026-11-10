@@ -36,12 +36,12 @@ const TimelineRow: React.FC<{ item: ExperienceItem; index: number }> = ({ item }
 
       {/* Content Card with cursor spotlight and sensitive hover */}
       <TiltCard
-        glareColor="rgba(255, 255, 255, 0.04)"
-        className={`glass-card p-5 sm:p-6 border transition-all rounded-[20px] ${
+        glareColor="rgba(34, 211, 238, 0.12)"
+        className={`glass-card p-5 sm:p-6 rounded-[20px] ${
           isInView
-            ? 'border-[var(--accent)]/30'
-            : 'border-[var(--border)]'
-        } hover:border-[var(--accent)]/50 hover:shadow-xl`}
+            ? '!border-cyan-400/40 shadow-[0_0_25px_rgba(34,211,238,0.15)]'
+            : ''
+        }`}
       >
         <div className="flex flex-wrap items-center justify-between gap-2 mb-1.5">
           <span className="text-xs font-mono text-[var(--accent)] font-bold">
@@ -68,7 +68,7 @@ const TimelineRow: React.FC<{ item: ExperienceItem; index: number }> = ({ item }
                 key={tag}
                 whileHover={{ y: -3, scale: 1.08 }}
                 transition={{ duration: 0.18, ease: SHARED_EASE }}
-                className="px-2 py-0.5 rounded-md text-[11px] font-mono bg-[var(--surface-2)] border border-[var(--border)] hover:border-[var(--accent)]/60 text-[var(--text-muted)] hover:text-[var(--text)] transition-all cursor-default"
+                className="tech-chip text-[11px] py-0.5 px-2 cursor-default"
               >
                 {tag}
               </motion.span>

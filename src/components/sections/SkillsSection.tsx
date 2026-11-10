@@ -50,8 +50,8 @@ export const SkillsSection: React.FC = () => {
             className="h-full"
           >
             <TiltCard
-              glareColor="rgba(255, 255, 255, 0.04)"
-              className="glass-card p-6 sm:p-7 flex flex-col justify-between h-full border border-[var(--border)] hover:border-[var(--accent)]/40 hover:shadow-xl transition-all rounded-[20px]"
+              glareColor="rgba(255, 255, 255, 0.08)"
+              className="glass-card p-6 sm:p-7 flex flex-col justify-between h-full rounded-[20px]"
             >
               <div className="space-y-4">
                 {/* Category Header with pulsing status aura */}
@@ -80,10 +80,10 @@ export const SkillsSection: React.FC = () => {
                   {category.items.map((skill) => (
                     <motion.span
                       key={skill}
-                      whileHover={{ y: -4, scale: 1.08 }}
+                      whileHover={{ y: -3, scale: 1.06 }}
                       whileTap={{ scale: 0.95 }}
                       transition={{ duration: 0.18, ease: SHARED_EASE }}
-                      className="px-3.5 py-2 rounded-lg text-sm font-mono font-medium bg-[var(--surface-2)] border border-[var(--border)] text-[var(--text)] hover:border-[var(--accent)] transition-all cursor-default shadow-sm select-none"
+                      className="tech-chip text-sm font-mono font-medium select-none cursor-default"
                     >
                       {skill}
                     </motion.span>

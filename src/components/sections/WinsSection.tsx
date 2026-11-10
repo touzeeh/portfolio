@@ -125,7 +125,7 @@ export const WinsSection: React.FC = () => {
                   />
 
                   {/* Top Rank Badge */}
-                  <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-950/85 backdrop-blur-md border border-amber-400/50 text-[11px] font-mono font-bold text-amber-300 shadow-md">
+                  <div className="glass-pill absolute top-3 left-3 z-10 flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-amber-400/50 text-[11px] font-mono font-bold text-amber-300 shadow-md">
                     <SparklesIcon className="w-3 h-3 text-amber-400" />
                     <span>{win.rank}</span>
                   </div>
@@ -156,7 +156,7 @@ export const WinsSection: React.FC = () => {
                       key={tag}
                       whileHover={{ y: -2, scale: 1.05 }}
                       transition={{ duration: 0.15, ease: SHARED_EASE }}
-                      className="px-2 py-0.5 rounded-md text-[11px] font-mono bg-[var(--surface-2)] border border-[var(--border)] hover:border-amber-400/40 text-[var(--text-muted)] transition-colors cursor-default"
+                      className="tech-chip text-[11px] py-0.5 px-2 cursor-default"
                     >
                       {tag}
                     </motion.span>
@@ -204,7 +204,7 @@ export const WinsSection: React.FC = () => {
                   animate={{ scale: 1, opacity: 1, y: 0 }}
                   exit={shouldReduceMotion ? { scale: 1, opacity: 0 } : { scale: 0.94, opacity: 0, y: 15 }}
                   transition={{ duration: 0.3, ease: SHARED_EASE }}
-                  className="relative w-full max-w-2xl max-h-[calc(100dvh-24px)] sm:max-h-[calc(100dvh-32px)] flex flex-col bg-[var(--surface)] border border-[var(--border)] rounded-2xl overflow-hidden shadow-2xl shadow-black/60"
+                  className="glass-modal relative w-full max-w-2xl max-h-[calc(100dvh-24px)] sm:max-h-[calc(100dvh-32px)] flex flex-col rounded-2xl overflow-hidden shadow-2xl shadow-black/80"
                   onClick={(e) => e.stopPropagation()}
                 >
                   {/* Always-Visible Fixed Close (X) Button (Touch target >= 44px) */}
@@ -214,7 +214,7 @@ export const WinsSection: React.FC = () => {
                     whileHover={{ scale: 1.15, rotate: 90 }}
                     whileTap={{ scale: 0.9 }}
                     transition={{ duration: 0.2 }}
-                    className="absolute top-3 right-3 sm:top-3.5 sm:right-3.5 w-11 h-11 rounded-full bg-[var(--surface-2)]/90 text-[var(--text-muted)] hover:text-[var(--text)] border border-[var(--border)] hover:border-amber-400/60 transition-colors z-40 shadow-xl cursor-pointer flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+                    className="glass-pill absolute top-3 right-3 sm:top-3.5 sm:right-3.5 w-11 h-11 rounded-full text-[var(--text-muted)] hover:text-[var(--text)] border border-white/20 hover:border-amber-400/70 transition-colors z-40 shadow-xl cursor-pointer flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
                     aria-label="Close modal"
                   >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -225,7 +225,7 @@ export const WinsSection: React.FC = () => {
                   {/* Scrollable Inner Content Area */}
                   <div className="overflow-y-auto overscroll-contain min-h-0 flex-1 flex flex-col">
                     {/* Modal Banner Image Area: Clamped height so info section is visible without scrolling on 1366x768 */}
-                    <div className="relative w-full h-[28vh] max-h-[220px] sm:max-h-[260px] min-h-[150px] bg-[var(--surface-2)] border-b border-[var(--border)] shrink-0">
+                    <div className="relative w-full h-[28vh] max-h-[220px] sm:max-h-[260px] min-h-[150px] bg-slate-950/70 border-b border-white/10 shrink-0">
                       <Image
                         src={selectedWin.image}
                         alt={`${selectedWin.title} full view`}

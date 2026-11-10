@@ -136,8 +136,8 @@ export const ContactSection: React.FC = () => {
         {/* Contact Form Card (spans 7 cols) */}
         <motion.div variants={staggerItemVariants} className="lg:col-span-7 h-full">
           <TiltCard
-            glareColor="rgba(255, 255, 255, 0.04)"
-            className="glass-card p-6 sm:p-8 border border-[var(--border)] hover:border-[var(--accent)]/40 hover:shadow-xl transition-all rounded-[20px] h-full"
+            glareColor="rgba(34, 211, 238, 0.12)"
+            className="glass-card p-6 sm:p-8 rounded-[20px] h-full"
           >
             {status === 'success' ? (
               <motion.div
@@ -188,10 +188,10 @@ export const ContactSection: React.FC = () => {
                       onBlur={() => handleBlur('name')}
                       required
                       placeholder="e.g. Alex Smith"
-                      className={`w-full px-4 py-2.5 rounded-xl bg-[var(--surface-2)] border ${
+                      className={`w-full px-4 py-2.5 rounded-xl bg-slate-950/60 backdrop-blur-md border ${
                         touched.name && errors.name
                           ? 'border-rose-400/80 focus:ring-rose-400/30'
-                          : 'border-[var(--border)] focus:border-[var(--accent)] focus:ring-[var(--accent)]/30'
+                          : 'border-white/10 border-t-white/15 focus:border-[var(--accent)] focus:ring-[var(--accent)]/30'
                       } text-[var(--text)] text-sm placeholder:text-[var(--text-muted)] focus:outline-none focus:ring-2 transition-all`}
                     />
                     {touched.name && errors.name && (
@@ -215,10 +215,10 @@ export const ContactSection: React.FC = () => {
                       onBlur={() => handleBlur('email')}
                       required
                       placeholder="alex@company.com"
-                      className={`w-full px-4 py-2.5 rounded-xl bg-[var(--surface-2)] border ${
+                      className={`w-full px-4 py-2.5 rounded-xl bg-slate-950/60 backdrop-blur-md border ${
                         touched.email && errors.email
                           ? 'border-rose-400/80 focus:ring-rose-400/30'
-                          : 'border-[var(--border)] focus:border-[var(--accent)] focus:ring-[var(--accent)]/30'
+                          : 'border-white/10 border-t-white/15 focus:border-[var(--accent)] focus:ring-[var(--accent)]/30'
                       } text-[var(--text)] text-sm placeholder:text-[var(--text-muted)] focus:outline-none focus:ring-2 transition-all`}
                     />
                     {touched.email && errors.email && (
@@ -243,10 +243,10 @@ export const ContactSection: React.FC = () => {
                     required
                     rows={4}
                     placeholder="Tell me about your team, role, or project..."
-                    className={`w-full px-4 py-2.5 rounded-xl bg-[var(--surface-2)] border ${
+                    className={`w-full px-4 py-2.5 rounded-xl bg-slate-950/60 backdrop-blur-md border ${
                       touched.message && errors.message
                         ? 'border-rose-400/80 focus:ring-rose-400/30'
-                        : 'border-[var(--border)] focus:border-[var(--accent)] focus:ring-[var(--accent)]/30'
+                        : 'border-white/10 border-t-white/15 focus:border-[var(--accent)] focus:ring-[var(--accent)]/30'
                     } text-[var(--text)] text-sm placeholder:text-[var(--text-muted)] focus:outline-none focus:ring-2 transition-all resize-none`}
                   />
                   {touched.message && errors.message && (
@@ -294,8 +294,8 @@ export const ContactSection: React.FC = () => {
         {/* Direct Channels (spans 5 cols) */}
         <motion.div variants={staggerItemVariants} className="lg:col-span-5 flex flex-col justify-between space-y-6 h-full">
           <TiltCard
-            glareColor="rgba(139, 92, 246, 0.15)"
-            className="glass-card p-6 sm:p-8 h-full flex flex-col justify-between border border-[var(--border)] hover:border-violet-400/40 hover:shadow-lg transition-all rounded-[20px]"
+            glareColor="rgba(167, 139, 250, 0.15)"
+            className="glass-card p-6 sm:p-8 h-full flex flex-col justify-between rounded-[20px]"
           >
             <div className="space-y-6">
               <div>
@@ -311,7 +311,7 @@ export const ContactSection: React.FC = () => {
               <div className="space-y-3.5">
                 {/* (8) Email with Copy-to-Clipboard Feedback */}
                 <div className="relative group">
-                  <div className="flex items-center justify-between p-3.5 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] group-hover:border-[var(--accent)]/50 transition-all">
+                  <div className="glass-subcard flex items-center justify-between p-3.5 rounded-xl group-hover:border-[var(--accent)]/50 transition-all">
                     <a
                       href={`mailto:${PERSONAL_INFO.email}`}
                       className="flex items-center gap-3.5 flex-1 min-w-0"
@@ -333,7 +333,7 @@ export const ContactSection: React.FC = () => {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       transition={{ duration: 0.15 }}
-                      className="ml-2 px-3 py-1.5 rounded-lg bg-[var(--surface)] border border-[var(--border)] hover:border-[var(--accent)] text-xs font-mono text-[var(--text-muted)] hover:text-[var(--text)] flex items-center gap-1.5 transition-colors shrink-0"
+                      className="ml-2 px-3 py-1.5 rounded-lg bg-[var(--surface)] border border-[var(--border)] hover:border-[var(--accent)] text-xs font-mono text-[var(--text-muted)] hover:text-[var(--text)] flex items-center gap-1.5 transition-colors shrink-0 cursor-pointer"
                       aria-label="Copy email address"
                     >
                       {copied ? (
@@ -359,7 +359,7 @@ export const ContactSection: React.FC = () => {
                   whileHover={{ x: 4 }}
                   whileTap={{ scale: 0.98 }}
                   transition={{ duration: 0.2, ease: SHARED_EASE }}
-                  className="flex items-center gap-3.5 p-3.5 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] hover:border-slate-400/40 transition-all group"
+                  className="glass-subcard flex items-center gap-3.5 p-3.5 rounded-xl hover:border-slate-400/40 transition-all group"
                 >
                   <div className="p-2.5 rounded-lg bg-[var(--surface)] border border-[var(--border)] text-[var(--text)] shrink-0 group-hover:scale-110 group-hover:rotate-6 transition-transform flex items-center justify-center">
                     <Image src="/icons/github.png" alt="GitHub" width={16} height={16} className="w-4 h-4 object-contain" />
@@ -380,7 +380,7 @@ export const ContactSection: React.FC = () => {
                   whileHover={{ x: 4 }}
                   whileTap={{ scale: 0.98 }}
                   transition={{ duration: 0.2, ease: SHARED_EASE }}
-                  className="flex items-center gap-3.5 p-3.5 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] hover:border-violet-400/50 transition-all group"
+                  className="glass-subcard flex items-center gap-3.5 p-3.5 rounded-xl hover:border-violet-400/50 transition-all group"
                 >
                   <div className="p-2.5 rounded-lg bg-violet-600/15 text-violet-400 shrink-0 group-hover:scale-110 group-hover:-rotate-6 transition-transform flex items-center justify-center">
                     <Image src="/icons/linkedin.png" alt="LinkedIn" width={16} height={16} className="w-4 h-4 object-contain" />

@@ -123,7 +123,7 @@ export const HeroSection: React.FC = () => {
             href="#wins"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.96 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--surface-2)]/90 backdrop-blur-md border border-amber-500/30 hover:border-amber-400/60 text-xs font-mono text-amber-300 shadow-sm hover:shadow-[0_0_15px_rgba(245,158,11,0.25)] transition-all group"
+            className="glass-pill inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-amber-500/35 border-t-amber-400/60 hover:border-amber-400/80 text-xs font-mono text-amber-300 shadow-lg hover:shadow-[0_0_20px_rgba(245,158,11,0.3)] transition-all group"
             title="View Hackathon Win & Verified Proof"
           >
             <TrophyIcon className="w-3.5 h-3.5 text-amber-400 group-hover:scale-110 transition-transform" />

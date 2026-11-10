@@ -47,12 +47,12 @@ export const AboutSection: React.FC = () => {
         {/* Story Card (spans 7 cols) */}
         <motion.div variants={staggerItemVariants} className="lg:col-span-7 flex flex-col">
           <TiltCard
-            glareColor="rgba(255, 255, 255, 0.04)"
-            className="glass-card p-6 sm:p-8 flex flex-col justify-between border border-[var(--border)] hover:border-[var(--accent)]/40 hover:shadow-xl transition-all rounded-[20px] flex-1"
+            glareColor="rgba(34, 211, 238, 0.12)"
+            className="glass-card p-6 sm:p-8 flex flex-col justify-between rounded-[20px] flex-1"
           >
             <div className="space-y-5">
               <div className="flex items-center gap-3.5">
-                <div className="w-11 h-11 rounded-xl bg-[var(--accent)]/15 border border-[var(--accent)]/30 text-[var(--accent)] flex items-center justify-center shrink-0">
+                <div className="glass-subcard w-11 h-11 rounded-xl text-[var(--accent)] flex items-center justify-center shrink-0">
                   <TerminalIcon className="w-5 h-5" />
                 </div>
                 <div>
@@ -85,8 +85,8 @@ export const AboutSection: React.FC = () => {
         {/* Education & Focus Card (spans 5 cols) */}
         <motion.div variants={staggerItemVariants} className="lg:col-span-5 flex flex-col">
           <TiltCard
-            glareColor="rgba(255, 255, 255, 0.04)"
-            className="glass-card p-6 sm:p-8 flex flex-col justify-between border border-[var(--border)] hover:border-violet-400/40 hover:shadow-xl transition-all rounded-[20px] flex-1"
+            glareColor="rgba(167, 139, 250, 0.12)"
+            className="glass-card p-6 sm:p-8 flex flex-col justify-between rounded-[20px] flex-1"
           >
             <div className="space-y-6">
               <h3 className="font-display text-lg font-bold text-[var(--text)]">
@@ -99,7 +99,7 @@ export const AboutSection: React.FC = () => {
                   <motion.div
                     whileHover={{ scale: 1.1, rotate: 5 }}
                     transition={{ duration: 0.2, ease: SHARED_EASE }}
-                    className="p-2.5 rounded-[12px] bg-cyan-600/15 border border-cyan-500/25 text-cyan-400 shrink-0"
+                    className="glass-subcard p-2.5 rounded-[12px] text-cyan-400 shrink-0"
                   >
                     <GraduationCapIcon className="w-5 h-5" />
                   </motion.div>
@@ -121,7 +121,7 @@ export const AboutSection: React.FC = () => {
                   <motion.div
                     whileHover={{ scale: 1.1, rotate: -5 }}
                     transition={{ duration: 0.2, ease: SHARED_EASE }}
-                    className="p-2.5 rounded-[12px] bg-violet-600/15 border border-violet-500/25 text-violet-400 shrink-0"
+                    className="glass-subcard p-2.5 rounded-[12px] text-violet-400 shrink-0"
                   >
                     <MapPinIcon className="w-5 h-5" />
                   </motion.div>
@@ -141,7 +141,7 @@ export const AboutSection: React.FC = () => {
                   <motion.div
                     whileHover={{ scale: 1.1, rotate: 5 }}
                     transition={{ duration: 0.2, ease: SHARED_EASE }}
-                    className="p-2.5 rounded-[12px] bg-emerald-600/15 border border-emerald-500/25 text-emerald-400 shrink-0"
+                    className="glass-subcard p-2.5 rounded-[12px] text-emerald-400 shrink-0"
                   >
                     <TerminalIcon className="w-5 h-5" />
                   </motion.div>
