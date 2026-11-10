@@ -23,7 +23,7 @@ export const AboutSection: React.FC = () => {
         whileInView="visible"
         viewport={VIEWPORT_CONFIG}
         variants={scrollRevealVariants}
-        className="mb-14 space-y-2"
+        className="mb-8 sm:mb-14 space-y-2"
       >
         <span className="text-xs font-mono uppercase tracking-widest text-[var(--accent)] font-semibold drop-shadow-sm">
           Background
@@ -48,7 +48,7 @@ export const AboutSection: React.FC = () => {
         <motion.div variants={staggerItemVariants} className="lg:col-span-7 flex flex-col">
           <TiltCard
             glareColor="rgba(34, 211, 238, 0.12)"
-            className="glass-card p-6 sm:p-8 flex flex-col justify-between rounded-[20px] flex-1"
+            className="glass-card p-4 sm:p-8 flex flex-col justify-between rounded-[20px] flex-1"
           >
             <div className="space-y-5">
               <div className="flex items-center gap-3.5">
@@ -86,7 +86,7 @@ export const AboutSection: React.FC = () => {
         <motion.div variants={staggerItemVariants} className="lg:col-span-5 flex flex-col">
           <TiltCard
             glareColor="rgba(167, 139, 250, 0.12)"
-            className="glass-card p-6 sm:p-8 flex flex-col justify-between rounded-[20px] flex-1"
+            className="glass-card p-4 sm:p-8 flex flex-col justify-between rounded-[20px] flex-1"
           >
             <div className="space-y-6">
               <h3 className="font-display text-lg font-bold text-[var(--text)]">

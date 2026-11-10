@@ -143,7 +143,7 @@ export const MusicDock: React.FC = () => {
             whileHover={shouldReduceMotion ? undefined : { scale: 1.08 }}
             whileTap={shouldReduceMotion ? undefined : { scale: 0.92 }}
             transition={{ duration: 0.18, ease: SHARED_EASE }}
-            className={`relative w-7 h-7 rounded-full flex items-center justify-center bg-transparent transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] cursor-pointer ${
+            className={`relative w-7 h-7 rounded-full flex items-center justify-center bg-transparent transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] cursor-pointer touch-manipulation after:absolute after:-inset-2.5 after:content-[''] ${
               isPlaying
                 ? 'border border-[var(--accent)]/60 text-[var(--accent)] shadow-[0_0_12px_rgba(34,211,238,0.25)]'
                 : 'border border-[var(--border)] text-[var(--text-muted)] hover:text-[var(--text)] hover:border-[var(--accent)]/50 opacity-60'
@@ -281,7 +281,7 @@ export const MusicDock: React.FC = () => {
 
       {/* Responsive Sub-Header Lyric Strip (Shown below 1100px, left-aligned right under header) */}
       <div
-        className="block min-[1100px]:hidden fixed top-[60px] sm:top-[68px] left-4 sm:left-6 z-40 pointer-events-none select-none max-w-[80vw]"
+        className="block min-[1100px]:hidden fixed top-[60px] sm:top-[68px] left-4 sm:left-6 z-40 pointer-events-none select-none max-w-[85vw]"
         aria-live="off"
       >
         <AnimatePresence mode="popLayout" initial={false}>
@@ -308,7 +308,7 @@ export const MusicDock: React.FC = () => {
                 ease: 'easeInOut',
                 opacity: { duration: 0.25 },
               }}
-              className="flex items-center min-w-0"
+              className="flex items-center min-w-0 px-2.5 py-1 rounded-full bg-slate-950/70 backdrop-blur-md border border-white/10 shadow-sm"
             >
               <LyricLineDisplay text={activeLine.text} isMobileStrip />
             </motion.div>

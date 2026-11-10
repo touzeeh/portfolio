@@ -40,7 +40,7 @@ export const ProjectsSection: React.FC = () => {
   };
 
   return (
-    <section id="projects" className="py-24 px-4 sm:px-6 max-w-6xl mx-auto space-y-10">
+    <section id="projects" className="py-16 sm:py-24 px-4 sm:px-6 max-w-6xl mx-auto space-y-8 sm:space-y-10">
       {/* Section Header Scroll Reveal */}
       <motion.div
         initial="hidden"
@@ -78,7 +78,7 @@ export const ProjectsSection: React.FC = () => {
           glareColor="rgba(6, 182, 212, 0.25)"
           className="glass-card overflow-hidden rounded-[24px] group"
         >
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 p-6 sm:p-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-8 p-4 sm:p-8">
             {/* Left: Interactive Media Preview */}
             <div className="lg:col-span-6 flex flex-col justify-between">
               <div className="relative aspect-[16/10] w-full rounded-xl overflow-hidden bg-slate-950 border border-white/10 group-hover:border-cyan-400/50 transition-colors">
@@ -195,7 +195,7 @@ export const ProjectsSection: React.FC = () => {
           <motion.div key={project.id} variants={staggerItemVariants} className="h-full">
             <TiltCard
               glareColor={project.accent === 'violet' ? 'rgba(139, 92, 246, 0.22)' : 'rgba(56, 189, 248, 0.22)'}
-              className="glass-card flex flex-col justify-between h-full p-6 border border-white/10 hover:border-white/30 transition-all rounded-[22px] group"
+              className="glass-card flex flex-col justify-between h-full p-4 sm:p-6 transition-all rounded-[22px] group"
             >
               <div className="space-y-4">
                 {/* Thumbnail Preview */}

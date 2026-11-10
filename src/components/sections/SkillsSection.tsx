@@ -15,14 +15,14 @@ import {
 export const SkillsSection: React.FC = () => {
 
   return (
-    <section id="skills" className="py-24 px-4 sm:px-6 max-w-6xl mx-auto">
+    <section id="skills" className="py-16 sm:py-24 px-4 sm:px-6 max-w-6xl mx-auto">
       {/* Section Header Scroll Reveal */}
       <motion.div
         initial="hidden"
         whileInView="visible"
         viewport={VIEWPORT_CONFIG}
         variants={scrollRevealVariants}
-        className="mb-14 space-y-2"
+        className="mb-8 sm:mb-14 space-y-2"
       >
         <span className="text-xs font-mono uppercase tracking-widest text-[var(--accent)] font-semibold drop-shadow-sm">
           Technical Stack
@@ -51,7 +51,7 @@ export const SkillsSection: React.FC = () => {
           >
             <TiltCard
               glareColor="rgba(255, 255, 255, 0.08)"
-              className="glass-card p-6 sm:p-7 flex flex-col justify-between h-full rounded-[20px]"
+              className="glass-card p-5 sm:p-7 flex flex-col justify-between h-full rounded-[20px]"
             >
               <div className="space-y-4">
                 {/* Category Header with pulsing status aura */}

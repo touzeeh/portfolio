@@ -70,14 +70,14 @@ export const WinsSection: React.FC = () => {
   }, [selectedWin]);
 
   return (
-    <section id="wins" className="py-24 px-4 sm:px-6 max-w-6xl mx-auto">
+    <section id="wins" className="py-16 sm:py-24 px-4 sm:px-6 max-w-6xl mx-auto">
       {/* Section Header Scroll Reveal */}
       <motion.div
         initial="hidden"
         whileInView="visible"
         viewport={VIEWPORT_CONFIG}
         variants={scrollRevealVariants}
-        className="mb-14 space-y-2"
+        className="mb-8 sm:mb-14 space-y-2"
       >
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-300 text-xs font-mono font-medium mb-1">
           <TrophyIcon className="w-3.5 h-3.5 text-amber-400" />
@@ -107,7 +107,7 @@ export const WinsSection: React.FC = () => {
           >
             <TiltCard
               glareColor="rgba(245, 158, 11, 0.22)"
-              className="glass-card flex flex-col justify-between h-full p-6 border border-white/10 hover:border-amber-400/40 hover:shadow-xl transition-all rounded-[20px] group flex-1"
+              className="glass-card flex flex-col justify-between h-full p-4 sm:p-6 transition-all rounded-[20px] group flex-1"
             >
               <div className="space-y-4">
                 {/* Image Frame with Clean Hairline */}
@@ -236,7 +236,7 @@ export const WinsSection: React.FC = () => {
                     </div>
 
                     {/* Modal Body Info Section */}
-                    <div className="p-5 sm:p-6 space-y-4">
+                    <div className="p-4 sm:p-6 space-y-4">
                       <div className="flex flex-wrap items-center justify-between gap-2">
                         <span className="relative overflow-hidden inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-amber-500/20 border border-amber-400/40 text-amber-300 text-xs font-mono font-bold shadow-sm">
                           <motion.span

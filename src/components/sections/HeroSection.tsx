@@ -118,18 +118,18 @@ export const HeroSection: React.FC = () => {
         className="relative z-10 max-w-4xl mx-auto text-center flex flex-col items-center gap-5 sm:gap-6"
       >
         {/* 1st Place Winner Badge on Top */}
-        <motion.div variants={itemVariants} className="flex items-center justify-center">
+        <motion.div variants={itemVariants} className="flex items-center justify-center w-full px-2">
           <motion.a
             href="#wins"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.96 }}
-            className="glass-pill inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-amber-500/35 border-t-amber-400/60 hover:border-amber-400/80 text-xs font-mono text-amber-300 shadow-lg hover:shadow-[0_0_20px_rgba(245,158,11,0.3)] transition-all group"
+            className="glass-pill inline-flex flex-wrap items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-full border border-amber-500/35 border-t-amber-400/60 hover:border-amber-400/80 text-[11px] sm:text-xs font-mono text-amber-300 shadow-lg hover:shadow-[0_0_20px_rgba(245,158,11,0.3)] transition-all group touch-manipulation max-w-full text-center"
             title="View Hackathon Win & Verified Proof"
           >
-            <TrophyIcon className="w-3.5 h-3.5 text-amber-400 group-hover:scale-110 transition-transform" />
+            <TrophyIcon className="w-3.5 h-3.5 text-amber-400 group-hover:scale-110 transition-transform shrink-0" />
             <span className="font-semibold text-amber-300">1st Place Winner</span>
-            <span className="text-[var(--text-muted)]">• Smart Health Hackathon 2025 (InnerSight 3D)</span>
-            <span className="text-amber-400 font-bold group-hover:translate-x-0.5 transition-transform">→</span>
+            <span className="text-[var(--text-muted)]">• Smart Health Hackathon 2025</span>
+            <span className="text-amber-400 font-bold group-hover:translate-x-0.5 transition-transform shrink-0">→</span>
           </motion.a>
         </motion.div>
 
@@ -159,15 +159,15 @@ export const HeroSection: React.FC = () => {
         {/* Action Row: Magnetic CTAs & Social Links */}
         <motion.div
           variants={itemVariants}
-          className="flex flex-wrap items-center justify-center gap-3.5 pt-2"
+          className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2 w-full max-w-[340px] sm:max-w-none"
         >
           {/* Primary CTA */}
           <MagneticButton
             href="#projects"
-            className="btn-primary group overflow-hidden"
+            className="btn-primary group overflow-hidden w-full sm:w-auto"
           >
             {/* One-pass shine sweep on hover */}
-            <span className="relative z-10 flex items-center gap-1.5">
+            <span className="relative z-10 flex items-center justify-center gap-1.5">
               <span>View projects</span>
               <ArrowUpRightIcon className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-200" />
             </span>
@@ -182,7 +182,7 @@ export const HeroSection: React.FC = () => {
             href={PERSONAL_INFO.resumeUrl}
             target="_blank"
             rel="noreferrer"
-            className="btn-secondary group min-h-[44px] min-w-[44px]"
+            className="btn-secondary group min-h-[44px] min-w-[44px] w-full sm:w-auto justify-center"
             title="Download 1-Page Resume PDF"
             aria-label="Download Resume (PDF)"
           >
@@ -191,7 +191,7 @@ export const HeroSection: React.FC = () => {
           </MagneticButton>
 
           {/* Social Icon Buttons (with official downloaded logos) */}
-          <div className="flex items-center gap-2 sm:ml-2">
+          <div className="flex items-center justify-center gap-2 mt-1 sm:mt-0 sm:ml-2">
             <MagneticButton
               href={PERSONAL_INFO.github}
               target="_blank"

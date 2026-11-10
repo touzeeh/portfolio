@@ -429,12 +429,12 @@ export const Scene3D: React.FC<{ isMobile?: boolean }> = ({ isMobile = false }) 
     >
       <Canvas
         camera={{ position: [0, 0, 7.8], fov: isTouchMobile ? 54 : 45 }}
-        dpr={[1, Math.min(typeof window !== 'undefined' ? window.devicePixelRatio : 1, 2)]}
+        dpr={isTouchMobile ? [1, 1.25] : [1, Math.min(typeof window !== 'undefined' ? window.devicePixelRatio : 1, 2)]}
         frameloop={isHidden || !isHeroVisible ? 'never' : 'always'}
         gl={{
           antialias: !isTouchMobile,
           alpha: true,
-          powerPreference: 'high-performance',
+          powerPreference: isTouchMobile ? 'low-power' : 'high-performance',
           depth: true,
         }}
       >

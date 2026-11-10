@@ -89,7 +89,7 @@ export const TiltCard: React.FC<CardProps> = ({
     return (
       <div
         ref={cardRef}
-        className={`relative overflow-hidden ${radiusClass} ${className} transition-all duration-300 group/card`}
+        className={`relative overflow-hidden ${radiusClass} ${className} transition-colors duration-200 group/card`}
       >
         <div className="relative z-10 w-full h-full">
           {children}

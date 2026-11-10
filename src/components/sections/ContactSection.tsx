@@ -113,7 +113,7 @@ export const ContactSection: React.FC = () => {
         whileInView="visible"
         viewport={VIEWPORT_CONFIG}
         variants={scrollRevealVariants}
-        className="mb-14 space-y-2"
+        className="mb-8 sm:mb-14 space-y-2"
       >
         <span className="text-xs font-mono uppercase tracking-widest text-[var(--accent)] font-semibold drop-shadow-sm">
           Get in Touch
@@ -137,7 +137,7 @@ export const ContactSection: React.FC = () => {
         <motion.div variants={staggerItemVariants} className="lg:col-span-7 h-full">
           <TiltCard
             glareColor="rgba(34, 211, 238, 0.12)"
-            className="glass-card p-6 sm:p-8 rounded-[20px] h-full"
+            className="glass-card p-4 sm:p-8 rounded-[20px] h-full"
           >
             {status === 'success' ? (
               <motion.div
@@ -295,7 +295,7 @@ export const ContactSection: React.FC = () => {
         <motion.div variants={staggerItemVariants} className="lg:col-span-5 flex flex-col justify-between space-y-6 h-full">
           <TiltCard
             glareColor="rgba(167, 139, 250, 0.15)"
-            className="glass-card p-6 sm:p-8 h-full flex flex-col justify-between rounded-[20px]"
+            className="glass-card p-4 sm:p-8 h-full flex flex-col justify-between rounded-[20px]"
           >
             <div className="space-y-6">
               <div>

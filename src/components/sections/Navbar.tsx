@@ -34,6 +34,7 @@ export const Navbar: React.FC = () => {
     isMountedRef.current = true;
 
     const initLiquidGL = async () => {
+      if (typeof window !== 'undefined' && window.innerWidth < 768) return;
       const pillElement = document.getElementById('navbar-pill');
       if (!pillElement) return;
 

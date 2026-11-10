@@ -16,7 +16,7 @@ const TimelineRow: React.FC<{ item: ExperienceItem; index: number }> = ({ item }
   const isInView = useInView(rowRef, { amount: 0.4, once: false });
 
   return (
-    <div ref={rowRef} className="relative group pl-8 sm:pl-10">
+    <div ref={rowRef} className="relative group pl-6 sm:pl-10">
       {/* (5) Node Dot that activates per entry with sensitive glow and radar ring */}
       <motion.div
         animate={{
@@ -37,7 +37,7 @@ const TimelineRow: React.FC<{ item: ExperienceItem; index: number }> = ({ item }
       {/* Content Card with cursor spotlight and sensitive hover */}
       <TiltCard
         glareColor="rgba(34, 211, 238, 0.12)"
-        className={`glass-card p-5 sm:p-6 rounded-[20px] ${
+        className={`glass-card p-4 sm:p-6 rounded-[20px] ${
           isInView
             ? '!border-cyan-400/40 shadow-[0_0_25px_rgba(34,211,238,0.15)]'
             : ''
@@ -90,14 +90,14 @@ export const ExperienceSection: React.FC = () => {
   });
 
   return (
-    <section id="experience" className="py-24 px-4 sm:px-6 max-w-6xl mx-auto">
+    <section id="experience" className="py-16 sm:py-24 px-4 sm:px-6 max-w-6xl mx-auto">
       {/* Section Header */}
       <motion.div
         initial="hidden"
         whileInView="visible"
         viewport={VIEWPORT_CONFIG}
         variants={scrollRevealVariants}
-        className="mb-14 space-y-2"
+        className="mb-8 sm:mb-14 space-y-2"
       >
         <span className="text-xs font-mono uppercase tracking-widest text-[var(--accent)] font-semibold drop-shadow-sm">
           Milestones
